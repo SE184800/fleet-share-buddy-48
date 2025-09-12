@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Car, Users, AlertCircle } from "lucide-react";
+import { Calendar, Clock, Car, Users, AlertCircle, Edit, X, Check } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 interface BookingSlot {
   id: string;
@@ -25,6 +26,11 @@ export default function VehicleBooking() {
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [editingBooking, setEditingBooking] = useState<string | null>(null);
+  const [editVehicle, setEditVehicle] = useState<string>("");
+  const [editDate, setEditDate] = useState<string>("");
+  const [editTime, setEditTime] = useState<string>("");
+  const { toast } = useToast();
 
   // Mock data - would come from backend
   const vehicles: Vehicle[] = [
@@ -87,6 +93,50 @@ export default function VehicleBooking() {
   const handleCancelBooking = (bookingId: string) => {
     console.log("Cancelling booking:", bookingId);
     // Here would integrate with backend to cancel booking
+    toast({
+      title: "Đã hủy lịch",
+      description: "Lịch đặt xe đã được hủy thành công",
+    });
+  };
+
+  const handleEditBooking = (bookingId: string) => {
+    const booking = existingBookings.find(b => b.id === bookingId);
+    if (booking) {
+      setEditingBooking(bookingId);
+      setEditVehicle(booking.vehicle);
+      setEditDate(booking.date);
+      setEditTime(booking.time);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingBooking(null);
+    setEditVehicle("");
+    setEditDate("");
+    setEditTime("");
+  };
+
+  const handleUpdateBooking = () => {
+    try {
+      console.log("Updating booking:", { editingBooking, editVehicle, editDate, editTime });
+      // Here would integrate with backend to update booking
+      
+      toast({
+        title: "Cập nhật thành công",
+        description: "Lịch đặt xe đã được cập nhật thành công",
+      });
+      
+      setEditingBooking(null);
+      setEditVehicle("");
+      setEditDate("");
+      setEditTime("");
+    } catch (error) {
+      toast({
+        title: "Lỗi cập nhật",
+        description: "Không thể cập nhật lịch đặt xe. Vui lòng thử lại.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -170,6 +220,85 @@ export default function VehicleBooking() {
           Đặt lịch
         </Button>
 
+        {/* Edit Booking Form */}
+        {editingBooking && (
+          <Card className="border-primary/50 bg-primary/5">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center space-x-2">
+                <Edit className="h-5 w-5" />
+                <span>Chỉnh sửa lịch đặt</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Chọn xe</label>
+                  <Select value={editVehicle} onValueChange={setEditVehicle}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn xe" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vehicles.map((vehicle) => (
+                        <SelectItem key={vehicle.id} value={vehicle.name}>
+                          <div className="flex items-center space-x-2">
+                            <Car className="h-4 w-4" />
+                            <span>{vehicle.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Chọn ngày</label>
+                  <input
+                    type="date"
+                    className="w-full px-3 py-2 border border-input rounded-md bg-background"
+                    value={editDate}
+                    onChange={(e) => setEditDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Chọn giờ</label>
+                  <Select value={editTime} onValueChange={setEditTime}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn giờ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeSlots.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          <span>{time}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={handleUpdateBooking}
+                  className="bg-gradient-primary hover:shadow-glow"
+                  disabled={!editVehicle || !editDate || !editTime}
+                >
+                  <Check className="h-4 w-4 mr-2" />
+                  Cập nhật
+                </Button>
+                <Button 
+                  onClick={handleCancelEdit}
+                  variant="outline"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Hủy chỉnh sửa
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Existing Bookings */}
         <div>
           <h4 className="font-semibold mb-3 flex items-center space-x-2">
@@ -180,7 +309,9 @@ export default function VehicleBooking() {
             {existingBookings.map((booking) => (
               <div 
                 key={booking.id} 
-                className="flex items-center justify-between p-3 border rounded-lg bg-accent/20"
+                className={`flex items-center justify-between p-3 border rounded-lg ${
+                  editingBooking === booking.id ? 'bg-primary/10 border-primary/50' : 'bg-accent/20'
+                }`}
               >
                 <div className="flex-1">
                   <div className="flex items-center space-x-3">
@@ -191,6 +322,11 @@ export default function VehicleBooking() {
                     <Badge variant={getOwnershipColor(booking.ownershipLevel) as "default" | "secondary" | "destructive" | "outline"}>
                       {booking.bookedBy}
                     </Badge>
+                    {editingBooking === booking.id && (
+                      <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800">
+                        Đang chỉnh sửa
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-sm text-muted-foreground mt-1">
                     {booking.date} • {booking.time}
@@ -202,6 +338,15 @@ export default function VehicleBooking() {
                       Có thể thay thế
                     </Badge>
                   )}
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleEditBooking(booking.id)}
+                    disabled={editingBooking === booking.id}
+                  >
+                    <Edit className="h-4 w-4 mr-1" />
+                    Thay đổi
+                  </Button>
                   <Button 
                     size="sm" 
                     variant="outline"
