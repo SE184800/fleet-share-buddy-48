@@ -27,11 +27,11 @@ const Index = () => {
       <section className="bg-gradient-hero text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Tương lai xe điện<br/>
+            Tương lai xe điện<br />
             <span className="text-yellow-300">Đồng sở hữu thông minh</span>
           </h1>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Kết nối những người có cùng tầm nhìn để sở hữu xe điện một cách thông minh, 
+            Kết nối những người có cùng tầm nhìn để sở hữu xe điện một cách thông minh,
             tiết kiệm và bền vững cho tương lai xanh.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -42,7 +42,7 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/login">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-glow">
                 Đăng nhập
               </Button>
             </Link>
@@ -54,7 +54,7 @@ const Index = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Tại sao chọn EcoShare?</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center p-6 rounded-lg bg-gradient-card shadow-elegant">
               <div className="bg-primary/10 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">

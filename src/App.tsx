@@ -12,6 +12,7 @@ import StaffDashboard from "./pages/staff/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 import VehicleRegistration from "./pages/co-owner/VehicleRegistration";
 import NotFound from "./pages/NotFound";
+import Footer from "./components/ui/footnote";
 
 const queryClient = new QueryClient();
 
@@ -26,20 +27,22 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
-          
+
           {/* Co-owner routes */}
           <Route path="/co-owner/dashboard" element={<CoOwnerDashboard />} />
           <Route path="/co-owner/vehicle-registration" element={<VehicleRegistration />} />
-          
+
           {/* Staff routes */}
           <Route path="/staff/dashboard" element={<StaffDashboard />} />
-          
+
           {/* Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
