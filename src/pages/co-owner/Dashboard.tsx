@@ -11,7 +11,7 @@ import {
   Bell,
   Plus
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ChatBox from "@/components/ChatBox";
 import UserDropdown from "@/components/UserDropdown";
 import VehicleBooking from "@/components/VehicleBooking";
@@ -19,7 +19,7 @@ import { useState } from "react";
 
 export default function CoOwnerDashboard() {
   const [showChat, setShowChat] = useState(false);
-
+  const navigate = useNavigate();
   const registrations = [
     {
       id: "VX-001",
@@ -96,7 +96,7 @@ export default function CoOwnerDashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" onClick={() => navigate('/co-owner/groups')}>
                 Xem nhóm
               </Button>
             </CardContent>

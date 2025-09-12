@@ -1,0 +1,80 @@
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Users } from "lucide-react";
+import { groups, CURRENT_USER_ID } from "@/data/mockGroups";
+import { useSEO } from "@/hooks/useSEO";
+
+export default function MyGroups() {
+  useSEO({
+    title: "Nhóm của tôi | EcoShare",
+    description: "Quản lý các nhóm đồng sở hữu bạn tham gia: chủ sở hữu, vai trò và thành viên.",
+    canonicalPath: "/co-owner/groups",
+  });
+
+  const navigate = useNavigate();
+
+  const data = useMemo(() => groups, []);
+
+  return (
+    <div className="container mx-auto p-6">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold">Nhóm của tôi</h1>
+        <p className="text-sm text-muted-foreground">Danh sách các nhóm bạn đang tham gia</p>
+      </header>
+      <main>
+        <section aria-label="Danh sách nhóm" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data.map((g) => {
+            const owner = g.users.find((u) => u.id === g.ownerId)!;
+            const me = g.users.find((u) => u.id === CURRENT_USER_ID);
+            const myRole = me?.role ?? "member";
+            const otherMembers = g.users.filter((u) => u.id !== g.ownerId);
+
+            return (
+              <Card key={g.id} className="relative hover:shadow-elegant transition">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <Users className="h-5 w-5 text-primary" />
+                      <div>
+                        <CardTitle className="text-base">{g.name}</CardTitle>
+                        <CardDescription>Chủ sở hữu: {owner.name} <Badge className="ml-1">Admin</Badge></CardDescription>
+                      </div>
+                    </div>
+                    <Badge variant="secondary">Vai trò: {myRole === "admin" ? "Admin" : "Member"}</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex -space-x-2">
+                      {otherMembers.slice(0, 5).map((m) => (
+                        <Avatar key={m.id} className="border">
+                          <AvatarImage src={m.avatar} alt={`Ảnh đại diện ${m.name}`} loading="lazy" />
+                          <AvatarFallback>{m.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Thành viên: {otherMembers.map((m) => m.name).slice(0, 3).join(", ")}
+                      {otherMembers.length > 3 ? ` và +${otherMembers.length - 3} nữa` : ""}
+                    </p>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Quỹ nhóm:</span>
+                      <span className="font-semibold">{g.fund.toLocaleString("vi-VN")} VNĐ</span>
+                    </div>
+                    <Button variant="outline" className="w-full" onClick={() => navigate(`/co-owner/groups/${g.id}`)}>
+                      Xem chi tiết
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </section>
+      </main>
+    </div>
+  );
+}

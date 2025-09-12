@@ -11,6 +11,8 @@ import CoOwnerDashboard from "./pages/co-owner/Dashboard";
 import StaffDashboard from "./pages/staff/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 import VehicleRegistration from "./pages/co-owner/VehicleRegistration";
+import MyGroups from "./pages/co-owner/MyGroups";
+import GroupDetail from "./pages/co-owner/GroupDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
           {/* Co-owner routes */}
           <Route path="/co-owner/dashboard" element={<CoOwnerDashboard />} />
           <Route path="/co-owner/vehicle-registration" element={<VehicleRegistration />} />
+          <Route path="/co-owner/groups" element={<MyGroups />} />
+          <Route path="/co-owner/groups/:groupId" element={<GroupDetail />} />
           
           {/* Staff routes */}
           <Route path="/staff/dashboard" element={<StaffDashboard />} />
