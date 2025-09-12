@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import VerifyOTP from "./pages/VerifyOTP";
 import CoOwnerDashboard from "./pages/co-owner/Dashboard";
 import StaffDashboard from "./pages/staff/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
           
           {/* Co-owner routes */}
           <Route path="/co-owner/dashboard" element={<CoOwnerDashboard />} />

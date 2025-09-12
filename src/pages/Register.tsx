@@ -37,12 +37,14 @@ export default function Register() {
       return;
     }
 
-    // Simulate registration and redirect to vehicle registration
-    navigate("/co-owner/vehicle-registration");
+    // Redirect to OTP verification with user info
+    navigate("/verify-otp", { 
+      state: { phone, email, fullName } 
+    });
     
     toast({
       title: "Đăng ký thành công",
-      description: "Tài khoản đã được tạo. Hãy đăng ký xe của bạn!",
+      description: "Vui lòng xác thực tài khoản bằng mã OTP",
     });
   };
 
