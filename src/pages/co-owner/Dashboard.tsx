@@ -9,10 +9,12 @@ import {
   Download,
   MessageCircle,
   Bell,
-  Settings
+  Plus
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatBox from "@/components/ChatBox";
+import UserDropdown from "@/components/UserDropdown";
+import VehicleBooking from "@/components/VehicleBooking";
 import { useState } from "react";
 
 export default function CoOwnerDashboard() {
@@ -39,10 +41,10 @@ export default function CoOwnerDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "approved": return "success";
-      case "pending": return "warning";
+      case "approved": return "default";
+      case "pending": return "secondary";
       case "rejected": return "destructive";
-      default: return "secondary";
+      default: return "outline";
     }
   };
 
@@ -68,36 +70,23 @@ export default function CoOwnerDashboard() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            <Link to="/co-owner/vehicle-registration">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                <Plus className="h-4 w-4 mr-2" />
+                Đăng ký xe
+              </Button>
+            </Link>
             <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
               <Bell className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-              <Settings className="h-4 w-4" />
-            </Button>
+            <UserDropdown />
           </div>
         </div>
       </header>
 
       <div className="container mx-auto p-6 space-y-6">
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="shadow-elegant">
-            <CardHeader className="text-center">
-              <Car className="h-8 w-8 text-primary mx-auto mb-2" />
-              <CardTitle>Đăng ký xe mới</CardTitle>
-              <CardDescription>
-                Thêm xe điện vào chương trình đồng sở hữu
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/co-owner/vehicle-registration">
-                <Button className="w-full bg-gradient-primary hover:shadow-glow">
-                  Đăng ký ngay
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card className="shadow-elegant">
             <CardHeader className="text-center">
               <Users className="h-8 w-8 text-primary mx-auto mb-2" />
@@ -128,6 +117,9 @@ export default function CoOwnerDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Vehicle Booking */}
+        <VehicleBooking />
 
         {/* Registration History */}
         <Card className="shadow-elegant">
