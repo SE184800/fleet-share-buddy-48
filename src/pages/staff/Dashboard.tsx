@@ -22,10 +22,12 @@ import {
 } from "lucide-react";
 import ChatBox from "@/components/ChatBox";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function StaffDashboard() {
   const [showChat, setShowChat] = useState(false);
   const [selectedApp, setSelectedApp] = useState<any>(null);
+  const navigate = useNavigate();
 
   const stats = [
     { label: "Đơn chờ duyệt", value: 12, icon: Clock, color: "warning" },
@@ -127,7 +129,7 @@ export default function StaffDashboard() {
               variant="outline" 
               size="sm"
               className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              onClick={() => window.location.href = '/login'}
+              onClick={() => navigate('/login')}
             >
               <LogOut className="h-4 w-4 mr-1" />
               Đăng xuất
