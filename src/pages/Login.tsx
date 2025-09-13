@@ -72,9 +72,9 @@ export default function Login() {
                       checked={userTypes.includes(type.value)}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          setUserTypes([...userTypes, type.value]);
+                          setUserTypes([type.value]); // Only allow one selection
                         } else {
-                          setUserTypes(userTypes.filter(t => t !== type.value));
+                          setUserTypes([]);
                         }
                       }}
                     />
