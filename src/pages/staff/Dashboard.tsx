@@ -23,6 +23,7 @@ import {
 import ChatBox from "@/components/ChatBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 export default function StaffDashboard() {
   const [showChat, setShowChat] = useState(false);
@@ -798,7 +799,10 @@ export default function StaffDashboard() {
                             className="text-success border-success hover:bg-success hover:text-success-foreground"
                             onClick={() => {
                               console.log("Approved request:", request.id);
-                              // Handle approve logic
+                              toast({
+                                title: "Đã duyệt yêu cầu",
+                                description: `Yêu cầu ${request.type === "delete_group" ? "xóa nhóm" : request.type === "add_member" ? "thêm thành viên" : "xóa thành viên"} đã được phê duyệt thành công.`
+                              });
                             }}
                           >
                             <CheckCircle className="h-4 w-4 mr-1" />
@@ -810,7 +814,11 @@ export default function StaffDashboard() {
                             className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
                             onClick={() => {
                               console.log("Rejected request:", request.id);
-                              // Handle reject logic
+                              toast({
+                                title: "Đã từ chối yêu cầu",
+                                description: `Yêu cầu ${request.type === "delete_group" ? "xóa nhóm" : request.type === "add_member" ? "thêm thành viên" : "xóa thành viên"} đã bị từ chối.`,
+                                variant: "destructive"
+                              });
                             }}
                           >
                             <XCircle className="h-4 w-4 mr-1" />
