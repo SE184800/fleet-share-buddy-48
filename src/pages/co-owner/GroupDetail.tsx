@@ -134,7 +134,7 @@ export default function GroupDetail() {
       {/* 3 phần nội dung */}
       <main className="grid gap-6 lg:grid-cols-3">
         {/* Phần 1: Profile chủ sở hữu (lớn) */}
-        <section>
+        <section className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Chủ sở hữu nhóm</CardTitle>
