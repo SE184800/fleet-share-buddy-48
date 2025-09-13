@@ -28,10 +28,22 @@ import {
 import ChatBox from "@/components/ChatBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
+  const [showAddStaffModal, setShowAddStaffModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [newStaffData, setNewStaffData] = useState({
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    province: ""
+  });
+  const [createdStaff, setCreatedStaff] = useState<any>(null);
+  const { toast } = useToast();
 
   const stats = [
     { label: "Tổng nhân viên", value: 25, icon: Users, color: "primary" },
@@ -103,6 +115,36 @@ export default function AdminDashboard() {
       case "inactive": return "Ngưng hoạt động";
       default: return "Không xác định";
     }
+  };
+
+  const handleCreateStaff = () => {
+    if (!newStaffData.name || !newStaffData.email || !newStaffData.username || !newStaffData.password || !newStaffData.province) {
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng nhập đầy đủ thông tin",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simulate staff creation
+    const created = {
+      id: `ST${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
+      ...newStaffData
+    };
+    
+    setCreatedStaff(created);
+    setShowAddStaffModal(false);
+    setShowSuccessModal(true);
+    
+    // Reset form
+    setNewStaffData({
+      name: "",
+      email: "",
+      username: "",
+      password: "",
+      province: ""
+    });
   };
 
   return (
@@ -180,7 +222,10 @@ export default function AdminDashboard() {
                       Tạo, chỉnh sửa và quản lý tài khoản nhân viên
                     </CardDescription>
                   </div>
-                  <Button className="bg-gradient-primary hover:shadow-glow">
+                  <Button 
+                    className="bg-gradient-primary hover:shadow-glow"
+                    onClick={() => setShowAddStaffModal(true)}
+                  >
                     <UserPlus className="h-4 w-4 mr-2" />
                     Thêm nhân viên
                   </Button>
@@ -625,6 +670,123 @@ export default function AdminDashboard() {
             userType="admin"
           />
         )}
+
+        {/* Add Staff Modal */}
+        <dialog open={showAddStaffModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-background rounded-lg shadow-elegant max-w-md w-full mx-4">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-4">Thêm nhân viên mới</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Họ tên</label>
+                  <Input
+                    value={newStaffData.name}
+                    onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
+                    placeholder="Nhập họ tên nhân viên"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Email</label>
+                  <Input
+                    type="email"
+                    value={newStaffData.email}
+                    onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
+                    placeholder="Nhập email"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tỉnh/Thành phố</label>
+                  <Input
+                    value={newStaffData.province}
+                    onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
+                    placeholder="Nhập tỉnh/thành phố"
+                  />
+                </div>
+                
+                <div className="border-t pt-4">
+                  <h3 className="font-medium mb-3">Tài khoản đăng nhập</h3>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Tên đăng nhập</label>
+                      <Input
+                        value={newStaffData.username}
+                        onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
+                        placeholder="Nhập tên đăng nhập"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Mật khẩu</label>
+                      <Input
+                        type="password"
+                        value={newStaffData.password}
+                        onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
+                        placeholder="Nhập mật khẩu"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowAddStaffModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={handleCreateStaff}
+                >
+                  Create
+                </Button>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        {/* Success Modal */}
+        <dialog open={showSuccessModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-background rounded-lg shadow-elegant max-w-md w-full mx-4">
+            <div className="p-6 text-center">
+              <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-success mb-4">Tạo nhân viên thành công!</h2>
+              
+              {createdStaff && (
+                <div className="space-y-3 text-left bg-muted p-4 rounded-lg">
+                  <div>
+                    <span className="font-medium">Họ tên:</span>
+                    <span className="ml-2">{createdStaff.name}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Email:</span>
+                    <span className="ml-2">{createdStaff.email}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Tài khoản:</span>
+                    <span className="ml-2">{createdStaff.username}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Mật khẩu:</span>
+                    <span className="ml-2">{createdStaff.password}</span>
+                  </div>
+                </div>
+              )}
+              
+              <Button 
+                className="mt-6 bg-gradient-primary hover:shadow-glow"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                Đóng
+              </Button>
+            </div>
+          </div>
+        </dialog>
       </div>
     </div>
   );
