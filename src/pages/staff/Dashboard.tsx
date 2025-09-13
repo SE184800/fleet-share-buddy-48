@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Users, 
   FileCheck, 
@@ -23,6 +25,7 @@ import { useState } from "react";
 
 export default function StaffDashboard() {
   const [showChat, setShowChat] = useState(false);
+  const [selectedApp, setSelectedApp] = useState<any>(null);
 
   const stats = [
     { label: "Đơn chờ duyệt", value: 12, icon: Clock, color: "warning" },
@@ -38,7 +41,18 @@ export default function StaffDashboard() {
       vehicle: "VinFast VF8",
       ownership: "40%",
       date: "2024-01-20",
-      status: "pending"
+      status: "pending",
+      details: {
+        email: "nguyenvana@email.com",
+        phone: "0123456789",
+        idNumber: "001234567890",
+        address: "123 Đường ABC, Quận 1, TP.HCM",
+        coOwners: [
+          { name: "Trần Thị B", email: "tranthib@email.com", ownership: "35%" },
+          { name: "Lê Văn C", email: "levanc@email.com", ownership: "25%" }
+        ],
+        totalAmount: "1,200,000,000 VNĐ"
+      }
     },
     {
       id: "APP-002", 
@@ -46,7 +60,18 @@ export default function StaffDashboard() {
       vehicle: "Tesla Model Y",
       ownership: "35%",
       date: "2024-01-21",
-      status: "pending"
+      status: "pending",
+      details: {
+        email: "tranthib@email.com",
+        phone: "0987654321",
+        idNumber: "001987654321",
+        address: "456 Đường XYZ, Quận 3, TP.HCM",
+        coOwners: [
+          { name: "Nguyễn Văn A", email: "nguyenvana@email.com", ownership: "40%" },
+          { name: "Phạm Văn D", email: "phamvand@email.com", ownership: "25%" }
+        ],
+        totalAmount: "1,800,000,000 VNĐ"
+      }
     },
     {
       id: "APP-003",
@@ -54,7 +79,18 @@ export default function StaffDashboard() {
       vehicle: "Hyundai Kona",
       ownership: "50%",
       date: "2024-01-22", 
-      status: "pending"
+      status: "pending",
+      details: {
+        email: "levanc@email.com",
+        phone: "0369852147",
+        idNumber: "001369852147",
+        address: "789 Đường DEF, Quận 7, TP.HCM",
+        coOwners: [
+          { name: "Hoàng Thị E", email: "hoangthie@email.com", ownership: "30%" },
+          { name: "Vũ Văn F", email: "vuvanf@email.com", ownership: "20%" }
+        ],
+        totalAmount: "800,000,000 VNĐ"
+      }
     }
   ];
 
@@ -157,7 +193,11 @@ export default function StaffDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setSelectedApp(app)}
+                        >
                           <Eye className="h-4 w-4 mr-1" />
                           Chi tiết
                         </Button>
@@ -469,8 +509,185 @@ export default function StaffDashboard() {
             </Card>
           </TabsContent>
         </Tabs>
-
       </div>
+
+      {/* Application Detail Modal */}
+      <Dialog open={!!selectedApp} onOpenChange={() => setSelectedApp(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <FileCheck className="h-5 w-5" />
+              <span>Chi tiết đơn đăng ký - {selectedApp?.id}</span>
+            </DialogTitle>
+            <DialogDescription>
+              Thông tin chi tiết về đơn đăng ký đồng sở hữu xe điện
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedApp && (
+            <div className="space-y-6">
+              {/* Vehicle Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Car className="h-5 w-5" />
+                    <span>Thông tin xe</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-lg">{selectedApp.vehicle}</h4>
+                      <p className="text-muted-foreground">Tổng giá trị: {selectedApp.details.totalAmount}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Ngày đăng ký</p>
+                      <p className="font-medium">{selectedApp.date}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Main Owner Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Users className="h-5 w-5" />
+                    <span>Chủ sở hữu chính</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <Avatar className="h-12 w-12">
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                          {selectedApp.applicant.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <h4 className="font-semibold">{selectedApp.applicant}</h4>
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="secondary">Chủ sở hữu chính</Badge>
+                          <Badge className="bg-primary/20 text-primary">{selectedApp.ownership}</Badge>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-primary">
+                          {(parseFloat(selectedApp.ownership) * parseFloat(selectedApp.details.totalAmount.replace(/[^0-9]/g, '')) / 100).toLocaleString()} VNĐ
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Email</p>
+                        <p className="font-medium">{selectedApp.details.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Số điện thoại</p>
+                        <p className="font-medium">{selectedApp.details.phone}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">CCCD/CMND</p>
+                        <p className="font-medium">{selectedApp.details.idNumber}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Địa chỉ</p>
+                        <p className="font-medium">{selectedApp.details.address}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Co-owners Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Users className="h-5 w-5" />
+                    <span>Đồng sở hữu ({selectedApp.details.coOwners.length})</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {selectedApp.details.coOwners.map((coOwner: any, index: number) => (
+                      <div key={index} className="flex items-center space-x-4 p-4 border rounded-lg">
+                        <Avatar>
+                          <AvatarFallback className="bg-accent text-accent-foreground">
+                            {coOwner.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{coOwner.name}</h4>
+                          <p className="text-sm text-muted-foreground">{coOwner.email}</p>
+                        </div>
+                        <div className="text-right">
+                          <Badge variant="outline">{coOwner.ownership}</Badge>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {(parseFloat(coOwner.ownership) * parseFloat(selectedApp.details.totalAmount.replace(/[^0-9]/g, '')) / 100).toLocaleString()} VNĐ
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Ownership Summary */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Tổng kết tỷ lệ sở hữu</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Chủ sở hữu chính:</span>
+                      <span className="font-semibold">{selectedApp.ownership}</span>
+                    </div>
+                    {selectedApp.details.coOwners.map((coOwner: any, index: number) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <span>{coOwner.name}:</span>
+                        <span className="font-semibold">{coOwner.ownership}</span>
+                      </div>
+                    ))}
+                    <div className="border-t pt-3 flex justify-between items-center font-bold">
+                      <span>Tổng cộng:</span>
+                      <span className="text-primary">
+                        {(parseFloat(selectedApp.ownership) + selectedApp.details.coOwners.reduce((sum: number, co: any) => sum + parseFloat(co.ownership), 0))}%
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 pt-4 border-t">
+                <Button 
+                  variant="outline"
+                  className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={() => {
+                    handleReject(selectedApp.id);
+                    setSelectedApp(null);
+                  }}
+                >
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Từ chối
+                </Button>
+                <Button 
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={() => {
+                    handleApprove(selectedApp.id);
+                    setSelectedApp(null);
+                  }}
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Phê duyệt
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
