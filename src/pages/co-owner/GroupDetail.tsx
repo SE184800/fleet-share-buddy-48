@@ -160,22 +160,7 @@ export default function GroupDetail() {
             <CardContent>
               <div className="space-y-3">
                 {/* Chủ sở hữu */}
-                <div className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarImage src={owner.avatar} alt={`Ảnh đại diện ${owner.name}`} loading="lazy" />
-                      <AvatarFallback>{owner.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-medium">{owner.name}</div>
-                      <div className="text-sm text-muted-foreground">Admin</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-primary">{getUserUsage(owner.id)}%</div>
-                    <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
-                  </div>
-                </div>
+                
 
                 {/* Đồng sở hữu */}
                 {members.map(m => <div key={m.id} className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
