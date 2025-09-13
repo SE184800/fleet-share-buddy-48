@@ -289,7 +289,7 @@ export default function AdminDashboard() {
                           <Lock className="h-4 w-4 mr-1" />
                           {staff.status === "active" ? "Khóa" : "Mở khóa"}
                         </Button>
-                        {staff.status === "blocked" && <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+                        {staff.status === "inactive" && <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
                             <Trash2 className="h-4 w-4 mr-1" />
                             Sa thải
                           </Button>}
