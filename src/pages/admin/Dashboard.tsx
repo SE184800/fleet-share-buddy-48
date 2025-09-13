@@ -3,33 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { 
-  Shield, 
-  Users, 
-  Building, 
-  FileText, 
-  BarChart3,
-  Plus,
-  Settings,
-  Search,
-  UserPlus,
-  Lock,
-  LogOut,
-  ArrowLeft,
-  Car,
-  Calendar,
-  DollarSign,
-  TrendingUp,
-  Download,
-  Eye,
-  CheckCircle,
-  Trash2
-} from "lucide-react";
+import { Shield, Users, Building, FileText, BarChart3, Plus, Settings, Search, UserPlus, Lock, LogOut, ArrowLeft, Car, Calendar, DollarSign, TrendingUp, Download, Eye, CheckCircle, Trash2 } from "lucide-react";
 import ChatBox from "@/components/ChatBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
@@ -43,80 +21,90 @@ export default function AdminDashboard() {
     province: ""
   });
   const [createdStaff, setCreatedStaff] = useState<any>(null);
-  const { toast } = useToast();
-
-  const stats = [
-    { label: "Tổng nhân viên", value: 25, icon: Users, color: "primary" },
-    { label: "Showroom", value: 12, icon: Building, color: "success" },
-    { label: "Hợp đồng", value: 158, icon: FileText, color: "warning" },
-    { label: "Doanh thu (tháng)", value: "2.5B VNĐ", icon: BarChart3, color: "primary" }
-  ];
-
-  const staffList = [
-    {
-      id: "ST001",
-      name: "Nguyễn Văn Nam",
-      email: "nam.nguyen@ecoshare.vn",
-      role: "Staff",
-      status: "active",
-      groups: 3,
-      province: "Hồ Chí Minh"
-    },
-    {
-      id: "ST002",
-      name: "Trần Thị Lan", 
-      email: "lan.tran@ecoshare.vn",
-      role: "Staff",
-      status: "active",
-      groups: 2,
-      province: "Hà Nội"
-    },
-    {
-      id: "ST003",
-      name: "Lê Văn Tùng",
-      email: "tung.le@ecoshare.vn", 
-      role: "Staff",
-      status: "inactive",
-      groups: 0,
-      province: "Đà Nẵng"
-    }
-  ];
-
-  const showrooms = [
-    {
-      id: "SR001",
-      name: "EcoShare Saigon Center",
-      address: "123 Nguyễn Huệ, Q1, HCM",
-      manager: "Nguyễn Văn A",
-      vehicles: 15,
-      status: "active"
-    },
-    {
-      id: "SR002",
-      name: "EcoShare Hanoi Plaza",
-      address: "456 Hoàn Kiếm, Hà Nội", 
-      manager: "Trần Thị B",
-      vehicles: 12,
-      status: "active"
-    }
-  ];
-
+  const {
+    toast
+  } = useToast();
+  const stats = [{
+    label: "Tổng nhân viên",
+    value: 25,
+    icon: Users,
+    color: "primary"
+  }, {
+    label: "Showroom",
+    value: 12,
+    icon: Building,
+    color: "success"
+  }, {
+    label: "Hợp đồng",
+    value: 158,
+    icon: FileText,
+    color: "warning"
+  }, {
+    label: "Doanh thu (tháng)",
+    value: "2.5B VNĐ",
+    icon: BarChart3,
+    color: "primary"
+  }];
+  const staffList = [{
+    id: "ST001",
+    name: "Nguyễn Văn Nam",
+    email: "nam.nguyen@ecoshare.vn",
+    role: "Staff",
+    status: "active",
+    groups: 3,
+    province: "Hồ Chí Minh"
+  }, {
+    id: "ST002",
+    name: "Trần Thị Lan",
+    email: "lan.tran@ecoshare.vn",
+    role: "Staff",
+    status: "active",
+    groups: 2,
+    province: "Hà Nội"
+  }, {
+    id: "ST003",
+    name: "Lê Văn Tùng",
+    email: "tung.le@ecoshare.vn",
+    role: "Staff",
+    status: "inactive",
+    groups: 0,
+    province: "Đà Nẵng"
+  }];
+  const showrooms = [{
+    id: "SR001",
+    name: "EcoShare Saigon Center",
+    address: "123 Nguyễn Huệ, Q1, HCM",
+    manager: "Nguyễn Văn A",
+    vehicles: 15,
+    status: "active"
+  }, {
+    id: "SR002",
+    name: "EcoShare Hanoi Plaza",
+    address: "456 Hoàn Kiếm, Hà Nội",
+    manager: "Trần Thị B",
+    vehicles: 12,
+    status: "active"
+  }];
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "success";
-      case "inactive": return "destructive";
-      default: return "secondary";
+      case "active":
+        return "success";
+      case "inactive":
+        return "destructive";
+      default:
+        return "secondary";
     }
   };
-
   const getStatusText = (status: string) => {
     switch (status) {
-      case "active": return "Hoạt động";
-      case "inactive": return "Ngưng hoạt động";
-      default: return "Không xác định";
+      case "active":
+        return "Hoạt động";
+      case "inactive":
+        return "Ngưng hoạt động";
+      default:
+        return "Không xác định";
     }
   };
-
   const handleCreateStaff = () => {
     if (!newStaffData.name || !newStaffData.email || !newStaffData.username || !newStaffData.password || !newStaffData.province) {
       toast({
@@ -132,11 +120,10 @@ export default function AdminDashboard() {
       id: `ST${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
       ...newStaffData
     };
-    
     setCreatedStaff(created);
     setShowAddStaffModal(false);
     setShowSuccessModal(true);
-    
+
     // Reset form
     setNewStaffData({
       name: "",
@@ -146,9 +133,7 @@ export default function AdminDashboard() {
       province: ""
     });
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-gradient-primary text-white p-4 shadow-glow">
         <div className="container mx-auto flex justify-between items-center">
@@ -157,21 +142,11 @@ export default function AdminDashboard() {
             <p className="text-sm opacity-90">Quản lý toàn bộ hệ thống EcoShare</p>
           </div>
           <div className="flex items-center space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              onClick={() => window.history.back()}
-            >
+            <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => window.history.back()}>
               <ArrowLeft className="h-4 w-4 mr-1" />
               Quay lại
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              onClick={() => navigate('/login')}
-            >
+            <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => navigate('/login')}>
               <LogOut className="h-4 w-4 mr-1" />
               Đăng xuất
             </Button>
@@ -183,8 +158,7 @@ export default function AdminDashboard() {
       <div className="container mx-auto p-6 space-y-6">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {stats.map((stat) => (
-            <Card key={stat.label} className="shadow-elegant">
+          {stats.map(stat => <Card key={stat.label} className="shadow-elegant">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -194,8 +168,7 @@ export default function AdminDashboard() {
                   <stat.icon className={`h-8 w-8 text-${stat.color}`} />
                 </div>
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
 
         {/* Main Content Tabs */}
@@ -222,10 +195,7 @@ export default function AdminDashboard() {
                       Tạo, chỉnh sửa và quản lý tài khoản nhân viên
                     </CardDescription>
                   </div>
-                  <Button 
-                    className="bg-gradient-primary hover:shadow-glow"
-                    onClick={() => setShowAddStaffModal(true)}
-                  >
+                  <Button className="bg-gradient-primary hover:shadow-glow" onClick={() => setShowAddStaffModal(true)}>
                     <UserPlus className="h-4 w-4 mr-2" />
                     Thêm nhân viên
                   </Button>
@@ -240,8 +210,7 @@ export default function AdminDashboard() {
                 </div>
                 
                 <div className="space-y-4">
-                  {staffList.map((staff) => (
-                    <div key={staff.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  {staffList.map(staff => <div key={staff.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <h3 className="font-semibold">{staff.name}</h3>
@@ -266,19 +235,12 @@ export default function AdminDashboard() {
                           <Lock className="h-4 w-4 mr-1" />
                           {staff.status === "active" ? "Khóa" : "Mở khóa"}
                         </Button>
-                        {staff.status === "blocked" && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
-                          >
+                        {staff.status === "blocked" && <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
                             <Trash2 className="h-4 w-4 mr-1" />
                             Sa thải
-                          </Button>
-                        )}
+                          </Button>}
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -306,8 +268,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {showrooms.map((showroom) => (
-                    <div key={showroom.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  {showrooms.map(showroom => <div key={showroom.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <h3 className="font-semibold">{showroom.name}</h3>
@@ -332,8 +293,7 @@ export default function AdminDashboard() {
                           Chỉnh sửa
                         </Button>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -353,36 +313,31 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    { 
-                      id: "HD001", 
-                      title: "Hợp đồng Showroom HCM", 
-                      staff: "Nguyễn Văn Nam", 
-                      type: "Showroom", 
-                      status: "approved", 
-                      value: "500M VNĐ",
-                      date: "15/01/2024"
-                    },
-                    { 
-                      id: "HD002", 
-                      title: "Hợp đồng đồng sở hữu VF8", 
-                      staff: "Trần Thị Lan", 
-                      type: "Xe điện", 
-                      status: "pending", 
-                      value: "1.2B VNĐ",
-                      date: "20/01/2024"
-                    },
-                    { 
-                      id: "HD003", 
-                      title: "Hợp đồng bảo trì xe", 
-                      staff: "Lê Văn Tùng", 
-                      type: "Bảo trì", 
-                      status: "approved", 
-                      value: "50M VNĐ",
-                      date: "18/01/2024"
-                    }
-                  ].map((contract) => (
-                    <div key={contract.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  {[{
+                  id: "HD001",
+                  title: "Hợp đồng Showroom HCM",
+                  staff: "Nguyễn Văn Nam",
+                  type: "Showroom",
+                  status: "approved",
+                  value: "500M VNĐ",
+                  date: "15/01/2024"
+                }, {
+                  id: "HD002",
+                  title: "Hợp đồng đồng sở hữu VF8",
+                  staff: "Trần Thị Lan",
+                  type: "Xe điện",
+                  status: "pending",
+                  value: "1.2B VNĐ",
+                  date: "20/01/2024"
+                }, {
+                  id: "HD003",
+                  title: "Hợp đồng bảo trì xe",
+                  staff: "Lê Văn Tùng",
+                  type: "Bảo trì",
+                  status: "approved",
+                  value: "50M VNĐ",
+                  date: "18/01/2024"
+                }].map(contract => <div key={contract.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <h3 className="font-semibold">{contract.title}</h3>
@@ -412,15 +367,12 @@ export default function AdminDashboard() {
                           <Download className="h-4 w-4 mr-1" />
                           Tải về
                         </Button>
-                        {contract.status === 'pending' && (
-                          <Button size="sm" className="bg-gradient-primary hover:shadow-glow">
+                        {contract.status === 'pending' && <Button size="sm" className="bg-gradient-primary hover:shadow-glow">
                             <CheckCircle className="h-4 w-4 mr-1" />
                             Duyệt
-                          </Button>
-                        )}
+                          </Button>}
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -579,39 +531,34 @@ export default function AdminDashboard() {
 
                   <div className="space-y-4">
                     <h4 className="font-medium">Giao dịch gần đây</h4>
-                    {[
-                      {
-                        id: "TX001",
-                        type: "Mua",
-                        vehicle: "VinFast VF8 2024",
-                        buyer: "Nhóm HCM-Q1 (12 thành viên)",
-                        seller: "VinFast Showroom HCM",
-                        price: "1.2B VNĐ",
-                        date: "22/01/2024",
-                        status: "completed"
-                      },
-                      {
-                        id: "TX002", 
-                        type: "Bán",
-                        vehicle: "Tesla Model Y 2023",
-                        buyer: "Công ty ABC",
-                        seller: "Nhóm HN-Cầu Giấy (8 thành viên)",
-                        price: "950M VNĐ",
-                        date: "20/01/2024",
-                        status: "completed"
-                      },
-                      {
-                        id: "TX003",
-                        type: "Mua",
-                        vehicle: "Hyundai Kona Electric",
-                        buyer: "Nhóm ĐN-Hải Châu (6 thành viên)",
-                        seller: "Hyundai Đà Nẵng",
-                        price: "750M VNĐ",
-                        date: "18/01/2024",
-                        status: "processing"
-                      }
-                    ].map((transaction) => (
-                      <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    {[{
+                    id: "TX001",
+                    type: "Mua",
+                    vehicle: "VinFast VF8 2024",
+                    buyer: "Nhóm HCM-Q1 (12 thành viên)",
+                    seller: "VinFast Showroom HCM",
+                    price: "1.2B VNĐ",
+                    date: "22/01/2024",
+                    status: "completed"
+                  }, {
+                    id: "TX002",
+                    type: "Bán",
+                    vehicle: "Tesla Model Y 2023",
+                    buyer: "Công ty ABC",
+                    seller: "Nhóm HN-Cầu Giấy (8 thành viên)",
+                    price: "950M VNĐ",
+                    date: "20/01/2024",
+                    status: "completed"
+                  }, {
+                    id: "TX003",
+                    type: "Mua",
+                    vehicle: "Hyundai Kona Electric",
+                    buyer: "Nhóm ĐN-Hải Châu (6 thành viên)",
+                    seller: "Hyundai Đà Nẵng",
+                    price: "750M VNĐ",
+                    date: "18/01/2024",
+                    status: "processing"
+                  }].map(transaction => <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
                             <Badge variant={transaction.type === 'Mua' ? 'default' : 'secondary'}>
@@ -642,8 +589,7 @@ export default function AdminDashboard() {
                             Hợp đồng
                           </Button>
                         </div>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
               </CardContent>
@@ -653,149 +599,27 @@ export default function AdminDashboard() {
 
         {/* AI Chat Button */}
         <div className="fixed bottom-6 right-6">
-          <Button
-            onClick={() => setShowChat(true)}
-            size="lg"
-            className="rounded-full bg-gradient-primary hover:shadow-glow shadow-lg"
-          >
+          <Button onClick={() => setShowChat(true)} size="lg" className="rounded-full bg-gradient-primary hover:shadow-glow shadow-lg">
             Phân tích AI
           </Button>
         </div>
 
         {/* Chat Box */}
-        {showChat && (
-          <ChatBox
-            isOpen={showChat}
-            onClose={() => setShowChat(false)}
-            userType="admin"
-          />
-        )}
+        {showChat && <ChatBox isOpen={showChat} onClose={() => setShowChat(false)} userType="admin" />}
 
         {/* Add Staff Modal */}
         <dialog open={showAddStaffModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           <div className="bg-background rounded-lg shadow-elegant max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">Thêm nhân viên mới</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold border-b pb-2">Thông tin cá nhân</h3>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Họ tên</label>
-                    <Input
-                      value={newStaffData.name}
-                      onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
-                      placeholder="Nhập họ tên nhân viên"
-                      className="h-12"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
-                    <Input
-                      type="email"
-                      value={newStaffData.email}
-                      onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
-                      placeholder="Nhập email"
-                      className="h-12"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố</label>
-                    <Input
-                      value={newStaffData.province}
-                      onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
-                      placeholder="Nhập tỉnh/thành phố"
-                      className="h-12"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold border-b pb-2">Tài khoản đăng nhập</h3>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Tên đăng nhập</label>
-                    <Input
-                      value={newStaffData.username}
-                      onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
-                      placeholder="Nhập tên đăng nhập"
-                      className="h-12"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Mật khẩu</label>
-                    <Input
-                      type="password"
-                      value={newStaffData.password}
-                      onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
-                      placeholder="Nhập mật khẩu"
-                      className="h-12"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-center space-x-4 mt-8 pt-6 border-t">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowAddStaffModal(false)}
-                  className="px-8 py-3 h-12"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  className="bg-gradient-primary hover:shadow-glow px-8 py-3 h-12"
-                  onClick={handleCreateStaff}
-                >
-                  Create
-                </Button>
-              </div>
-            </div>
+            
           </div>
         </dialog>
 
         {/* Success Modal */}
         <dialog open={showSuccessModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           <div className="bg-background rounded-lg shadow-elegant max-w-md w-full mx-4">
-            <div className="p-6 text-center">
-              <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-success mb-4">Tạo nhân viên thành công!</h2>
-              
-              {createdStaff && (
-                <div className="space-y-3 text-left bg-muted p-4 rounded-lg">
-                  <div>
-                    <span className="font-medium">Họ tên:</span>
-                    <span className="ml-2">{createdStaff.name}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">Email:</span>
-                    <span className="ml-2">{createdStaff.email}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">Tài khoản:</span>
-                    <span className="ml-2">{createdStaff.username}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">Mật khẩu:</span>
-                    <span className="ml-2">{createdStaff.password}</span>
-                  </div>
-                </div>
-              )}
-              
-              <Button 
-                className="mt-6 bg-gradient-primary hover:shadow-glow"
-                onClick={() => setShowSuccessModal(false)}
-              >
-                Đóng
-              </Button>
-            </div>
+            
           </div>
         </dialog>
       </div>
-    </div>
-  );
+    </div>;
 }
