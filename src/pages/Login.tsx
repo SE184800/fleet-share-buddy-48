@@ -60,7 +60,7 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label>Loại tài khoản</Label>
-              <div className="space-y-3">
+              <div className="flex flex-wrap gap-4">
                 {[
                   { value: "co-owner", label: "Chủ sở hữu (Co-owner)" },
                   { value: "staff", label: "Nhân viên (Staff)" }, 
