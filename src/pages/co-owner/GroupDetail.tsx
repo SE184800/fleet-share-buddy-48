@@ -136,14 +136,20 @@ export default function GroupDetail() {
               <CardDescription>Thông tin người quản trị nhóm</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-4">
-                <Avatar className="h-14 w-14">
-                  <AvatarImage src={owner.avatar} alt={`Ảnh đại diện ${owner.name}`} loading="lazy" />
-                  <AvatarFallback>{owner.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="text-lg font-semibold flex items-center gap-2">{owner.name} <Badge>Admin</Badge></div>
-                  {owner.email && <div className="text-sm text-muted-foreground">{owner.email}</div>}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-14 w-14">
+                    <AvatarImage src={owner.avatar} alt={`Ảnh đại diện ${owner.name}`} loading="lazy" />
+                    <AvatarFallback>{owner.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="text-lg font-semibold flex items-center gap-2">{owner.name} <Badge>Admin</Badge></div>
+                    {owner.email && <div className="text-sm text-muted-foreground">{owner.email}</div>}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold text-primary">{getUserUsage(owner.id)}%</div>
+                  <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
                 </div>
               </div>
             </CardContent>
