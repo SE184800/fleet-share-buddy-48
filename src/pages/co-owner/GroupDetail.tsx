@@ -26,6 +26,11 @@ export default function GroupDetail() {
   const [amount, setAmount] = useState<string>("");
   const [showQR, setShowQR] = useState(false);
   const [openHistory, setOpenHistory] = useState(false);
+  const [openAddMember, setOpenAddMember] = useState(false);
+  const [openRemoveMember, setOpenRemoveMember] = useState(false);
+  const [selectedMemberToRemove, setSelectedMemberToRemove] = useState<string>("");
+  const [newMemberEmail, setNewMemberEmail] = useState("");
+  const [confirmText, setConfirmText] = useState("");
   if (!group) {
     return <div className="container mx-auto p-6">
         <Card>
@@ -164,8 +169,17 @@ export default function GroupDetail() {
         <section>
           <Card>
             <CardHeader>
-              <CardTitle>Đồng sở hữu</CardTitle>
-              <CardDescription>Các thành viên trong nhóm</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Đồng sở hữu</CardTitle>
+                  <CardDescription>Các thành viên trong nhóm</CardDescription>
+                </div>
+                {myRole === "admin" && (
+                  <Button onClick={() => setOpenAddMember(true)} size="sm">
+                    Thêm thành viên
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -187,9 +201,23 @@ export default function GroupDetail() {
                         <div className="text-sm text-muted-foreground">Member</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-bold text-primary">{getUserUsage(m.id)}%</div>
-                      <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-right">
+                        <div className="text-sm font-bold text-primary">{getUserUsage(m.id)}%</div>
+                        <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
+                      </div>
+                      {myRole === "admin" && m.id !== CURRENT_USER_ID && (
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedMemberToRemove(m.id);
+                            setOpenRemoveMember(true);
+                          }}
+                        >
+                          Xóa
+                        </Button>
+                      )}
                     </div>
                   </div>)}
               </div>
@@ -244,6 +272,106 @@ export default function GroupDetail() {
             }))} />
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog thêm thành viên */}
+      <Dialog open={openAddMember} onOpenChange={setOpenAddMember}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thêm thành viên mới</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Email thành viên mới:</label>
+              <Input 
+                value={newMemberEmail}
+                onChange={(e) => setNewMemberEmail(e.target.value)}
+                placeholder="Nhập email thành viên"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Xác nhận hành động:</label>
+              <Input 
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="Nhập 'Xác nhận thêm thành viên'"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => {
+                  if (confirmText === "Xác nhận thêm thành viên" && newMemberEmail.trim()) {
+                    toast({
+                      title: "Yêu cầu đã được gửi",
+                      description: "Staff sẽ xử lý yêu cầu thêm thành viên trong 24h"
+                    });
+                    setOpenAddMember(false);
+                    setNewMemberEmail("");
+                    setConfirmText("");
+                  } else {
+                    toast({
+                      title: "Thông tin không hợp lệ",
+                      description: "Vui lòng nhập đúng text xác nhận và email"
+                    });
+                  }
+                }}
+                className="flex-1"
+              >
+                Gửi yêu cầu
+              </Button>
+              <Button variant="outline" onClick={() => setOpenAddMember(false)}>
+                Hủy
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog xóa thành viên */}
+      <Dialog open={openRemoveMember} onOpenChange={setOpenRemoveMember}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Xóa thành viên</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>Bạn có chắc chắn muốn xóa thành viên này khỏi nhóm?</p>
+            <div>
+              <label className="text-sm font-medium">Xác nhận hành động:</label>
+              <Input 
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="Nhập 'Xác nhận xóa thành viên'"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="destructive"
+                onClick={() => {
+                  if (confirmText === "Xác nhận xóa thành viên") {
+                    toast({
+                      title: "Yêu cầu đã được gửi",
+                      description: "Staff sẽ xử lý yêu cầu xóa thành viên trong 24h"
+                    });
+                    setOpenRemoveMember(false);
+                    setConfirmText("");
+                    setSelectedMemberToRemove("");
+                  } else {
+                    toast({
+                      title: "Text xác nhận không đúng",
+                      description: "Vui lòng nhập đúng text xác nhận"
+                    });
+                  }
+                }}
+                className="flex-1"
+              >
+                Gửi yêu cầu xóa
+              </Button>
+              <Button variant="outline" onClick={() => setOpenRemoveMember(false)}>
+                Hủy
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>;
