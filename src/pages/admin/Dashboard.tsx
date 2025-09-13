@@ -13,6 +13,17 @@ export default function AdminDashboard() {
   const [showChat, setShowChat] = useState(false);
   const [showAddStaffModal, setShowAddStaffModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showEditStaffModal, setShowEditStaffModal] = useState(false);
+  const [showUpdateSuccessModal, setShowUpdateSuccessModal] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState<any>(null);
+  const [editStaffData, setEditStaffData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    birthDate: "",
+    province: ""
+  });
   const [newStaffData, setNewStaffData] = useState({
     name: "",
     email: "",
@@ -143,6 +154,35 @@ export default function AdminDashboard() {
       showroom: ""
     });
   };
+
+  const handleEditStaff = (staff: any) => {
+    setSelectedStaff(staff);
+    setEditStaffData({
+      name: staff.name,
+      email: staff.email,
+      phone: staff.phone || "",
+      address: staff.address || "",
+      birthDate: staff.birthDate || "",
+      province: staff.province
+    });
+    setShowEditStaffModal(true);
+  };
+
+  const handleUpdateStaff = () => {
+    if (!editStaffData.name || !editStaffData.email || !editStaffData.province) {
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng nhập đầy đủ thông tin bắt buộc",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simulate staff update
+    setShowEditStaffModal(false);
+    setShowUpdateSuccessModal(true);
+  };
+
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-gradient-primary text-white p-4 shadow-glow">
@@ -237,7 +277,11 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleEditStaff(staff)}
+                        >
                           <Settings className="h-4 w-4 mr-1" />
                           Chỉnh sửa
                         </Button>
@@ -804,6 +848,177 @@ export default function AdminDashboard() {
                 <Button
                   className="w-full bg-gradient-primary hover:shadow-glow"
                   onClick={() => setShowSuccessModal(false)}
+                >
+                  Đóng
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Staff Modal */}
+        {showEditStaffModal && selectedStaff && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b">
+                <h2 className="text-xl font-bold flex items-center space-x-2">
+                  <Settings className="h-5 w-5" />
+                  <span>Chỉnh sửa thông tin nhân viên</span>
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Chỉnh sửa thông tin cá nhân của nhân viên
+                </p>
+              </div>
+              
+              <div className="space-y-6 p-6">
+                {/* Thông tin tài khoản (chỉ đọc) */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Shield className="h-5 w-5" />
+                      <span>Thông tin tài khoản</span>
+                    </CardTitle>
+                    <CardDescription>Thông tin này không thể chỉnh sửa</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Mã nhân viên</p>
+                        <p className="font-medium">{selectedStaff.id}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Vai trò</p>
+                        <p className="font-medium">{selectedStaff.role}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Trạng thái</p>
+                        <Badge variant={getStatusColor(selectedStaff.status) as any}>
+                          {getStatusText(selectedStaff.status)}
+                        </Badge>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Số nhóm quản lý</p>
+                        <p className="font-medium">{selectedStaff.groups} nhóm</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Thông tin cá nhân (có thể chỉnh sửa) */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Users className="h-5 w-5" />
+                      <span>Thông tin cá nhân</span>
+                    </CardTitle>
+                    <CardDescription>Chỉnh sửa thông tin cá nhân của nhân viên</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Họ và tên *</label>
+                        <Input
+                          placeholder="Nhập họ và tên đầy đủ"
+                          value={editStaffData.name}
+                          onChange={(e) => setEditStaffData({...editStaffData, name: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Email *</label>
+                        <Input
+                          type="email"
+                          placeholder="example@ecoshare.vn"
+                          value={editStaffData.email}
+                          onChange={(e) => setEditStaffData({...editStaffData, email: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Số điện thoại</label>
+                        <Input
+                          placeholder="0123456789"
+                          value={editStaffData.phone}
+                          onChange={(e) => setEditStaffData({...editStaffData, phone: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Ngày sinh</label>
+                        <Input
+                          type="date"
+                          value={editStaffData.birthDate}
+                          onChange={(e) => setEditStaffData({...editStaffData, birthDate: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-2">Địa chỉ</label>
+                        <Input
+                          placeholder="Nhập địa chỉ"
+                          value={editStaffData.address}
+                          onChange={(e) => setEditStaffData({...editStaffData, address: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố làm việc *</label>
+                        <select
+                          className="w-full p-3 border border-input rounded-md bg-background"
+                          value={editStaffData.province}
+                          onChange={(e) => setEditStaffData({...editStaffData, province: e.target.value})}
+                        >
+                          <option value="">Chọn tỉnh/thành phố</option>
+                          <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                          <option value="Hà Nội">Hà Nội</option>
+                          <option value="Đà Nẵng">Đà Nẵng</option>
+                          <option value="Cần Thơ">Cần Thơ</option>
+                          <option value="Hải Phòng">Hải Phòng</option>
+                          <option value="Bình Dương">Bình Dương</option>
+                          <option value="Đồng Nai">Đồng Nai</option>
+                          <option value="Khánh Hòa">Khánh Hòa</option>
+                        </select>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div className="flex justify-end space-x-3 p-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowEditStaffModal(false)}
+                >
+                  Hủy
+                </Button>
+                <Button
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={handleUpdateStaff}
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Cập nhật
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Update Success Modal */}
+        {showUpdateSuccessModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
+                  <CheckCircle className="h-6 w-6 text-success" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Cập nhật thành công!</h3>
+                <p className="text-muted-foreground mb-6">
+                  Thông tin nhân viên đã được cập nhật thành công.
+                </p>
+                
+                <Button
+                  className="w-full bg-gradient-primary hover:shadow-glow"
+                  onClick={() => setShowUpdateSuccessModal(false)}
                 >
                   Đóng
                 </Button>
