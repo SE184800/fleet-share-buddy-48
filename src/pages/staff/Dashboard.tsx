@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 export default function StaffDashboard() {
   const [showChat, setShowChat] = useState(false);
   const [selectedApp, setSelectedApp] = useState<any>(null);
+  const [selectedGroup, setSelectedGroup] = useState<any>(null);
   const navigate = useNavigate();
 
   const stats = [
@@ -243,14 +244,29 @@ export default function StaffDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <Card>
+                  <Card 
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => setSelectedGroup({
+                      id: "g-hcm-q1",
+                      name: "Nhóm HCM - Quận 1",
+                      members: 12,
+                      fund: 50000000,
+                      requests: [
+                        { id: "req-001", type: "delete_group", description: "Yêu cầu xóa nhóm từ admin Nguyễn Văn A", date: "2024-01-20", status: "pending" },
+                        { id: "req-002", type: "add_member", description: "Thêm thành viên: member@email.com", date: "2024-01-19", status: "pending" }
+                      ]
+                    })}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold">Nhóm HCM - Quận 1</h3>
                           <p className="text-sm text-muted-foreground">12 thành viên</p>
                         </div>
-                        <MapPin className="h-6 w-6 text-primary" />
+                        <div className="flex flex-col items-end">
+                          <MapPin className="h-6 w-6 text-primary" />
+                          <Badge variant="destructive" className="mt-1 text-xs">2 yêu cầu</Badge>
+                        </div>
                       </div>
                       <div className="mt-2">
                         <div className="flex justify-between text-sm">
@@ -261,14 +277,28 @@ export default function StaffDashboard() {
                     </CardContent>
                   </Card>
                   
-                  <Card>
+                  <Card 
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => setSelectedGroup({
+                      id: "g-hn-cg",
+                      name: "Nhóm HN - Cầu Giấy",
+                      members: 8,
+                      fund: 35000000,
+                      requests: [
+                        { id: "req-003", type: "remove_member", description: "Xóa thành viên: oldmember@email.com", date: "2024-01-18", status: "pending" }
+                      ]
+                    })}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold">Nhóm HN - Cầu Giấy</h3>
                           <p className="text-sm text-muted-foreground">8 thành viên</p>
                         </div>
-                        <MapPin className="h-6 w-6 text-primary" />
+                        <div className="flex flex-col items-end">
+                          <MapPin className="h-6 w-6 text-primary" />
+                          <Badge variant="destructive" className="mt-1 text-xs">1 yêu cầu</Badge>
+                        </div>
                       </div>
                       <div className="mt-2">
                         <div className="flex justify-between text-sm">
@@ -684,6 +714,119 @@ export default function StaffDashboard() {
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Phê duyệt
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Group Details Dialog */}
+      <Dialog open={selectedGroup !== null} onOpenChange={() => setSelectedGroup(null)}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Users className="h-5 w-5" />
+              <span>Chi tiết nhóm: {selectedGroup?.name}</span>
+            </DialogTitle>
+            <DialogDescription>
+              Thông tin nhóm và các yêu cầu từ admin
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedGroup && (
+            <div className="space-y-6">
+              {/* Group Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Thông tin chung</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Tên nhóm</p>
+                      <p className="font-semibold">{selectedGroup.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Số thành viên</p>
+                      <p className="font-semibold">{selectedGroup.members} người</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Quỹ nhóm</p>
+                      <p className="font-semibold">{selectedGroup.fund.toLocaleString()} VNĐ</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Admin Requests */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <span>Yêu cầu từ Admin</span>
+                    <Badge variant="destructive">{selectedGroup.requests.length} yêu cầu</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {selectedGroup.requests.map((request: any) => (
+                      <div key={request.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Badge 
+                              variant={
+                                request.type === "delete_group" ? "destructive" : 
+                                request.type === "add_member" ? "default" : 
+                                "secondary"
+                              }
+                            >
+                              {request.type === "delete_group" ? "Xóa nhóm" : 
+                               request.type === "add_member" ? "Thêm thành viên" : 
+                               "Xóa thành viên"}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">{request.date}</span>
+                          </div>
+                          <Badge variant="outline">Chờ xử lý</Badge>
+                        </div>
+                        
+                        <p className="text-sm">{request.description}</p>
+                        
+                        <div className="flex space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="text-success border-success hover:bg-success hover:text-success-foreground"
+                            onClick={() => {
+                              console.log("Approved request:", request.id);
+                              // Handle approve logic
+                            }}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Duyệt
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+                            onClick={() => {
+                              console.log("Rejected request:", request.id);
+                              // Handle reject logic
+                            }}
+                          >
+                            <XCircle className="h-4 w-4 mr-1" />
+                            Từ chối
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 pt-4 border-t">
+                <Button variant="outline" onClick={() => setSelectedGroup(null)}>
+                  Đóng
                 </Button>
               </div>
             </div>
