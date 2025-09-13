@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Car } from "lucide-react";
@@ -11,14 +11,14 @@ import { Car } from "lucide-react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState<string>("");
+  const [userTypes, setUserTypes] = useState<string[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !userType) {
+    if (!email || !password || userTypes.length === 0) {
       toast({
         title: "Lỗi đăng nhập",
         description: "Vui lòng điền đầy đủ thông tin",
@@ -27,12 +27,13 @@ export default function Login() {
       return;
     }
 
-    // Simulate login logic
-    if (userType === "co-owner") {
+    // Simulate login logic - use first selected user type
+    const selectedType = userTypes[0];
+    if (selectedType === "co-owner") {
       navigate("/co-owner/dashboard");
-    } else if (userType === "staff") {
+    } else if (selectedType === "staff") {
       navigate("/staff/dashboard");
-    } else if (userType === "admin") {
+    } else if (selectedType === "admin") {
       navigate("/admin/dashboard");
     }
 
@@ -58,17 +59,31 @@ export default function Login() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="userType">Loại tài khoản</Label>
-              <Select value={userType} onValueChange={setUserType}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Chọn loại tài khoản" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="co-owner">Chủ sở hữu (Co-owner)</SelectItem>
-                  <SelectItem value="staff">Nhân viên (Staff)</SelectItem>
-                  <SelectItem value="admin">Quản trị viên (Admin)</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Loại tài khoản</Label>
+              <div className="space-y-3">
+                {[
+                  { value: "co-owner", label: "Chủ sở hữu (Co-owner)" },
+                  { value: "staff", label: "Nhân viên (Staff)" }, 
+                  { value: "admin", label: "Quản trị viên (Admin)" }
+                ].map((type) => (
+                  <div key={type.value} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={type.value}
+                      checked={userTypes.includes(type.value)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setUserTypes([...userTypes, type.value]);
+                        } else {
+                          setUserTypes(userTypes.filter(t => t !== type.value));
+                        }
+                      }}
+                    />
+                    <Label htmlFor={type.value} className="text-sm font-normal">
+                      {type.label}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
             
             <div className="space-y-2">
