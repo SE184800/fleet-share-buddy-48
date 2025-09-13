@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Car, Users, AlertCircle, Edit, X, Check } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface BookingSlot {
@@ -26,6 +27,9 @@ export default function VehicleBooking() {
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectedStartTime, setSelectedStartTime] = useState<string>("");
+  const [selectedEndTime, setSelectedEndTime] = useState<string>("");
+  const [showTimeSelector, setShowTimeSelector] = useState<boolean>(false);
   const [editingBooking, setEditingBooking] = useState<string | null>(null);
   const [editVehicle, setEditVehicle] = useState<string>("");
   const [editDate, setEditDate] = useState<string>("");
@@ -40,13 +44,13 @@ export default function VehicleBooking() {
 
   const timeSlots = [
     "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", 
-    "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
+    "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"
   ];
 
   const existingBookings: BookingSlot[] = [
     {
       id: "1",
-      time: "09:00",
+      time: "09:00-11:00",
       date: "2024-01-16",
       vehicle: "VinFast VF8",
       bookedBy: "Nguyễn Văn A (60%)",
@@ -55,12 +59,21 @@ export default function VehicleBooking() {
     },
     {
       id: "2", 
-      time: "14:00",
+      time: "14:00-17:00",
       date: "2024-01-16",
       vehicle: "Tesla Model Y",
       bookedBy: "Trần Thị B (25%)",
       ownershipLevel: 25,
       canOverride: true
+    },
+    {
+      id: "3",
+      time: "13:00-15:00", 
+      date: "2024-01-16",
+      vehicle: "VinFast VF8",
+      bookedBy: "Lê Văn C (40%)",
+      ownershipLevel: 40,
+      canOverride: false
     }
   ];
 
@@ -83,11 +96,29 @@ export default function VehicleBooking() {
     return existingBooking.ownershipLevel < currentUserOwnership;
   };
 
+  const handleTimeSelection = () => {
+    if (!selectedStartTime || !selectedEndTime) return;
+    
+    const timeRange = `${selectedStartTime}-${selectedEndTime}`;
+    setSelectedTime(timeRange);
+    setShowTimeSelector(false);
+    
+    toast({
+      title: "Đã chọn thời gian",
+      description: `Thời gian: ${timeRange}`,
+    });
+  };
+
   const handleBooking = () => {
     if (!selectedVehicle || !selectedDate || !selectedTime) return;
     
     console.log("Booking:", { selectedVehicle, selectedDate, selectedTime });
     // Here would integrate with backend to create booking
+    
+    toast({
+      title: "Đặt lịch thành công",
+      description: `Đã đặt ${selectedVehicle} vào ${selectedDate} từ ${selectedTime}`,
+    });
   };
 
   const handleCancelBooking = (bookingId: string) => {
@@ -185,30 +216,15 @@ export default function VehicleBooking() {
 
           <div>
             <label className="text-sm font-medium mb-2 block">Chọn giờ</label>
-            <Select value={selectedTime} onValueChange={setSelectedTime}>
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn giờ" />
-              </SelectTrigger>
-              <SelectContent>
-                {timeSlots.map((time) => {
-                  const canBook = selectedVehicle && selectedDate ? 
-                    canBookSlot(time, selectedDate, selectedVehicle) : true;
-                  
-                  return (
-                    <SelectItem 
-                      key={time} 
-                      value={time}
-                      disabled={!canBook}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span>{time}</span>
-                        {!canBook && <AlertCircle className="h-4 w-4 text-destructive" />}
-                      </div>
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-left font-normal"
+              onClick={() => setShowTimeSelector(true)}
+              disabled={!selectedVehicle || !selectedDate}
+            >
+              <Clock className="h-4 w-4 mr-2" />
+              {selectedTime ? selectedTime : "Chọn khung giờ"}
+            </Button>
           </div>
         </div>
 
@@ -219,6 +235,114 @@ export default function VehicleBooking() {
         >
           Đặt lịch
         </Button>
+
+        {/* Time Selection Dialog */}
+        <Dialog open={showTimeSelector} onOpenChange={setShowTimeSelector}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center space-x-2">
+                <Clock className="h-5 w-5" />
+                <span>Chọn khung giờ sử dụng</span>
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Time Range Selection */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Giờ bắt đầu</label>
+                  <Select value={selectedStartTime} onValueChange={setSelectedStartTime}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn giờ bắt đầu" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeSlots.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Giờ kết thúc</label>
+                  <Select value={selectedEndTime} onValueChange={setSelectedEndTime}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn giờ kết thúc" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeSlots.map((time) => (
+                        <SelectItem 
+                          key={time} 
+                          value={time}
+                          disabled={selectedStartTime && time <= selectedStartTime}
+                        >
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Existing Bookings for Selected Date */}
+              {selectedDate && (
+                <div>
+                  <h4 className="font-medium mb-3">Lịch đã đặt trong ngày {selectedDate}</h4>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {existingBookings
+                      .filter(booking => booking.date === selectedDate && booking.vehicle === selectedVehicle)
+                      .map((booking) => (
+                      <div key={booking.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <Clock className="h-4 w-4" />
+                          <span className="font-medium">{booking.time}</span>
+                          <Badge variant={getOwnershipColor(booking.ownershipLevel) as "default" | "secondary" | "destructive" | "outline"}>
+                            {booking.bookedBy}
+                          </Badge>
+                        </div>
+                        {booking.canOverride && (
+                          <Badge variant="secondary" className="text-xs">
+                            Có thể thay thế
+                          </Badge>
+                        )}
+                      </div>
+                    ))}
+                    {existingBookings.filter(booking => booking.date === selectedDate && booking.vehicle === selectedVehicle).length === 0 && (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        Chưa có lịch đặt nào trong ngày này
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={handleTimeSelection}
+                  className="bg-gradient-primary hover:shadow-glow"
+                  disabled={!selectedStartTime || !selectedEndTime}
+                >
+                  <Check className="h-4 w-4 mr-2" />
+                  Chọn
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setShowTimeSelector(false);
+                    setSelectedStartTime("");
+                    setSelectedEndTime("");
+                  }}
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Hủy
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Edit Booking Form */}
         {editingBooking && (
