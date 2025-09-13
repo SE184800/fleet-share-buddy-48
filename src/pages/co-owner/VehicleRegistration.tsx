@@ -71,6 +71,16 @@ export default function VehicleRegistration() {
   ];
 
   const totalOwnership = ownerInfo.ownership + coOwners.reduce((sum, co) => sum + co.ownership, 0);
+  
+  const getVehiclePrice = () => {
+    const vehicle = vehicles.find(v => v.id === selectedVehicle);
+    return vehicle ? parseInt(vehicle.price.replace(/[^0-9]/g, '')) : 0;
+  };
+
+  const getOwnershipAmount = (percentage: number) => {
+    const price = getVehiclePrice();
+    return Math.round(price * (percentage / 100));
+  };
 
   const addCoOwner = () => {
     if (totalOwnership >= 100) {
@@ -345,14 +355,22 @@ export default function VehicleRegistration() {
                 
                 <div className="space-y-2">
                   <Label htmlFor="ownership">Tỷ lệ sở hữu (%) *</Label>
-                  <Input
-                    id="ownership"
-                    type="number"
-                    min="1"
-                    max="100"
-                    value={ownerInfo.ownership}
-                    onChange={(e) => setOwnerInfo({...ownerInfo, ownership: parseInt(e.target.value) || 0})}
-                  />
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      id="ownership"
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={ownerInfo.ownership}
+                      onChange={(e) => setOwnerInfo({...ownerInfo, ownership: parseInt(e.target.value) || 0})}
+                      className="flex-1"
+                    />
+                    {selectedVehicle && (
+                      <div className="text-sm text-primary font-medium">
+                        {getOwnershipAmount(ownerInfo.ownership).toLocaleString()} VNĐ
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               
@@ -442,12 +460,20 @@ export default function VehicleRegistration() {
                         value={coOwner.idNumber}
                         onChange={(e) => updateCoOwner(coOwner.id, "idNumber", e.target.value)}
                       />
-                      <Input
-                        type="number"
-                        placeholder="Tỷ lệ sở hữu (%)"
-                        value={coOwner.ownership}
-                        onChange={(e) => updateCoOwner(coOwner.id, "ownership", parseInt(e.target.value) || 0)}
-                      />
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="number"
+                          placeholder="Tỷ lệ sở hữu (%)"
+                          value={coOwner.ownership}
+                          onChange={(e) => updateCoOwner(coOwner.id, "ownership", parseInt(e.target.value) || 0)}
+                          className="flex-1"
+                        />
+                        {selectedVehicle && (
+                          <div className="text-sm text-primary font-medium">
+                            {getOwnershipAmount(coOwner.ownership).toLocaleString()} VNĐ
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </Card>

@@ -13,13 +13,15 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [driverLicense, setDriverLicense] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !confirmPassword || !fullName || !phone) {
+    if (!email || !password || !confirmPassword || !fullName || !phone || !idNumber || !driverLicense) {
       toast({
         title: "Lỗi đăng ký",
         description: "Vui lòng điền đầy đủ thông tin",
@@ -93,6 +95,28 @@ export default function Register() {
                 placeholder="Nhập số điện thoại"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="idNumber">CCCD/CMND</Label>
+              <Input
+                id="idNumber"
+                type="text"
+                placeholder="Nhập số CCCD/CMND"
+                value={idNumber}
+                onChange={(e) => setIdNumber(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="driverLicense">Giấy phép lái xe</Label>
+              <Input
+                id="driverLicense"
+                type="text"
+                placeholder="Nhập số giấy phép lái xe"
+                value={driverLicense}
+                onChange={(e) => setDriverLicense(e.target.value)}
               />
             </div>
             

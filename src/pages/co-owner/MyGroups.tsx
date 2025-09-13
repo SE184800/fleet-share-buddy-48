@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users } from "lucide-react";
+import { Users, ArrowLeft } from "lucide-react";
 import { groups, CURRENT_USER_ID } from "@/data/mockGroups";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -20,11 +20,26 @@ export default function MyGroups() {
   const data = useMemo(() => groups, []);
 
   return (
-    <div className="container mx-auto p-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Nhóm của tôi</h1>
-        <p className="text-sm text-muted-foreground">Danh sách các nhóm bạn đang tham gia</p>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="bg-gradient-primary text-white p-4 shadow-glow">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link to="/co-owner/dashboard">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Quay lại
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold">Nhóm của tôi</h1>
+              <p className="text-sm opacity-90">Quản lý các nhóm đồng sở hữu xe bạn tham gia</p>
+            </div>
+          </div>
+        </div>
       </header>
+
+      <div className="container mx-auto p-6">
       <main>
         <section aria-label="Danh sách nhóm" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((g) => {
@@ -75,6 +90,7 @@ export default function MyGroups() {
           })}
         </section>
       </main>
+      </div>
     </div>
   );
 }

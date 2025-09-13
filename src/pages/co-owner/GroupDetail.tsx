@@ -49,6 +49,22 @@ export default function GroupDetail() {
   const me = group.users.find((u) => u.id === CURRENT_USER_ID);
   const myRole = me?.role ?? "member";
 
+  // Mock usage percentages and monthly contributions
+  const getUserUsage = (userId: string) => {
+    const usageMap: Record<string, number> = {
+      "owner-1": 45,
+      "member-1": 35,
+      "member-2": 20
+    };
+    return usageMap[userId] || 0;
+  };
+
+  const getMonthlyContribution = (userId: string) => {
+    const usage = getUserUsage(userId);
+    const baseAmount = 2000000; // 2 triệu VND base
+    return Math.round(baseAmount * (usage / 100));
+  };
+
   const min = group.minTransfer;
 
   const handleGenerateQR = () => {
@@ -86,6 +102,17 @@ export default function GroupDetail() {
                 <div className="text-2xl font-bold">{group.fund.toLocaleString("vi-VN")} VNĐ</div>
               </div>
               <div>
+                <div className="mb-3">
+                  <div className="text-sm text-muted-foreground mb-2">Đóng góp hàng tháng theo tỉ lệ sử dụng:</div>
+                  <div className="space-y-1">
+                    {group.users.map(user => (
+                      <div key={user.id} className="flex items-center justify-between text-xs">
+                        <span>{user.name}: {getUserUsage(user.id)}%</span>
+                        <span className="font-medium text-primary">{getMonthlyContribution(user.id).toLocaleString()} VNĐ</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <label htmlFor="amount" className="text-sm text-muted-foreground">Số tiền chuyển (Tối thiểu {min.toLocaleString("vi-VN")} VNĐ)</label>
                 <Input id="amount" type="number" min={min} placeholder={`${min}`} value={amount} onChange={(e) => setAmount(e.target.value)} />
               </div>
@@ -144,15 +171,40 @@ export default function GroupDetail() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {members.map((m) => (
-                  <div key={m.id} className="flex items-center gap-3">
+                {/* Chủ sở hữu */}
+                <div className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
+                  <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarImage src={m.avatar} alt={`Ảnh đại diện ${m.name}`} loading="lazy" />
-                      <AvatarFallback>{m.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={owner.avatar} alt={`Ảnh đại diện ${owner.name}`} loading="lazy" />
+                      <AvatarFallback>{owner.name.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                      <div className="font-medium">{m.name}</div>
-                      <div className="text-sm text-muted-foreground">Member</div>
+                    <div>
+                      <div className="font-medium">{owner.name}</div>
+                      <div className="text-sm text-muted-foreground">Admin</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-primary">{getUserUsage(owner.id)}%</div>
+                    <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
+                  </div>
+                </div>
+
+                {/* Đồng sở hữu */}
+                {members.map((m) => (
+                  <div key={m.id} className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarImage src={m.avatar} alt={`Ảnh đại diện ${m.name}`} loading="lazy" />
+                        <AvatarFallback>{m.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-medium">{m.name}</div>
+                        <div className="text-sm text-muted-foreground">Member</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-primary">{getUserUsage(m.id)}%</div>
+                      <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
                     </div>
                   </div>
                 ))}
