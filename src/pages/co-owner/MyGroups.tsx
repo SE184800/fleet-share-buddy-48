@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, ArrowLeft } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Users, ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { groups, CURRENT_USER_ID } from "@/data/mockGroups";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -16,8 +18,28 @@ export default function MyGroups() {
   });
 
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<string>("");
 
   const data = useMemo(() => groups, []);
+
+  const handleRequestDeletion = (groupId: string) => {
+    setSelectedGroup(groupId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmRequestDeletion = () => {
+    const group = groups.find(g => g.id === selectedGroup);
+    if (group) {
+      toast({
+        title: "Yêu cầu xóa nhóm đã được gửi",
+        description: `Yêu cầu xóa nhóm "${group.name}" đã được gửi đến staff để xét duyệt.`,
+      });
+    }
+    setDeleteDialogOpen(false);
+    setSelectedGroup("");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,9 +102,21 @@ export default function MyGroups() {
                       <span>Quỹ nhóm:</span>
                       <span className="font-semibold">{g.fund.toLocaleString("vi-VN")} VNĐ</span>
                     </div>
-                    <Button variant="outline" className="w-full" onClick={() => navigate(`/co-owner/groups/${g.id}`)}>
-                      Xem chi tiết
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" onClick={() => navigate(`/co-owner/groups/${g.id}`)}>
+                        Xem chi tiết
+                      </Button>
+                      {myRole === "admin" && (
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={() => handleRequestDeletion(g.id)}
+                          className="px-3"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -91,6 +125,34 @@ export default function MyGroups() {
         </section>
       </main>
       </div>
+
+      {/* Delete Request Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              Yêu cầu xóa nhóm
+            </DialogTitle>
+            <DialogDescription>
+              Bạn có chắc chắn muốn gửi yêu cầu xóa nhóm này không? Yêu cầu sẽ được gửi đến staff để xét duyệt.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              <strong>Lưu ý:</strong> Chỉ staff mới có quyền xóa nhóm sau khi xét duyệt yêu cầu của bạn.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Hủy
+            </Button>
+            <Button variant="destructive" onClick={confirmRequestDeletion}>
+              Gửi yêu cầu
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
