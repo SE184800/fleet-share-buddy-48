@@ -18,7 +18,12 @@ export default function AdminDashboard() {
     email: "",
     username: "",
     password: "",
-    province: ""
+    province: "",
+    phone: "",
+    address: "",
+    birthDate: "",
+    role: "staff",
+    showroom: ""
   });
   const [createdStaff, setCreatedStaff] = useState<any>(null);
   const {
@@ -130,7 +135,12 @@ export default function AdminDashboard() {
       email: "",
       username: "",
       password: "",
-      province: ""
+      province: "",
+      phone: "",
+      address: "",
+      birthDate: "",
+      role: "staff",
+      showroom: ""
     });
   };
   return <div className="min-h-screen bg-background">
@@ -608,9 +618,209 @@ export default function AdminDashboard() {
         {showChat && <ChatBox isOpen={showChat} onClose={() => setShowChat(false)} userType="admin" />}
 
         {/* Add Staff Modal */}
-        
+        {showAddStaffModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b">
+                <h2 className="text-2xl font-bold">Thêm nhân viên mới</h2>
+                <p className="text-muted-foreground">Nhập thông tin cá nhân và tạo tài khoản cho nhân viên</p>
+              </div>
+              
+              <div className="p-6 space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Thông tin cá nhân */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold border-b pb-2">Thông tin cá nhân</h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Họ và tên *</label>
+                        <Input
+                          placeholder="Nhập họ và tên đầy đủ"
+                          value={newStaffData.name}
+                          onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Email *</label>
+                        <Input
+                          type="email"
+                          placeholder="example@ecoshare.vn"
+                          value={newStaffData.email}
+                          onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Số điện thoại</label>
+                        <Input
+                          placeholder="0123456789"
+                          value={newStaffData.phone || ''}
+                          onChange={(e) => setNewStaffData({...newStaffData, phone: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Địa chỉ</label>
+                        <Input
+                          placeholder="Nhập địa chỉ"
+                          value={newStaffData.address || ''}
+                          onChange={(e) => setNewStaffData({...newStaffData, address: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố làm việc *</label>
+                        <select
+                          className="w-full p-3 border border-input rounded-md bg-background"
+                          value={newStaffData.province}
+                          onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
+                        >
+                          <option value="">Chọn tỉnh/thành phố</option>
+                          <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                          <option value="Hà Nội">Hà Nội</option>
+                          <option value="Đà Nẵng">Đà Nẵng</option>
+                          <option value="Cần Thơ">Cần Thơ</option>
+                          <option value="Hải Phòng">Hải Phòng</option>
+                          <option value="Bình Dương">Bình Dương</option>
+                          <option value="Đồng Nai">Đồng Nai</option>
+                          <option value="Khánh Hòa">Khánh Hòa</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Ngày sinh</label>
+                        <Input
+                          type="date"
+                          value={newStaffData.birthDate || ''}
+                          onChange={(e) => setNewStaffData({...newStaffData, birthDate: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Thông tin tài khoản */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold border-b pb-2">Thông tin tài khoản</h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tên đăng nhập *</label>
+                        <Input
+                          placeholder="Nhập tên đăng nhập"
+                          value={newStaffData.username}
+                          onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Tên đăng nhập sẽ được sử dụng để đăng nhập vào hệ thống
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mật khẩu tạm thời *</label>
+                        <Input
+                          type="password"
+                          placeholder="Nhập mật khẩu tạm thời"
+                          value={newStaffData.password}
+                          onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Nhân viên sẽ được yêu cầu thay đổi mật khẩu khi đăng nhập lần đầu
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Quyền truy cập</label>
+                        <select
+                          className="w-full p-3 border border-input rounded-md bg-background"
+                          value={newStaffData.role || 'staff'}
+                          onChange={(e) => setNewStaffData({...newStaffData, role: e.target.value})}
+                        >
+                          <option value="staff">Nhân viên</option>
+                          <option value="manager">Quản lý</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Showroom phụ trách</label>
+                        <select
+                          className="w-full p-3 border border-input rounded-md bg-background"
+                          value={newStaffData.showroom || ''}
+                          onChange={(e) => setNewStaffData({...newStaffData, showroom: e.target.value})}
+                        >
+                          <option value="">Chọn showroom</option>
+                          <option value="SR001">EcoShare Saigon Center</option>
+                          <option value="SR002">EcoShare Hanoi Plaza</option>
+                        </select>
+                      </div>
+                      
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Thông tin tài khoản sẽ tạo:</h4>
+                        <div className="space-y-1 text-sm">
+                          <p><span className="font-medium">Email:</span> {newStaffData.email || 'Chưa nhập'}</p>
+                          <p><span className="font-medium">Tên đăng nhập:</span> {newStaffData.username || 'Chưa nhập'}</p>
+                          <p><span className="font-medium">Quyền:</span> {newStaffData.role === 'manager' ? 'Quản lý' : 'Nhân viên'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-4 p-6 border-t bg-muted/20">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowAddStaffModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={handleCreateStaff}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Tạo nhân viên
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Success Modal */}
+        {showSuccessModal && createdStaff && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
+                  <CheckCircle className="h-6 w-6 text-success" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Thêm nhân viên thành công!</h3>
+                <p className="text-muted-foreground mb-6">
+                  Tài khoản nhân viên đã được tạo và gửi thông tin đến email.
+                </p>
+                
+                <div className="bg-muted/50 p-4 rounded-lg text-left space-y-2 mb-6">
+                  <h4 className="font-medium">Thông tin nhân viên:</h4>
+                  <div className="text-sm space-y-1">
+                    <p><span className="font-medium">Tên:</span> {createdStaff.name}</p>
+                    <p><span className="font-medium">Email:</span> {createdStaff.email}</p>
+                    <p><span className="font-medium">Tài khoản:</span> {createdStaff.username}</p>
+                    <p><span className="font-medium">Mã nhân viên:</span> {createdStaff.id}</p>
+                    <p><span className="font-medium">Tỉnh/TP:</span> {createdStaff.province}</p>
+                  </div>
+                </div>
+                
+                <Button
+                  className="w-full bg-gradient-primary hover:shadow-glow"
+                  onClick={() => setShowSuccessModal(false)}
+                >
+                  Đóng
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         
       </div>
     </div>;
