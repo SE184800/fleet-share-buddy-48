@@ -609,15 +609,155 @@ export default function AdminDashboard() {
 
         {/* Add Staff Modal */}
         <dialog open={showAddStaffModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-background rounded-lg shadow-elegant max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            
+          <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Thêm nhân viên mới</h2>
+                <Button variant="ghost" size="sm" onClick={() => setShowAddStaffModal(false)}>
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Personal Information */}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-primary">Thông tin cá nhân</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium">Họ và tên *</label>
+                        <Input 
+                          placeholder="Nhập họ và tên"
+                          value={newStaffData.name}
+                          onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Email *</label>
+                        <Input 
+                          type="email"
+                          placeholder="Nhập email"
+                          value={newStaffData.email}
+                          onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Tỉnh/Thành phố phụ trách *</label>
+                        <Input 
+                          placeholder="Nhập tỉnh/thành phố"
+                          value={newStaffData.province}
+                          onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Account Information */}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-primary">Thông tin tài khoản</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium">Tên đăng nhập *</label>
+                        <Input 
+                          placeholder="Nhập tên đăng nhập"
+                          value={newStaffData.username}
+                          onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Mật khẩu *</label>
+                        <Input 
+                          type="password"
+                          placeholder="Nhập mật khẩu"
+                          value={newStaffData.password}
+                          onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-sm text-muted-foreground">
+                          <strong>Lưu ý:</strong> Thông tin tài khoản sẽ được gửi đến email của nhân viên sau khi tạo thành công.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-4 mt-8 pt-6 border-t">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowAddStaffModal(false)}
+                  className="px-6"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleCreateStaff}
+                  className="bg-gradient-primary hover:shadow-glow px-8"
+                >
+                  Tạo nhân viên
+                </Button>
+              </div>
+            </div>
           </div>
         </dialog>
 
         {/* Success Modal */}
         <dialog open={showSuccessModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-background rounded-lg shadow-elegant max-w-md w-full mx-4">
-            
+          <div className="bg-background rounded-lg shadow-elegant max-w-lg w-full mx-4">
+            <div className="p-8 text-center">
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-success/10 mb-6">
+                <CheckCircle className="h-8 w-8 text-success" />
+              </div>
+              
+              <h3 className="text-xl font-semibold mb-4">Tạo nhân viên thành công!</h3>
+              
+              {createdStaff && (
+                <div className="bg-muted/50 rounded-lg p-4 mb-6 text-left">
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Mã nhân viên:</span>
+                      <span>{createdStaff.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Họ tên:</span>
+                      <span>{createdStaff.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Email:</span>
+                      <span>{createdStaff.email}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Tài khoản:</span>
+                      <span>{createdStaff.username}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Tỉnh/TP:</span>
+                      <span>{createdStaff.province}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <p className="text-sm text-muted-foreground mb-6">
+                Thông tin tài khoản đã được gửi đến email của nhân viên.
+              </p>
+              
+              <Button 
+                onClick={() => setShowSuccessModal(false)}
+                className="bg-gradient-primary hover:shadow-glow w-full"
+              >
+                Đóng
+              </Button>
+            </div>
           </div>
         </dialog>
       </div>
