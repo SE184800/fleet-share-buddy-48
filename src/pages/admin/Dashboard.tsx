@@ -622,17 +622,26 @@ export default function AdminDashboard() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b">
-                <h2 className="text-2xl font-bold">Thêm nhân viên mới</h2>
-                <p className="text-muted-foreground">Nhập thông tin cá nhân và tạo tài khoản cho nhân viên</p>
+                <h2 className="text-xl font-bold flex items-center space-x-2">
+                  <UserPlus className="h-5 w-5" />
+                  <span>Thêm nhân viên mới</span>
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Nhập thông tin cá nhân và tạo tài khoản cho nhân viên
+                </p>
               </div>
               
-              <div className="p-6 space-y-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Thông tin cá nhân */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Thông tin cá nhân</h3>
-                    
-                    <div className="space-y-4">
+              <div className="space-y-6 p-6">
+                {/* Thông tin cá nhân */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Users className="h-5 w-5" />
+                      <span>Thông tin cá nhân</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Họ và tên *</label>
                         <Input
@@ -662,6 +671,15 @@ export default function AdminDashboard() {
                       </div>
                       
                       <div>
+                        <label className="block text-sm font-medium mb-2">Ngày sinh</label>
+                        <Input
+                          type="date"
+                          value={newStaffData.birthDate || ''}
+                          onChange={(e) => setNewStaffData({...newStaffData, birthDate: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div className="md:col-span-2">
                         <label className="block text-sm font-medium mb-2">Địa chỉ</label>
                         <Input
                           placeholder="Nhập địa chỉ"
@@ -688,23 +706,20 @@ export default function AdminDashboard() {
                           <option value="Khánh Hòa">Khánh Hòa</option>
                         </select>
                       </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Ngày sinh</label>
-                        <Input
-                          type="date"
-                          value={newStaffData.birthDate || ''}
-                          onChange={(e) => setNewStaffData({...newStaffData, birthDate: e.target.value})}
-                        />
-                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Thông tin tài khoản */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Thông tin tài khoản</h3>
-                    
-                    <div className="space-y-4">
+                  </CardContent>
+                </Card>
+                
+                {/* Thông tin tài khoản */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Shield className="h-5 w-5" />
+                      <span>Thông tin tài khoản</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Tên đăng nhập *</label>
                         <Input
@@ -729,51 +744,26 @@ export default function AdminDashboard() {
                           Nhân viên sẽ được yêu cầu thay đổi mật khẩu khi đăng nhập lần đầu
                         </p>
                       </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Quyền truy cập</label>
-                        <select
-                          className="w-full p-3 border border-input rounded-md bg-background"
-                          value={newStaffData.role || 'staff'}
-                          onChange={(e) => setNewStaffData({...newStaffData, role: e.target.value})}
-                        >
-                          <option value="staff">Nhân viên</option>
-                          <option value="manager">Quản lý</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Showroom phụ trách</label>
-                        <select
-                          className="w-full p-3 border border-input rounded-md bg-background"
-                          value={newStaffData.showroom || ''}
-                          onChange={(e) => setNewStaffData({...newStaffData, showroom: e.target.value})}
-                        >
-                          <option value="">Chọn showroom</option>
-                          <option value="SR001">EcoShare Saigon Center</option>
-                          <option value="SR002">EcoShare Hanoi Plaza</option>
-                        </select>
-                      </div>
-                      
-                      <div className="bg-muted/50 p-4 rounded-lg">
-                        <h4 className="font-medium mb-2">Thông tin tài khoản sẽ tạo:</h4>
-                        <div className="space-y-1 text-sm">
-                          <p><span className="font-medium">Email:</span> {newStaffData.email || 'Chưa nhập'}</p>
-                          <p><span className="font-medium">Tên đăng nhập:</span> {newStaffData.username || 'Chưa nhập'}</p>
-                          <p><span className="font-medium">Quyền:</span> {newStaffData.role === 'manager' ? 'Quản lý' : 'Nhân viên'}</p>
-                        </div>
+                    </div>
+                    
+                    <div className="mt-4 bg-muted/50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Thông tin tài khoản sẽ tạo:</h4>
+                      <div className="space-y-1 text-sm">
+                        <p><span className="font-medium">Email:</span> {newStaffData.email || 'Chưa nhập'}</p>
+                        <p><span className="font-medium">Tên đăng nhập:</span> {newStaffData.username || 'Chưa nhập'}</p>
+                        <p><span className="font-medium">Tỉnh/TP:</span> {newStaffData.province || 'Chưa chọn'}</p>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
               
-              <div className="flex justify-end space-x-4 p-6 border-t bg-muted/20">
+              <div className="flex justify-end space-x-3 p-6 border-t">
                 <Button
                   variant="outline"
                   onClick={() => setShowAddStaffModal(false)}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button
                   className="bg-gradient-primary hover:shadow-glow"
