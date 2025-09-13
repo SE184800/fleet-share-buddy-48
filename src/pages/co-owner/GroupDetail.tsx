@@ -12,25 +12,22 @@ import QRCode from "react-qr-code";
 import { useSEO } from "@/hooks/useSEO";
 import { toast } from "@/hooks/use-toast";
 import { CURRENT_USER_ID, getGroupById } from "@/data/mockGroups";
-
 export default function GroupDetail() {
-  const { groupId } = useParams();
+  const {
+    groupId
+  } = useParams();
   const navigate = useNavigate();
-  const group = useMemo(() => (groupId ? getGroupById(groupId) : undefined), [groupId]);
-
+  const group = useMemo(() => groupId ? getGroupById(groupId) : undefined, [groupId]);
   useSEO({
     title: group ? `${group.name} | Nhóm | EcoShare` : "Nhóm | EcoShare",
     description: group ? `Thông tin nhóm ${group.name}, chủ sở hữu, thành viên và xe.` : "Chi tiết nhóm đồng sở hữu",
-    canonicalPath: group ? `/co-owner/groups/${group.id}` : "/co-owner/groups",
+    canonicalPath: group ? `/co-owner/groups/${group.id}` : "/co-owner/groups"
   });
-
   const [amount, setAmount] = useState<string>("");
   const [showQR, setShowQR] = useState(false);
   const [openHistory, setOpenHistory] = useState(false);
-
   if (!group) {
-    return (
-      <div className="container mx-auto p-6">
+    return <div className="container mx-auto p-6">
         <Card>
           <CardHeader>
             <CardTitle>Không tìm thấy nhóm</CardTitle>
@@ -40,13 +37,11 @@ export default function GroupDetail() {
             <Button variant="outline" onClick={() => navigate(-1)}>Quay lại</Button>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
-  const owner = group.users.find((u) => u.id === group.ownerId)!;
-  const members = group.users.filter((u) => u.id !== group.ownerId);
-  const me = group.users.find((u) => u.id === CURRENT_USER_ID);
+  const owner = group.users.find(u => u.id === group.ownerId)!;
+  const members = group.users.filter(u => u.id !== group.ownerId);
+  const me = group.users.find(u => u.id === CURRENT_USER_ID);
   const myRole = me?.role ?? "member";
 
   // Mock usage percentages and monthly contributions
@@ -58,32 +53,31 @@ export default function GroupDetail() {
     };
     return usageMap[userId] || 0;
   };
-
   const getMonthlyContribution = (userId: string) => {
     const usage = getUserUsage(userId);
     const baseAmount = 2000000; // 2 triệu VND base
     return Math.round(baseAmount * (usage / 100));
   };
-
   const min = group.minTransfer;
-
   const handleGenerateQR = () => {
     const amt = Number(amount);
     if (!amt || isNaN(amt) || amt < min) {
-      toast({ title: "Số tiền không hợp lệ", description: `Tối thiểu ${min.toLocaleString("vi-VN")} VNĐ` });
+      toast({
+        title: "Số tiền không hợp lệ",
+        description: `Tối thiểu ${min.toLocaleString("vi-VN")} VNĐ`
+      });
       setShowQR(false);
       return;
     }
     setShowQR(true);
-    toast({ title: "Đã tạo QR chuyển tiền", description: `${amt.toLocaleString("vi-VN")} VNĐ` });
+    toast({
+      title: "Đã tạo QR chuyển tiền",
+      description: `${amt.toLocaleString("vi-VN")} VNĐ`
+    });
   };
-
-  const myTransactions = group.transactions.filter((t) => t.userId === CURRENT_USER_ID);
-
+  const myTransactions = group.transactions.filter(t => t.userId === CURRENT_USER_ID);
   const qrValue = `ecoshare:pay?group=${group.id}&amount=${Number(amount) || 0}&currency=VND`;
-
-  return (
-    <div className="container mx-auto p-6">
+  return <div className="container mx-auto p-6">
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button variant="ghost" onClick={() => navigate(-1)}>← Quay lại</Button>
@@ -104,15 +98,13 @@ export default function GroupDetail() {
               <div>
                 <div className="mb-3">
                   <div className="text-sm text-muted-foreground mb-2">Đóng góp hàng tháng của bạn theo tỉ lệ sử dụng:</div>
-                  {me && (
-                    <div className="flex items-center justify-between text-xs">
+                  {me && <div className="flex items-center justify-between text-xs">
                       <span>{me.name}: {getUserUsage(me.id)}%</span>
                       <span className="font-medium text-primary">{getMonthlyContribution(me.id).toLocaleString()} VNĐ</span>
-                    </div>
-                  )}
+                    </div>}
                 </div>
-                <label htmlFor="amount" className="text-sm text-muted-foreground">Số tiền chuyển (Tối thiểu {min.toLocaleString("vi-VN")} VNĐ)</label>
-                <Input id="amount" type="number" min={min} placeholder={`${min}`} value={amount} onChange={(e) => setAmount(e.target.value)} />
+                
+                <Input id="amount" type="number" min={min} placeholder={`${min}`} value={amount} onChange={e => setAmount(e.target.value)} />
               </div>
               <div className="flex gap-2">
                 <Button onClick={handleGenerateQR} className="flex-1">Tạo QR chuyển tiền</Button>
@@ -120,8 +112,7 @@ export default function GroupDetail() {
               </div>
             </div>
 
-            {showQR && (
-              <div className="mt-6 flex items-center gap-6">
+            {showQR && <div className="mt-6 flex items-center gap-6">
                 <div className="rounded-md border p-4 bg-background">
                   <QRCode value={qrValue} size={144} />
                 </div>
@@ -130,8 +121,7 @@ export default function GroupDetail() {
                   <div className="font-semibold">{group.name}</div>
                   <div className="text-sm">Số tiền: {Number(amount).toLocaleString("vi-VN")} VNĐ</div>
                 </div>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
       </section>
@@ -188,8 +178,7 @@ export default function GroupDetail() {
                 </div>
 
                 {/* Đồng sở hữu */}
-                {members.map((m) => (
-                  <div key={m.id} className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
+                {members.map(m => <div key={m.id} className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarImage src={m.avatar} alt={`Ảnh đại diện ${m.name}`} loading="lazy" />
@@ -204,8 +193,7 @@ export default function GroupDetail() {
                       <div className="text-sm font-bold text-primary">{getUserUsage(m.id)}%</div>
                       <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -220,16 +208,14 @@ export default function GroupDetail() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.vehicles.map((v) => (
-                  <div key={v.id} className="border rounded-md p-3">
+                {group.vehicles.map(v => <div key={v.id} className="border rounded-md p-3">
                     <img src={v.imageUrl} alt={`Hình ảnh xe ${v.name}`} loading="lazy" className="w-full h-32 object-cover rounded mb-2" />
                     <div className="font-semibold">{v.name}</div>
                     <div className="text-sm text-muted-foreground mb-2">{v.info}</div>
                     <Badge variant={v.status === "maintenance" ? "destructive" : v.status === "in-use" ? "secondary" : "default"}>
                       {v.status === "available" ? "Sẵn sàng" : v.status === "in-use" ? "Đang sử dụng" : "Bảo dưỡng"}
                     </Badge>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -248,18 +234,22 @@ export default function GroupDetail() {
               <TabsTrigger value="all">Tất cả</TabsTrigger>
             </TabsList>
             <TabsContent value="mine">
-              <TransactionTable rows={myTransactions.map((t) => ({ ...t, groupName: group.name }))} />
+              <TransactionTable rows={myTransactions.map(t => ({
+              ...t,
+              groupName: group.name
+            }))} />
             </TabsContent>
             <TabsContent value="all">
-              <TransactionTable rows={group.transactions.map((t) => ({ ...t, groupName: group.name }))} />
+              <TransactionTable rows={group.transactions.map(t => ({
+              ...t,
+              groupName: group.name
+            }))} />
             </TabsContent>
           </Tabs>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>;
 }
-
 interface TxRow {
   id: string;
   name: string;
@@ -268,10 +258,12 @@ interface TxRow {
   date: string;
   groupName: string;
 }
-
-function TransactionTable({ rows }: { rows: TxRow[] }) {
-  return (
-    <div className="mt-4">
+function TransactionTable({
+  rows
+}: {
+  rows: TxRow[];
+}) {
+  return <div className="mt-4">
       <Table>
         <TableHeader>
           <TableRow>
@@ -282,16 +274,13 @@ function TransactionTable({ rows }: { rows: TxRow[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((r) => (
-            <TableRow key={r.id}>
+          {rows.map(r => <TableRow key={r.id}>
               <TableCell>{new Date(r.date).toLocaleDateString("vi-VN")}</TableCell>
               <TableCell>{r.name}</TableCell>
               <TableCell>{r.type === "in" ? "Nạp quỹ" : "Chi quỹ"}</TableCell>
               <TableCell className="text-right">{r.amount.toLocaleString("vi-VN")}</TableCell>
-            </TableRow>
-          ))}
+            </TableRow>)}
         </TableBody>
       </Table>
-    </div>
-  );
+    </div>;
 }
