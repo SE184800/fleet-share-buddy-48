@@ -42,6 +42,7 @@ export default function VehicleRegistration() {
   });
   const [coOwners, setCoOwners] = useState<CoOwner[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState(0);
   
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -71,6 +72,27 @@ export default function VehicleRegistration() {
   ];
 
   const totalOwnership = ownerInfo.ownership + coOwners.reduce((sum, co) => sum + co.ownership, 0);
+  
+  // Helper function to check if a step is completed
+  const isStepCompleted = (stepNumber: number) => {
+    switch (stepNumber) {
+      case 1: return selectedVehicle !== "";
+      case 2: return ownerInfo.name && ownerInfo.email && ownerInfo.phone && ownerInfo.idNumber && ownerInfo.address;
+      case 3: return totalOwnership === 100;
+      case 4: return true;
+      default: return false;
+    }
+  };
+  
+  // Calculate progress based on completed steps
+  const getProgress = () => {
+    let completed = 0;
+    for (let i = 1; i <= 4; i++) {
+      if (isStepCompleted(i)) completed++;
+      else break;
+    }
+    return (completed / 4) * 100;
+  };
   
   const getVehiclePrice = () => {
     const vehicle = vehicles.find(v => v.id === selectedVehicle);
@@ -222,20 +244,20 @@ export default function VehicleRegistration() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium">Bước {step} / 4</span>
-              <span className="text-sm text-muted-foreground">{Math.round((step / 4) * 100)}% hoàn thành</span>
+              <span className="text-sm text-muted-foreground">{Math.round(getProgress())}% hoàn thành</span>
             </div>
-            <Progress value={(step / 4) * 100} className="mb-4" />
+            <Progress value={getProgress()} className="mb-4" />
             <div className="flex justify-between text-xs">
-              <span className={step >= 1 ? "text-primary font-medium" : "text-muted-foreground"}>
+              <span className={isStepCompleted(1) ? "text-primary font-medium" : "text-muted-foreground"}>
                 Chọn xe
               </span>
-              <span className={step >= 2 ? "text-primary font-medium" : "text-muted-foreground"}>
+              <span className={isStepCompleted(2) ? "text-primary font-medium" : "text-muted-foreground"}>
                 Thông tin chủ sở hữu
               </span>
-              <span className={step >= 3 ? "text-primary font-medium" : "text-muted-foreground"}>
+              <span className={isStepCompleted(3) ? "text-primary font-medium" : "text-muted-foreground"}>
                 Đồng sở hữu
               </span>
-              <span className={step >= 4 ? "text-primary font-medium" : "text-muted-foreground"}>
+              <span className={isStepCompleted(4) ? "text-primary font-medium" : "text-muted-foreground"}>
                 Xác nhận
               </span>
             </div>
