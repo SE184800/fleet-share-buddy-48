@@ -15,6 +15,11 @@ export default function AdminDashboard() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showEditStaffModal, setShowEditStaffModal] = useState(false);
   const [showUpdateSuccessModal, setShowUpdateSuccessModal] = useState(false);
+  const [showLockConfirmModal, setShowLockConfirmModal] = useState(false);
+  const [showFireConfirmModal, setShowFireConfirmModal] = useState(false);
+  const [showActionSuccessModal, setShowActionSuccessModal] = useState(false);
+  const [actionType, setActionType] = useState(""); // "lock", "unlock", "fire"
+  const [confirmationText, setConfirmationText] = useState("");
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [editStaffData, setEditStaffData] = useState({
     name: "",
@@ -183,6 +188,40 @@ export default function AdminDashboard() {
     setShowUpdateSuccessModal(true);
   };
 
+  const handleLockUnlock = (staff: any) => {
+    setSelectedStaff(staff);
+    setActionType(staff.status === "active" ? "lock" : "unlock");
+    setConfirmationText("");
+    setShowLockConfirmModal(true);
+  };
+
+  const handleFire = (staff: any) => {
+    setSelectedStaff(staff);
+    setActionType("fire");
+    setConfirmationText("");
+    setShowFireConfirmModal(true);
+  };
+
+  const confirmAction = () => {
+    const expectedText = actionType === "lock" ? "Xác nhận khóa nhân viên này" : 
+                        actionType === "unlock" ? "Xác nhận mở khóa nhân viên này" : 
+                        "Xác nhận sa thải nhân viên này";
+    
+    if (confirmationText !== expectedText) {
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng nhập đúng nội dung xác nhận",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simulate action
+    setShowLockConfirmModal(false);
+    setShowFireConfirmModal(false);
+    setShowActionSuccessModal(true);
+  };
+
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-gradient-primary text-white p-4 shadow-glow">
@@ -285,11 +324,20 @@ export default function AdminDashboard() {
                           <Settings className="h-4 w-4 mr-1" />
                           Chỉnh sửa
                         </Button>
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleLockUnlock(staff)}
+                        >
                           <Lock className="h-4 w-4 mr-1" />
                           {staff.status === "active" ? "Khóa" : "Mở khóa"}
                         </Button>
-                        {staff.status === "inactive" && <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+                        {staff.status === "inactive" && <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+                            onClick={() => handleFire(staff)}
+                          >
                             <Trash2 className="h-4 w-4 mr-1" />
                             Sa thải
                           </Button>}
@@ -1019,6 +1067,116 @@ export default function AdminDashboard() {
                 <Button
                   className="w-full bg-gradient-primary hover:shadow-glow"
                   onClick={() => setShowUpdateSuccessModal(false)}
+                >
+                  Đóng
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Lock/Unlock Confirmation Modal */}
+        {showLockConfirmModal && selectedStaff && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-4">
+                  {actionType === "lock" ? "Xác nhận khóa nhân viên" : "Xác nhận mở khóa nhân viên"}
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Nhân viên: <span className="font-medium">{selectedStaff.name}</span>
+                </p>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Nhập "{actionType === "lock" ? "Xác nhận khóa nhân viên này" : "Xác nhận mở khóa nhân viên này"}" để xác nhận:
+                  </label>
+                  <Input
+                    placeholder={actionType === "lock" ? "Xác nhận khóa nhân viên này" : "Xác nhận mở khóa nhân viên này"}
+                    value={confirmationText}
+                    onChange={(e) => setConfirmationText(e.target.value)}
+                  />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowLockConfirmModal(false)}
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    className={actionType === "lock" ? "bg-destructive hover:bg-destructive/90" : "bg-gradient-primary hover:shadow-glow"}
+                    onClick={confirmAction}
+                  >
+                    {actionType === "lock" ? "Khóa" : "Mở khóa"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Fire Confirmation Modal */}
+        {showFireConfirmModal && selectedStaff && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-4 text-destructive">
+                  Xác nhận sa thải nhân viên
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Nhân viên: <span className="font-medium">{selectedStaff.name}</span>
+                </p>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Nhập "Xác nhận sa thải nhân viên này" để xác nhận:
+                  </label>
+                  <Input
+                    placeholder="Xác nhận sa thải nhân viên này"
+                    value={confirmationText}
+                    onChange={(e) => setConfirmationText(e.target.value)}
+                  />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowFireConfirmModal(false)}
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    className="bg-destructive hover:bg-destructive/90"
+                    onClick={confirmAction}
+                  >
+                    Sa thải
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Success Modal */}
+        {showActionSuccessModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
+                  <CheckCircle className="h-6 w-6 text-success" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">
+                  {actionType === "lock" ? "Khóa thành công!" : 
+                   actionType === "unlock" ? "Mở khóa thành công!" : 
+                   "Sa thải thành công!"}
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {actionType === "lock" ? "Nhân viên đã được khóa tài khoản." : 
+                   actionType === "unlock" ? "Nhân viên đã được mở khóa tài khoản." : 
+                   "Nhân viên đã được sa thải khỏi hệ thống."}
+                </p>
+                
+                <Button
+                  className="w-full bg-gradient-primary hover:shadow-glow"
+                  onClick={() => setShowActionSuccessModal(false)}
                 >
                   Đóng
                 </Button>
