@@ -143,7 +143,11 @@ export default function GroupDetail() {
                     <AvatarFallback>{owner.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="text-lg font-semibold flex items-center gap-2">{owner.name} <Badge>Admin</Badge></div>
+                    <div className="text-lg font-semibold flex items-center gap-2">
+                      {owner.name} 
+                      <Badge>Admin</Badge>
+                      {owner.id === CURRENT_USER_ID && <Badge variant="outline">Bạn</Badge>}
+                    </div>
                     {owner.email && <div className="text-sm text-muted-foreground">{owner.email}</div>}
                   </div>
                 </div>
@@ -176,7 +180,10 @@ export default function GroupDetail() {
                         <AvatarFallback>{m.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <div className="font-medium">{m.name}</div>
+                        <div className="font-medium flex items-center gap-2">
+                          {m.name}
+                          {m.id === CURRENT_USER_ID && <Badge variant="outline">Bạn</Badge>}
+                        </div>
                         <div className="text-sm text-muted-foreground">Member</div>
                       </div>
                     </div>
