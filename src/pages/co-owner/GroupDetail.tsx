@@ -103,15 +103,13 @@ export default function GroupDetail() {
               </div>
               <div>
                 <div className="mb-3">
-                  <div className="text-sm text-muted-foreground mb-2">Đóng góp hàng tháng theo tỉ lệ sử dụng:</div>
-                  <div className="space-y-1">
-                    {group.users.map(user => (
-                      <div key={user.id} className="flex items-center justify-between text-xs">
-                        <span>{user.name}: {getUserUsage(user.id)}%</span>
-                        <span className="font-medium text-primary">{getMonthlyContribution(user.id).toLocaleString()} VNĐ</span>
-                      </div>
-                    ))}
-                  </div>
+                  <div className="text-sm text-muted-foreground mb-2">Đóng góp hàng tháng của bạn theo tỉ lệ sử dụng:</div>
+                  {me && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span>{me.name}: {getUserUsage(me.id)}%</span>
+                      <span className="font-medium text-primary">{getMonthlyContribution(me.id).toLocaleString()} VNĐ</span>
+                    </div>
+                  )}
                 </div>
                 <label htmlFor="amount" className="text-sm text-muted-foreground">Số tiền chuyển (Tối thiểu {min.toLocaleString("vi-VN")} VNĐ)</label>
                 <Input id="amount" type="number" min={min} placeholder={`${min}`} value={amount} onChange={(e) => setAmount(e.target.value)} />
