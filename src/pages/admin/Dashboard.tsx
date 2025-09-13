@@ -673,74 +673,82 @@ export default function AdminDashboard() {
 
         {/* Add Staff Modal */}
         <dialog open={showAddStaffModal} className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-background rounded-lg shadow-elegant max-w-md w-full mx-4">
-            <div className="p-6">
-              <h2 className="text-xl font-bold mb-4">Thêm nhân viên mới</h2>
+          <div className="bg-background rounded-lg shadow-elegant max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold mb-6 text-center">Thêm nhân viên mới</h2>
               
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Họ tên</label>
-                  <Input
-                    value={newStaffData.name}
-                    onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
-                    placeholder="Nhập họ tên nhân viên"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-1">Email</label>
-                  <Input
-                    type="email"
-                    value={newStaffData.email}
-                    onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
-                    placeholder="Nhập email"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-1">Tỉnh/Thành phố</label>
-                  <Input
-                    value={newStaffData.province}
-                    onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
-                    placeholder="Nhập tỉnh/thành phố"
-                  />
-                </div>
-                
-                <div className="border-t pt-4">
-                  <h3 className="font-medium mb-3">Tài khoản đăng nhập</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold border-b pb-2">Thông tin cá nhân</h3>
                   
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Tên đăng nhập</label>
-                      <Input
-                        value={newStaffData.username}
-                        onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
-                        placeholder="Nhập tên đăng nhập"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Mật khẩu</label>
-                      <Input
-                        type="password"
-                        value={newStaffData.password}
-                        onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
-                        placeholder="Nhập mật khẩu"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Họ tên</label>
+                    <Input
+                      value={newStaffData.name}
+                      onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
+                      placeholder="Nhập họ tên nhân viên"
+                      className="h-12"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <Input
+                      type="email"
+                      value={newStaffData.email}
+                      onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
+                      placeholder="Nhập email"
+                      className="h-12"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố</label>
+                    <Input
+                      value={newStaffData.province}
+                      onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
+                      placeholder="Nhập tỉnh/thành phố"
+                      className="h-12"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold border-b pb-2">Tài khoản đăng nhập</h3>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Tên đăng nhập</label>
+                    <Input
+                      value={newStaffData.username}
+                      onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
+                      placeholder="Nhập tên đăng nhập"
+                      className="h-12"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Mật khẩu</label>
+                    <Input
+                      type="password"
+                      value={newStaffData.password}
+                      onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
+                      placeholder="Nhập mật khẩu"
+                      className="h-12"
+                    />
                   </div>
                 </div>
               </div>
               
-              <div className="flex justify-end space-x-3 mt-6">
+              <div className="flex justify-center space-x-4 mt-8 pt-6 border-t">
                 <Button 
                   variant="outline" 
                   onClick={() => setShowAddStaffModal(false)}
+                  className="px-8 py-3 h-12"
                 >
                   Cancel
                 </Button>
                 <Button 
-                  className="bg-gradient-primary hover:shadow-glow"
+                  className="bg-gradient-primary hover:shadow-glow px-8 py-3 h-12"
                   onClick={handleCreateStaff}
                 >
                   Create
