@@ -8,6 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import QRCode from "react-qr-code";
 import { useSEO } from "@/hooks/useSEO";
 import { toast } from "@/hooks/use-toast";
@@ -31,6 +35,23 @@ export default function GroupDetail() {
   const [selectedMemberToRemove, setSelectedMemberToRemove] = useState<string>("");
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [confirmText, setConfirmText] = useState("");
+  
+  // Service request states
+  const [selectedVehicle, setSelectedVehicle] = useState<string>("");
+  const [openServiceRequest, setOpenServiceRequest] = useState(false);
+  const [paymentType, setPaymentType] = useState<string>("");
+  const [serviceType, setServiceType] = useState<string>("");
+  const [serviceDescription, setServiceDescription] = useState("");
+  const [serviceRequests, setServiceRequests] = useState<Array<{
+    id: string;
+    vehicleId: string;
+    vehicleName: string;
+    paymentType: string;
+    serviceType: string;
+    description: string;
+    status: "pending" | "approved" | "rejected";
+    date: string;
+  }>>([]);
   if (!group) {
     return <div className="container mx-auto p-6">
         <Card>
@@ -229,20 +250,81 @@ export default function GroupDetail() {
         <section className="lg:col-span-3">
           <Card>
             <CardHeader>
-              <CardTitle>Xe của nhóm</CardTitle>
-              <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Xe của nhóm</CardTitle>
+                  <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
+                </div>
+                <Button 
+                  onClick={() => setOpenServiceRequest(true)}
+                  disabled={!selectedVehicle}
+                  size="sm"
+                >
+                  Request dịch vụ
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.vehicles.map(v => <div key={v.id} className="border rounded-md p-3">
-                    <img src={v.imageUrl} alt={`Hình ảnh xe ${v.name}`} loading="lazy" className="w-full h-32 object-cover rounded mb-2" />
-                    <div className="font-semibold">{v.name}</div>
-                    <div className="text-sm text-muted-foreground mb-2">{v.info}</div>
-                    <Badge variant={v.status === "maintenance" ? "destructive" : v.status === "in-use" ? "secondary" : "default"}>
-                      {v.status === "available" ? "Sẵn sàng" : v.status === "in-use" ? "Đang sử dụng" : "Bảo dưỡng"}
-                    </Badge>
-                  </div>)}
-              </div>
+              <Tabs defaultValue="vehicles">
+                <TabsList>
+                  <TabsTrigger value="vehicles">Danh sách xe</TabsTrigger>
+                  <TabsTrigger value="requests">Yêu cầu dịch vụ ({serviceRequests.length})</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="vehicles">
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {group.vehicles.map(v => <div 
+                        key={v.id} 
+                        className={`border rounded-md p-3 cursor-pointer transition-colors ${
+                          selectedVehicle === v.id ? "border-primary bg-primary/5" : "hover:bg-accent/50"
+                        }`}
+                        onClick={() => setSelectedVehicle(v.id)}
+                      >
+                        <img src={v.imageUrl} alt={`Hình ảnh xe ${v.name}`} loading="lazy" className="w-full h-32 object-cover rounded mb-2" />
+                        <div className="font-semibold flex items-center gap-2">
+                          {v.name}
+                          {selectedVehicle === v.id && <Badge variant="outline">Đã chọn</Badge>}
+                        </div>
+                        <div className="text-sm text-muted-foreground mb-2">{v.info}</div>
+                        <Badge variant={v.status === "maintenance" ? "destructive" : v.status === "in-use" ? "secondary" : "default"}>
+                          {v.status === "available" ? "Sẵn sàng" : v.status === "in-use" ? "Đang sử dụng" : "Bảo dưỡng"}
+                        </Badge>
+                      </div>)}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="requests">
+                  <div className="space-y-3">
+                    {serviceRequests.length === 0 ? (
+                      <div className="text-center py-6 text-muted-foreground">
+                        Chưa có yêu cầu dịch vụ nào
+                      </div>
+                    ) : (
+                      serviceRequests.map(request => (
+                        <div key={request.id} className="border rounded-lg p-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="font-medium">{request.vehicleName}</div>
+                              <div className="text-sm text-muted-foreground">{request.serviceType}</div>
+                              <div className="text-sm mt-1">{request.description}</div>
+                              <div className="text-xs text-muted-foreground mt-2">
+                                {request.paymentType === "self" ? "Tự chi trả" : "Dùng quỹ chung"} • {request.date}
+                              </div>
+                            </div>
+                            <Badge variant={
+                              request.status === "pending" ? "secondary" : 
+                              request.status === "approved" ? "default" : "destructive"
+                            }>
+                              {request.status === "pending" ? "Chờ duyệt" : 
+                               request.status === "approved" ? "Đã duyệt" : "Từ chối"}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </section>
@@ -368,6 +450,118 @@ export default function GroupDetail() {
                 Gửi yêu cầu xóa
               </Button>
               <Button variant="outline" onClick={() => setOpenRemoveMember(false)}>
+                Hủy
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog yêu cầu dịch vụ */}
+      <Dialog open={openServiceRequest} onOpenChange={setOpenServiceRequest}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Yêu cầu dịch vụ xe</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-sm font-medium">Xe đã chọn:</Label>
+              <div className="mt-1 p-2 bg-accent/30 rounded-md">
+                {group.vehicles.find(v => v.id === selectedVehicle)?.name || "Chưa chọn xe"}
+              </div>
+            </div>
+            
+            <div>
+              <Label className="text-sm font-medium">Hình thức thanh toán:</Label>
+              <RadioGroup value={paymentType} onValueChange={setPaymentType} className="mt-2">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="self" id="self" />
+                  <Label htmlFor="self">Tự chi trả (tự lái xe đi thực hiện dịch vụ)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="group" id="group" />
+                  <Label htmlFor="group">Dùng quỹ chung (gửi xe lên công ty vận hành)</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            
+            <div>
+              <Label className="text-sm font-medium">Loại dịch vụ:</Label>
+              <Select value={serviceType} onValueChange={setServiceType}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Chọn loại dịch vụ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="parking">Đậu xe</SelectItem>
+                  <SelectItem value="wash">Rửa xe</SelectItem>
+                  <SelectItem value="maintenance">Bảo dưỡng</SelectItem>
+                  <SelectItem value="repair">Sửa chữa</SelectItem>
+                  <SelectItem value="inspection">Kiểm định</SelectItem>
+                  <SelectItem value="insurance">Bảo hiểm</SelectItem>
+                  <SelectItem value="other">Khác</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label className="text-sm font-medium">Mô tả chi tiết:</Label>
+              <Textarea 
+                value={serviceDescription}
+                onChange={(e) => setServiceDescription(e.target.value)}
+                placeholder="Nhập mô tả chi tiết về dịch vụ cần thực hiện..."
+                className="mt-1"
+                rows={3}
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => {
+                  if (!selectedVehicle || !paymentType || !serviceType || !serviceDescription.trim()) {
+                    toast({
+                      title: "Thông tin chưa đầy đủ",
+                      description: "Vui lòng điền đầy đủ thông tin yêu cầu"
+                    });
+                    return;
+                  }
+                  
+                  const newRequest = {
+                    id: `req-${Date.now()}`,
+                    vehicleId: selectedVehicle,
+                    vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
+                    paymentType,
+                    serviceType,
+                    description: serviceDescription,
+                    status: "pending" as const,
+                    date: new Date().toLocaleDateString("vi-VN")
+                  };
+                  
+                  setServiceRequests(prev => [...prev, newRequest]);
+                  
+                  toast({
+                    title: "Gửi yêu cầu thành công",
+                    description: "Staff sẽ xử lý yêu cầu của bạn trong 24h"
+                  });
+                  
+                  // Reset form
+                  setOpenServiceRequest(false);
+                  setPaymentType("");
+                  setServiceType("");
+                  setServiceDescription("");
+                }}
+                className="flex-1"
+              >
+                Gửi yêu cầu
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setOpenServiceRequest(false);
+                  setPaymentType("");
+                  setServiceType("");
+                  setServiceDescription("");
+                }}
+              >
                 Hủy
               </Button>
             </div>
