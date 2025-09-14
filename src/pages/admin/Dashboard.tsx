@@ -341,16 +341,69 @@ export default function AdminDashboard() {
           </div>
 
           {/* Main Content Tabs */}
-          <Tabs defaultValue="staff" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="staff">Nhân viên</TabsTrigger>
-            <TabsTrigger value="showrooms">Showroom</TabsTrigger>
-            <TabsTrigger value="contracts">Hợp đồng</TabsTrigger>
-            <TabsTrigger value="analytics">Phân tích</TabsTrigger>
-            <TabsTrigger value="history">Lịch sử xe</TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="analytics" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="staff">Nhân viên</TabsTrigger>
+              <TabsTrigger value="showrooms">Showroom</TabsTrigger>
+              <TabsTrigger value="contracts">Hợp đồng</TabsTrigger>
+              <TabsTrigger value="history">Lịch sử xe</TabsTrigger>
+            </TabsList>
 
-          {/* Staff Management */}
+            {/* Analytics Tab */}
+            <TabsContent value="analytics">
+              <Card className="shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <BarChart3 className="h-5 w-5" />
+                    <span>Phân tích doanh thu</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Báo cáo tổng quan về hoạt động kinh doanh
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center space-x-2">
+                            <DollarSign className="h-5 w-5 text-success" />
+                            <div>
+                              <p className="text-sm text-muted-foreground">Doanh thu tháng</p>
+                              <p className="text-lg font-bold">2.5B VNĐ</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center space-x-2">
+                            <TrendingUp className="h-5 w-5 text-primary" />
+                            <div>
+                              <p className="text-sm text-muted-foreground">Tăng trưởng</p>
+                              <p className="text-lg font-bold text-success">+12.5%</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center space-x-2">
+                            <Users className="h-5 w-5 text-warning" />
+                            <div>
+                              <p className="text-sm text-muted-foreground">Khách hàng mới</p>
+                              <p className="text-lg font-bold">248</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
           <TabsContent value="staff">
             <Card className="shadow-elegant">
               <CardHeader>
