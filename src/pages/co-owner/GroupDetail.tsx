@@ -42,6 +42,7 @@ export default function GroupDetail() {
   const [paymentType, setPaymentType] = useState<string>("");
   const [serviceType, setServiceType] = useState<string>("");
   const [serviceDescription, setServiceDescription] = useState("");
+  const [editingRequest, setEditingRequest] = useState<string | null>(null);
   const [serviceRequests, setServiceRequests] = useState<Array<{
     id: string;
     vehicleId: string;
@@ -303,7 +304,7 @@ export default function GroupDetail() {
                       serviceRequests.map(request => (
                         <div key={request.id} className="border rounded-lg p-4">
                           <div className="flex items-start justify-between">
-                            <div>
+                            <div className="flex-1">
                               <div className="font-medium">{request.vehicleName}</div>
                               <div className="text-sm text-muted-foreground">{request.serviceType}</div>
                               <div className="text-sm mt-1">{request.description}</div>
@@ -311,13 +312,46 @@ export default function GroupDetail() {
                                 {request.paymentType === "self" ? "Tự chi trả" : "Dùng quỹ chung"} • {request.date}
                               </div>
                             </div>
-                            <Badge variant={
-                              request.status === "pending" ? "secondary" : 
-                              request.status === "approved" ? "default" : "destructive"
-                            }>
-                              {request.status === "pending" ? "Chờ duyệt" : 
-                               request.status === "approved" ? "Đã duyệt" : "Từ chối"}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge variant={
+                                request.status === "pending" ? "secondary" : 
+                                request.status === "approved" ? "default" : "destructive"
+                              }>
+                                {request.status === "pending" ? "Chờ duyệt" : 
+                                 request.status === "approved" ? "Đã duyệt" : "Từ chối"}
+                              </Badge>
+                              {request.status === "pending" && (
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setEditingRequest(request.id);
+                                      setSelectedVehicle(request.vehicleId);
+                                      setPaymentType(request.paymentType);
+                                      setServiceType(request.serviceType);
+                                      setServiceDescription(request.description);
+                                      setOpenServiceRequest(true);
+                                    }}
+                                  >
+                                    Sửa
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => {
+                                      setServiceRequests(prev => prev.filter(r => r.id !== request.id));
+                                      toast({
+                                        title: "Đã xóa yêu cầu",
+                                        description: "Yêu cầu dịch vụ đã được xóa thành công"
+                                      });
+                                    }}
+                                  >
+                                    Xóa
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       ))
@@ -461,7 +495,7 @@ export default function GroupDetail() {
       <Dialog open={openServiceRequest} onOpenChange={setOpenServiceRequest}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Yêu cầu dịch vụ xe</DialogTitle>
+            <DialogTitle>{editingRequest ? "Chỉnh sửa yêu cầu dịch vụ" : "Yêu cầu dịch vụ xe"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -525,38 +559,62 @@ export default function GroupDetail() {
                     return;
                   }
                   
-                  const newRequest = {
-                    id: `req-${Date.now()}`,
-                    vehicleId: selectedVehicle,
-                    vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
-                    paymentType,
-                    serviceType,
-                    description: serviceDescription,
-                    status: "pending" as const,
-                    date: new Date().toLocaleDateString("vi-VN")
-                  };
-                  
-                  setServiceRequests(prev => [...prev, newRequest]);
-                  
-                  toast({
-                    title: "Gửi yêu cầu thành công",
-                    description: "Staff sẽ xử lý yêu cầu của bạn trong 24h"
-                  });
+                  if (editingRequest) {
+                    // Update existing request
+                    setServiceRequests(prev => prev.map(req => 
+                      req.id === editingRequest 
+                        ? {
+                            ...req,
+                            vehicleId: selectedVehicle,
+                            vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
+                            paymentType,
+                            serviceType,
+                            description: serviceDescription
+                          }
+                        : req
+                    ));
+                    
+                    toast({
+                      title: "Cập nhật thành công",
+                      description: "Yêu cầu dịch vụ đã được cập nhật"
+                    });
+                  } else {
+                    // Create new request
+                    const newRequest = {
+                      id: `req-${Date.now()}`,
+                      vehicleId: selectedVehicle,
+                      vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
+                      paymentType,
+                      serviceType,
+                      description: serviceDescription,
+                      status: "pending" as const,
+                      date: new Date().toLocaleDateString("vi-VN")
+                    };
+                    
+                    setServiceRequests(prev => [...prev, newRequest]);
+                    
+                    toast({
+                      title: "Gửi yêu cầu thành công",
+                      description: "Staff sẽ xử lý yêu cầu của bạn trong 24h"
+                    });
+                  }
                   
                   // Reset form
                   setOpenServiceRequest(false);
+                  setEditingRequest(null);
                   setPaymentType("");
                   setServiceType("");
                   setServiceDescription("");
                 }}
                 className="flex-1"
               >
-                Gửi yêu cầu
+                {editingRequest ? "Cập nhật yêu cầu" : "Gửi yêu cầu"}
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => {
                   setOpenServiceRequest(false);
+                  setEditingRequest(null);
                   setPaymentType("");
                   setServiceType("");
                   setServiceDescription("");
