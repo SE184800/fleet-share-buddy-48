@@ -306,16 +306,11 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
-                <Input placeholder="Tìm kiếm..." className="pl-10 w-64 bg-white/20 border-white/30 text-white placeholder:text-white/70" />
+                
+                
               </div>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-                <Plus className="h-4 w-4 mr-2" />
-                Tạo mới
-              </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-                <Settings className="h-4 w-4" />
-              </Button>
+              
+              
             </div>
           </div>
         </header>
