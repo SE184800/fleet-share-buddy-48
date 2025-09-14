@@ -294,18 +294,28 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {/* Top Header */}
-        <header className="bg-card border-b border-border p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-semibold">Analytics Dashboard</h1>
+        {/* EcoShare Header */}
+        <header className="bg-gradient-primary text-white p-4 shadow-glow">
+          <div className="container mx-auto flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <Car className="h-8 w-8" />
+              <div>
+                <h1 className="text-2xl font-bold">EcoShare</h1>
+                <p className="text-sm opacity-90">Bảng điều khiển quản trị</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search..." className="pl-10 w-64" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
+                <Input placeholder="Tìm kiếm..." className="pl-10 w-64 bg-white/20 border-white/30 text-white placeholder:text-white/70" />
               </div>
-              <Button>New Project</Button>
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                <Plus className="h-4 w-4 mr-2" />
+                Tạo mới
+              </Button>
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                <Settings className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </header>
