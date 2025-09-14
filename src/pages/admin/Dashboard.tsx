@@ -42,6 +42,8 @@ export default function AdminDashboard() {
     showroom: ""
   });
   const [createdStaff, setCreatedStaff] = useState<any>(null);
+  const [showContractDetailModal, setShowContractDetailModal] = useState(false);
+  const [selectedContract, setSelectedContract] = useState<any>(null);
   const {
     toast
   } = useToast();
@@ -558,10 +560,8 @@ export default function AdminDashboard() {
                                 size="sm" 
                                 variant="outline"
                                 onClick={() => {
-                                  toast({
-                                    title: "Xem hợp đồng",
-                                    description: `Đang mở hợp đồng ${contract.title}`,
-                                  });
+                                  setSelectedContract(contract);
+                                  setShowContractDetailModal(true);
                                 }}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
@@ -571,35 +571,15 @@ export default function AdminDashboard() {
                                 size="sm" 
                                 variant="outline"
                                 onClick={() => {
-                                  // Simulate download
-                                  const link = document.createElement('a');
-                                  link.href = '#';
-                                  link.download = `${contract.id}_contract.pdf`;
-                                  link.click();
                                   toast({
-                                    title: "Tải xuống thành công",
-                                    description: `Đã tải xuống hợp đồng ${contract.id}`,
+                                    title: "Trạng thái tải xuống",
+                                    description: contract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải",
                                   });
                                 }}
                               >
                                 <Download className="h-4 w-4 mr-1" />
                                 Tải về
                               </Button>
-                              {contract.status === 'pending' && (
-                                <Button 
-                                  size="sm" 
-                                  className="bg-gradient-primary hover:shadow-glow"
-                                  onClick={() => {
-                                    toast({
-                                      title: "Hợp đồng đã được duyệt",
-                                      description: `Hợp đồng ${contract.title} đã được phê duyệt thành công`,
-                                    });
-                                  }}
-                                >
-                                  <CheckCircle className="h-4 w-4 mr-1" />
-                                  Duyệt
-                                </Button>
-                              )}
                             </div>
                           </div>
                         </div>
@@ -1310,6 +1290,152 @@ export default function AdminDashboard() {
                   onClick={() => setShowActionSuccessModal(false)}
                 >
                   Đóng
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Contract Detail Modal */}
+        {showContractDetailModal && selectedContract && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b">
+                <h2 className="text-xl font-bold flex items-center space-x-2">
+                  <FileText className="h-5 w-5" />
+                  <span>Chi tiết hợp đồng</span>
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Thông tin chi tiết về hợp đồng đã được duyệt
+                </p>
+              </div>
+              
+              <div className="space-y-6 p-6">
+                {/* Contract Info */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <FileText className="h-5 w-5" />
+                      <span>Thông tin hợp đồng</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Mã hợp đồng</p>
+                        <p className="font-medium">{selectedContract.id}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Tên hợp đồng</p>
+                        <p className="font-medium">{selectedContract.title}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Loại hợp đồng</p>
+                        <p className="font-medium">{selectedContract.contractType}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Ngày ký</p>
+                        <p className="font-medium">{selectedContract.signedDate}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Giá trị hợp đồng</p>
+                        <p className="font-medium text-success">{selectedContract.value}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Trạng thái</p>
+                        <Badge variant={selectedContract.status === 'active' ? 'default' : 'secondary'}>
+                          {selectedContract.status === 'active' ? 'Hiệu lực' : selectedContract.status === 'expired' ? 'Hết hạn' : 'Chờ ký'}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Staff & Group Info */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Users className="h-5 w-5" />
+                      <span>Thông tin nhóm & nhân viên</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Nhân viên xử lý</p>
+                        <p className="font-medium">{selectedContract.staff}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Số thành viên</p>
+                        <p className="font-medium">{selectedContract.memberCount} người</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Số xe điện</p>
+                        <p className="font-medium">{selectedContract.vehicleCount} xe</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Kích thước file</p>
+                        <p className="font-medium">{selectedContract.fileSize}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Vehicle Details (if applicable) */}
+                {selectedContract.contractType.includes('đồng sở hữu') && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Car className="h-5 w-5" />
+                        <span>Chi tiết phương tiện</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="p-3 border rounded-lg">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className="font-medium">VinFast VF8 2024</p>
+                              <p className="text-sm text-muted-foreground">Xe điện cao cấp</p>
+                            </div>
+                            <Badge variant="default">Hoạt động</Badge>
+                          </div>
+                        </div>
+                        {selectedContract.vehicleCount > 1 && (
+                          <div className="p-3 border rounded-lg">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <p className="font-medium">Tesla Model Y 2023</p>
+                                <p className="text-sm text-muted-foreground">Xe điện thể thao</p>
+                              </div>
+                              <Badge variant="default">Hoạt động</Badge>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+              
+              <div className="flex justify-end space-x-3 p-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowContractDetailModal(false)}
+                >
+                  Đóng
+                </Button>
+                <Button
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={() => {
+                    toast({
+                      title: "Trạng thái tải xuống",
+                      description: selectedContract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải",
+                    });
+                  }}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Tải về hợp đồng
                 </Button>
               </div>
             </div>
