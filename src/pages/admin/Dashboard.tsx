@@ -403,81 +403,180 @@ export default function AdminDashboard() {
 
           {/* Contracts */}
           <TabsContent value="contracts">
-            <Card className="shadow-elegant">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5" />
-                  <span>Quản lý hợp đồng</span>
-                </CardTitle>
-                <CardDescription>
-                  Hợp đồng được phân theo nhân viên quản lý và xử lý
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[{
-                  id: "HD001",
-                  title: "Hợp đồng Showroom HCM",
-                  staff: "Nguyễn Văn Nam",
-                  type: "Showroom",
-                  status: "approved",
-                  value: "500M VNĐ",
-                  date: "15/01/2024"
-                }, {
-                  id: "HD002",
-                  title: "Hợp đồng đồng sở hữu VF8",
-                  staff: "Trần Thị Lan",
-                  type: "Xe điện",
-                  status: "pending",
-                  value: "1.2B VNĐ",
-                  date: "20/01/2024"
-                }, {
-                  id: "HD003",
-                  title: "Hợp đồng bảo trì xe",
-                  staff: "Lê Văn Tùng",
-                  type: "Bảo trì",
-                  status: "approved",
-                  value: "50M VNĐ",
-                  date: "18/01/2024"
-                }].map(contract => <div key={contract.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3">
-                          <h3 className="font-semibold">{contract.title}</h3>
-                          <Badge variant={contract.status === 'approved' ? 'default' : 'secondary'}>
-                            {contract.type}
-                          </Badge>
-                          <Badge variant={contract.status === 'approved' ? 'default' : 'outline'}>
-                            {contract.status === 'approved' ? 'Đã duyệt' : 'Chờ duyệt'}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-muted-foreground mt-1">
-                          <span>Mã: {contract.id}</span>
-                          <span className="mx-2">•</span>
-                          <span>NV xử lý: {contract.staff}</span>
-                          <span className="mx-2">•</span>
-                          <span>Giá trị: {contract.value}</span>
-                          <span className="mx-2">•</span>
-                          <span>{contract.date}</span>
-                        </div>
+            <div className="space-y-6">
+              {/* Search and Stats */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="lg:col-span-3">
+                  <Card className="shadow-elegant">
+                    <CardHeader>
+                      <CardTitle>Tìm kiếm hợp đồng</CardTitle>
+                      <CardDescription>
+                        Tra cứu hợp đồng theo tên, nhân viên xử lý hoặc mã hợp đồng
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Nhập tên hợp đồng, nhân viên hoặc mã hợp đồng..."
+                          className="pl-10"
+                        />
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Button size="sm" variant="outline">
-                          <Eye className="h-4 w-4 mr-1" />
-                          Xem
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Download className="h-4 w-4 mr-1" />
-                          Tải về
-                        </Button>
-                        {contract.status === 'pending' && <Button size="sm" className="bg-gradient-primary hover:shadow-glow">
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Duyệt
-                          </Button>}
-                      </div>
-                    </div>)}
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
+                
+                <Card className="shadow-elegant">
+                  <CardHeader className="text-center">
+                    <FileText className="h-8 w-8 text-primary mx-auto mb-2" />
+                    <CardTitle>15</CardTitle>
+                    <CardDescription>Tổng số hợp đồng</CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
+
+              {/* Contracts List */}
+              <Card className="shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <FileText className="h-5 w-5" />
+                    <span>Danh sách hợp đồng</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Quản lý tất cả hợp đồng trong hệ thống theo nhân viên xử lý
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[{
+                      id: "CONTRACT-001",
+                      title: "Hợp đồng đồng sở hữu - Nhóm HCM Quận 1",
+                      staff: "Nguyễn Văn Nam",
+                      contractType: "Đồng sở hữu xe điện",
+                      status: "active",
+                      signedDate: "15/01/2024",
+                      vehicleCount: 3,
+                      memberCount: 12,
+                      value: "1.2B VNĐ",
+                      fileSize: "2.5 MB"
+                    }, {
+                      id: "CONTRACT-002", 
+                      title: "Hợp đồng showroom - Chi nhánh HCM",
+                      staff: "Trần Thị Lan",
+                      contractType: "Hợp tác showroom",
+                      status: "pending",
+                      signedDate: "20/01/2024",
+                      vehicleCount: 0,
+                      memberCount: 8,
+                      value: "500M VNĐ",
+                      fileSize: "3.1 MB"
+                    }, {
+                      id: "CONTRACT-003",
+                      title: "Hợp đồng đồng sở hữu - Nhóm HN Cầu Giấy",
+                      staff: "Lê Văn Tùng",
+                      contractType: "Đồng sở hữu xe điện",
+                      status: "active",
+                      signedDate: "18/01/2024",
+                      vehicleCount: 2,
+                      memberCount: 8,
+                      value: "800M VNĐ",
+                      fileSize: "2.8 MB"
+                    }, {
+                      id: "CONTRACT-004",
+                      title: "Hợp đồng bảo trì - Trung tâm Đà Nẵng",
+                      staff: "Phạm Minh Đức",
+                      contractType: "Bảo trì và sửa chữa",
+                      status: "expired",
+                      signedDate: "05/12/2023",
+                      vehicleCount: 0,
+                      memberCount: 3,
+                      value: "50M VNĐ",
+                      fileSize: "1.2 MB"
+                    }].map((contract) => {
+                      const getStatusColor = (status: string) => {
+                        switch (status) {
+                          case "active": return "default";
+                          case "expired": return "destructive";
+                          case "pending": return "secondary";
+                          default: return "outline";
+                        }
+                      };
+                      
+                      const getStatusText = (status: string) => {
+                        switch (status) {
+                          case "active": return "Hiệu lực";
+                          case "expired": return "Hết hạn";
+                          case "pending": return "Chờ ký";
+                          default: return "Không xác định";
+                        }
+                      };
+
+                      return (
+                        <div key={contract.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-3 mb-2">
+                                <h3 className="text-lg font-semibold">{contract.title}</h3>
+                                <Badge variant={getStatusColor(contract.status) as any}>
+                                  {getStatusText(contract.status)}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground mb-4">
+                                <div className="flex items-center space-x-2">
+                                  <Calendar className="h-4 w-4" />
+                                  <span>Ngày ký: {contract.signedDate}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Users className="h-4 w-4" />
+                                  <span>{contract.memberCount} thành viên</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Car className="h-4 w-4" />
+                                  <span>{contract.vehicleCount} xe điện</span>
+                                </div>
+                              </div>
+
+                              <div className="text-sm space-y-1">
+                                <div>
+                                  <span className="font-medium">Mã hợp đồng:</span> {contract.id}
+                                  <span className="mx-3">•</span>
+                                  <span className="font-medium">Loại:</span> {contract.contractType}
+                                  <span className="mx-3">•</span>
+                                  <span className="font-medium">Kích thước:</span> {contract.fileSize}
+                                </div>
+                                <div>
+                                  <span className="font-medium">NV xử lý:</span> {contract.staff}
+                                  <span className="mx-3">•</span>
+                                  <span className="font-medium">Giá trị:</span> {contract.value}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col space-y-2 ml-4">
+                              <Button size="sm" variant="outline">
+                                <Eye className="h-4 w-4 mr-1" />
+                                Xem
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Download className="h-4 w-4 mr-1" />
+                                Tải về
+                              </Button>
+                              {contract.status === 'pending' && (
+                                <Button size="sm" className="bg-gradient-primary hover:shadow-glow">
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Duyệt
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Analytics */}
