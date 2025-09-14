@@ -19,6 +19,7 @@ export default function AdminDashboard() {
   const [showFireConfirmModal, setShowFireConfirmModal] = useState(false);
   const [showActionSuccessModal, setShowActionSuccessModal] = useState(false);
   const [actionType, setActionType] = useState(""); // "lock", "unlock", "fire"
+  const [activeTab, setActiveTab] = useState("analytics");
   const [confirmationText, setConfirmationText] = useState("");
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [editStaffData, setEditStaffData] = useState({
@@ -257,27 +258,52 @@ export default function AdminDashboard() {
             Pages
           </div>
           
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+          <button 
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'analytics' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('analytics')}
+          >
             <BarChart3 className="h-4 w-4" />
             <span>Analytics</span>
           </button>
           
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+              activeTab === 'staff' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('staff')}
+          >
             <Users className="h-4 w-4" />
             <span>Nhân viên</span>
           </button>
           
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+              activeTab === 'showrooms' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('showrooms')}
+          >
             <Building className="h-4 w-4" />
             <span>Showroom</span>
           </button>
           
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+              activeTab === 'contracts' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('contracts')}
+          >
             <FileText className="h-4 w-4" />
             <span>Hợp đồng</span>
           </button>
           
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+          <button 
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+              activeTab === 'history' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('history')}
+          >
             <Car className="h-4 w-4" />
             <span>Lịch sử xe</span>
           </button>
@@ -341,7 +367,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Main Content Tabs */}
-          <Tabs defaultValue="analytics" className="space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="staff">Nhân viên</TabsTrigger>
