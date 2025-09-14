@@ -224,46 +224,124 @@ export default function AdminDashboard() {
     setShowActionSuccessModal(true);
   };
 
-  return <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-gradient-primary text-white p-4 shadow-glow">
-        <div className="container mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">Bảng điều khiển quản trị</h1>
-            <p className="text-sm opacity-90">Quản lý toàn bộ hệ thống EcoShare</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => window.history.back()}>
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Quay lại
-            </Button>
-            <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20" onClick={() => navigate('/login')}>
-              <LogOut className="h-4 w-4 mr-1" />
-              Đăng xuất
-            </Button>
-            <Shield className="h-8 w-8" />
+  return <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <div className="w-64 bg-card border-r border-border shadow-elegant">
+        {/* Logo/Header */}
+        <div className="p-6 border-b border-border">
+          <div className="flex items-center space-x-3">
+            <Shield className="h-8 w-8 text-primary" />
+            <div>
+              <h1 className="text-lg font-bold">AdminKit</h1>
+              <p className="text-xs text-muted-foreground">PRO</p>
+            </div>
           </div>
         </div>
-      </header>
 
-      <div className="container mx-auto p-6 space-y-6">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {stats.map(stat => <Card key={stat.label} className="shadow-elegant">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold">{stat.value}</p>
+        {/* User Profile */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-sm font-medium text-primary">AH</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium">Admin Hall</p>
+              <p className="text-xs text-muted-foreground">Admin</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
+        <nav className="p-4 space-y-2">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+            Pages
+          </div>
+          
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+            <BarChart3 className="h-4 w-4" />
+            <span>Analytics</span>
+          </button>
+          
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            <Users className="h-4 w-4" />
+            <span>Nhân viên</span>
+          </button>
+          
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            <Building className="h-4 w-4" />
+            <span>Showroom</span>
+          </button>
+          
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            <FileText className="h-4 w-4" />
+            <span>Hợp đồng</span>
+          </button>
+          
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            <Car className="h-4 w-4" />
+            <span>Lịch sử xe</span>
+          </button>
+
+          <div className="pt-4">
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+              Components
+            </div>
+            
+            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+              <Settings className="h-4 w-4" />
+              <span>Cài đặt</span>
+            </button>
+            
+            <button 
+              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => navigate('/login')}
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        {/* Top Header */}
+        <header className="bg-card border-b border-border p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold">Analytics Dashboard</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search..." 
+                  className="pl-10 w-64"
+                />
+              </div>
+              <Button>New Project</Button>
+            </div>
+          </div>
+        </header>
+
+        <div className="p-6 space-y-6">
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {stats.map(stat => <Card key={stat.label} className="shadow-elegant">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                      <p className="text-2xl font-bold">{stat.value}</p>
+                    </div>
+                    <stat.icon className={`h-8 w-8 text-${stat.color}`} />
                   </div>
-                  <stat.icon className={`h-8 w-8 text-${stat.color}`} />
-                </div>
-              </CardContent>
-            </Card>)}
-        </div>
+                </CardContent>
+              </Card>)}
+          </div>
 
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="staff" className="space-y-6">
+          {/* Main Content Tabs */}
+          <Tabs defaultValue="staff" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="staff">Nhân viên</TabsTrigger>
             <TabsTrigger value="showrooms">Showroom</TabsTrigger>
@@ -1442,6 +1520,7 @@ export default function AdminDashboard() {
           </div>
         )}
         
+        </div>
       </div>
     </div>;
 }
