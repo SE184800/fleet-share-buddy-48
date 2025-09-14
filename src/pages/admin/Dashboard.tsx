@@ -274,21 +274,6 @@ export default function AdminDashboard() {
             <span>Lịch sử xe</span>
           </button>
 
-          <div className="pt-4">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-              Components
-            </div>
-            
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-              <Settings className="h-4 w-4" />
-              <span>Cài đặt</span>
-            </button>
-            
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" onClick={() => navigate('/login')}>
-              <LogOut className="h-4 w-4" />
-              <span>Đăng xuất</span>
-            </button>
-          </div>
         </nav>
       </div>
 
@@ -305,12 +290,15 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="relative">
-                
-                
-              </div>
+              <button className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-white/10 text-white/90 hover:text-white transition-colors">
+                <Settings className="h-4 w-4" />
+                <span>Cài đặt</span>
+              </button>
               
-              
+              <button className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-white/10 text-white/90 hover:text-white transition-colors" onClick={() => navigate('/login')}>
+                <LogOut className="h-4 w-4" />
+                <span>Đăng xuất</span>
+              </button>
             </div>
           </div>
         </header>
