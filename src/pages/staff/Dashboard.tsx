@@ -455,7 +455,9 @@ export default function StaffDashboard() {
                           amount: "2,500,000 VNĐ",
                           groupFund: "50,000,000 VNĐ",
                           date: "20/01/2024",
-                          status: "pending"
+                          status: "pending",
+                          paymentType: "group",
+                          description: "Bảo trì định kỳ 6 tháng theo quy định"
                         },
                         {
                           id: "PAY-002",
@@ -465,7 +467,9 @@ export default function StaffDashboard() {
                           amount: "1,800,000 VNĐ",
                           groupFund: "35,000,000 VNĐ",
                           date: "19/01/2024",
-                          status: "pending"
+                          status: "pending",
+                          paymentType: "self",
+                          description: "Thay lốp sau do bị thủng"
                         },
                         {
                           id: "PAY-003",
@@ -475,7 +479,9 @@ export default function StaffDashboard() {
                           amount: "3,200,000 VNĐ",
                           groupFund: "50,000,000 VNĐ",
                           date: "18/01/2024",
-                          status: "pending"
+                          status: "pending",
+                          paymentType: "group",
+                          description: "Lỗi hệ thống sạc, cần thay bộ điều khiển"
                         },
                         {
                           id: "PAY-004",
@@ -485,7 +491,9 @@ export default function StaffDashboard() {
                           amount: "800,000 VNĐ",
                           groupFund: "35,000,000 VNĐ",
                           date: "17/01/2024",
-                          status: "pending"
+                          status: "pending",
+                          paymentType: "self",
+                          description: "Kiểm tra độ chai pin theo định kỳ"
                         }
                       ].map((request) => (
                         <Card key={request.id}>
@@ -495,8 +503,11 @@ export default function StaffDashboard() {
                                 <div className="flex items-center space-x-3 mb-2">
                                   <h5 className="font-semibold">{request.service}</h5>
                                   <Badge variant="outline">{request.id}</Badge>
+                                  <Badge variant={request.paymentType === 'group' ? 'default' : 'secondary'} className="text-xs">
+                                    {request.paymentType === 'group' ? 'Quỹ chung' : 'Tự chi trả'}
+                                  </Badge>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-muted-foreground mb-2">
                                   <div>
                                     <span className="font-medium">Nhóm:</span> {request.group}
                                   </div>
@@ -507,15 +518,28 @@ export default function StaffDashboard() {
                                     <span className="font-medium">Ngày:</span> {request.date}
                                   </div>
                                 </div>
-                                <div className="flex items-center space-x-4 mt-2">
-                                  <div className="text-sm">
-                                    <span className="text-muted-foreground">Chi phí:</span>
-                                    <span className="font-semibold text-destructive ml-1">{request.amount}</span>
-                                  </div>
-                                  <div className="text-sm">
-                                    <span className="text-muted-foreground">Quỹ nhóm:</span>
-                                    <span className="font-semibold text-success ml-1">{request.groupFund}</span>
-                                  </div>
+                                <div className="text-sm text-muted-foreground mb-2">
+                                  <span className="font-medium">Mô tả:</span> {request.description}
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                  {request.paymentType === 'group' && (
+                                    <>
+                                      <div className="text-sm">
+                                        <span className="text-muted-foreground">Chi phí:</span>
+                                        <span className="font-semibold text-destructive ml-1">{request.amount}</span>
+                                      </div>
+                                      <div className="text-sm">
+                                        <span className="text-muted-foreground">Quỹ nhóm:</span>
+                                        <span className="font-semibold text-success ml-1">{request.groupFund}</span>
+                                      </div>
+                                    </>
+                                  )}
+                                  {request.paymentType === 'self' && (
+                                    <div className="text-sm">
+                                      <span className="text-muted-foreground">Hình thức:</span>
+                                      <span className="font-semibold ml-1">Tự lái xe thực hiện dịch vụ</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2 ml-4">
