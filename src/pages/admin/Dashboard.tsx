@@ -162,7 +162,6 @@ export default function AdminDashboard() {
       showroom: ""
     });
   };
-
   const handleEditStaff = (staff: any) => {
     setSelectedStaff(staff);
     setEditStaffData({
@@ -175,7 +174,6 @@ export default function AdminDashboard() {
     });
     setShowEditStaffModal(true);
   };
-
   const handleUpdateStaff = () => {
     if (!editStaffData.name || !editStaffData.email || !editStaffData.province) {
       toast({
@@ -190,26 +188,20 @@ export default function AdminDashboard() {
     setShowEditStaffModal(false);
     setShowUpdateSuccessModal(true);
   };
-
   const handleLockUnlock = (staff: any) => {
     setSelectedStaff(staff);
     setActionType(staff.status === "active" ? "lock" : "unlock");
     setConfirmationText("");
     setShowLockConfirmModal(true);
   };
-
   const handleFire = (staff: any) => {
     setSelectedStaff(staff);
     setActionType("fire");
     setConfirmationText("");
     setShowFireConfirmModal(true);
   };
-
   const confirmAction = () => {
-    const expectedText = actionType === "lock" ? "Xác nhận khóa nhân viên này" : 
-                        actionType === "unlock" ? "Xác nhận mở khóa nhân viên này" : 
-                        "Xác nhận sa thải nhân viên này";
-    
+    const expectedText = actionType === "lock" ? "Xác nhận khóa nhân viên này" : actionType === "unlock" ? "Xác nhận mở khóa nhân viên này" : "Xác nhận sa thải nhân viên này";
     if (confirmationText !== expectedText) {
       toast({
         title: "Lỗi",
@@ -224,7 +216,6 @@ export default function AdminDashboard() {
     setShowFireConfirmModal(false);
     setShowActionSuccessModal(true);
   };
-
   return <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <div className="w-64 bg-card border-r border-border shadow-elegant">
@@ -258,52 +249,27 @@ export default function AdminDashboard() {
             Pages
           </div>
           
-          <button 
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg font-medium transition-colors ${
-              activeTab === 'analytics' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-            }`}
-            onClick={() => setActiveTab('analytics')}
-          >
+          <button className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg font-medium transition-colors ${activeTab === 'analytics' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`} onClick={() => setActiveTab('analytics')}>
             <BarChart3 className="h-4 w-4" />
             <span>Analytics</span>
           </button>
           
-          <button 
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-              activeTab === 'staff' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-            }`}
-            onClick={() => setActiveTab('staff')}
-          >
+          <button className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${activeTab === 'staff' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`} onClick={() => setActiveTab('staff')}>
             <Users className="h-4 w-4" />
             <span>Nhân viên</span>
           </button>
           
-          <button 
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-              activeTab === 'showrooms' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-            }`}
-            onClick={() => setActiveTab('showrooms')}
-          >
+          <button className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${activeTab === 'showrooms' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`} onClick={() => setActiveTab('showrooms')}>
             <Building className="h-4 w-4" />
             <span>Showroom</span>
           </button>
           
-          <button 
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-              activeTab === 'contracts' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-            }`}
-            onClick={() => setActiveTab('contracts')}
-          >
+          <button className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${activeTab === 'contracts' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`} onClick={() => setActiveTab('contracts')}>
             <FileText className="h-4 w-4" />
             <span>Hợp đồng</span>
           </button>
           
-          <button 
-            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
-              activeTab === 'history' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-            }`}
-            onClick={() => setActiveTab('history')}
-          >
+          <button className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${activeTab === 'history' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`} onClick={() => setActiveTab('history')}>
             <Car className="h-4 w-4" />
             <span>Lịch sử xe</span>
           </button>
@@ -318,10 +284,7 @@ export default function AdminDashboard() {
               <span>Cài đặt</span>
             </button>
             
-            <button 
-              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-              onClick={() => navigate('/login')}
-            >
+            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" onClick={() => navigate('/login')}>
               <LogOut className="h-4 w-4" />
               <span>Đăng xuất</span>
             </button>
@@ -340,10 +303,7 @@ export default function AdminDashboard() {
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Search..." 
-                  className="pl-10 w-64"
-                />
+                <Input placeholder="Search..." className="pl-10 w-64" />
               </div>
               <Button>New Project</Button>
             </div>
@@ -368,13 +328,7 @@ export default function AdminDashboard() {
 
           {/* Main Content Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="staff">Nhân viên</TabsTrigger>
-              <TabsTrigger value="showrooms">Showroom</TabsTrigger>
-              <TabsTrigger value="contracts">Hợp đồng</TabsTrigger>
-              <TabsTrigger value="history">Lịch sử xe</TabsTrigger>
-            </TabsList>
+            
 
             {/* Analytics Tab */}
             <TabsContent value="analytics">
@@ -475,28 +429,15 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleEditStaff(staff)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => handleEditStaff(staff)}>
                           <Settings className="h-4 w-4 mr-1" />
                           Chỉnh sửa
                         </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleLockUnlock(staff)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => handleLockUnlock(staff)}>
                           <Lock className="h-4 w-4 mr-1" />
                           {staff.status === "active" ? "Khóa" : "Mở khóa"}
                         </Button>
-                        {staff.status === "inactive" && <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
-                            onClick={() => handleFire(staff)}
-                          >
+                        {staff.status === "inactive" && <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleFire(staff)}>
                             <Trash2 className="h-4 w-4 mr-1" />
                             Sa thải
                           </Button>}
@@ -576,10 +517,7 @@ export default function AdminDashboard() {
                     <CardContent>
                       <div className="relative">
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          placeholder="Nhập tên hợp đồng, nhân viên hoặc mã hợp đồng..."
-                          className="pl-10"
-                        />
+                        <Input placeholder="Nhập tên hợp đồng, nhân viên hoặc mã hợp đồng..." className="pl-10" />
                       </div>
                     </CardContent>
                   </Card>
@@ -619,7 +557,7 @@ export default function AdminDashboard() {
                       value: "1.2B VNĐ",
                       fileSize: "2.5 MB"
                     }, {
-                      id: "CONTRACT-002", 
+                      id: "CONTRACT-002",
                       title: "Hợp đồng showroom - Chi nhánh HCM",
                       staff: "Trần Thị Lan",
                       contractType: "Hợp tác showroom",
@@ -651,27 +589,32 @@ export default function AdminDashboard() {
                       memberCount: 3,
                       value: "50M VNĐ",
                       fileSize: "1.2 MB"
-                    }].map((contract) => {
+                    }].map(contract => {
                       const getStatusColor = (status: string) => {
                         switch (status) {
-                          case "active": return "default";
-                          case "expired": return "destructive";
-                          case "pending": return "secondary";
-                          default: return "outline";
+                          case "active":
+                            return "default";
+                          case "expired":
+                            return "destructive";
+                          case "pending":
+                            return "secondary";
+                          default:
+                            return "outline";
                         }
                       };
-                      
                       const getStatusText = (status: string) => {
                         switch (status) {
-                          case "active": return "Hiệu lực";
-                          case "expired": return "Hết hạn";
-                          case "pending": return "Chờ ký";
-                          default: return "Không xác định";
+                          case "active":
+                            return "Hiệu lực";
+                          case "expired":
+                            return "Hết hạn";
+                          case "pending":
+                            return "Chờ ký";
+                          default:
+                            return "Không xác định";
                         }
                       };
-
-                      return (
-                        <div key={contract.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                      return <div key={contract.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center space-x-3 mb-2">
@@ -713,34 +656,25 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="flex flex-col space-y-2 ml-4">
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => {
-                                  setSelectedContract(contract);
-                                  setShowContractDetailModal(true);
-                                }}
-                              >
+                              <Button size="sm" variant="outline" onClick={() => {
+                              setSelectedContract(contract);
+                              setShowContractDetailModal(true);
+                            }}>
                                 <Eye className="h-4 w-4 mr-1" />
                                 Xem
                               </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => {
-                                  toast({
-                                    title: "Trạng thái tải xuống",
-                                    description: contract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải",
-                                  });
-                                }}
-                              >
+                              <Button size="sm" variant="outline" onClick={() => {
+                              toast({
+                                title: "Trạng thái tải xuống",
+                                description: contract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải"
+                              });
+                            }}>
                                 <Download className="h-4 w-4 mr-1" />
                                 Tải về
                               </Button>
                             </div>
                           </div>
-                        </div>
-                      );
+                        </div>;
                     })}
                   </div>
                 </CardContent>
@@ -902,33 +836,33 @@ export default function AdminDashboard() {
                   <div className="space-y-4">
                     <h4 className="font-medium">Giao dịch gần đây</h4>
                     {[{
-                    id: "TX001",
-                    type: "Mua",
-                    vehicle: "VinFast VF8 2024",
-                    buyer: "Nhóm HCM-Q1 (12 thành viên)",
-                    seller: "VinFast Showroom HCM",
-                    price: "1.2B VNĐ",
-                    date: "22/01/2024",
-                    status: "completed"
-                  }, {
-                    id: "TX002",
-                    type: "Bán",
-                    vehicle: "Tesla Model Y 2023",
-                    buyer: "Công ty ABC",
-                    seller: "Nhóm HN-Cầu Giấy (8 thành viên)",
-                    price: "950M VNĐ",
-                    date: "20/01/2024",
-                    status: "completed"
-                  }, {
-                    id: "TX003",
-                    type: "Mua",
-                    vehicle: "Hyundai Kona Electric",
-                    buyer: "Nhóm ĐN-Hải Châu (6 thành viên)",
-                    seller: "Hyundai Đà Nẵng",
-                    price: "750M VNĐ",
-                    date: "18/01/2024",
-                    status: "processing"
-                  }].map(transaction => <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      id: "TX001",
+                      type: "Mua",
+                      vehicle: "VinFast VF8 2024",
+                      buyer: "Nhóm HCM-Q1 (12 thành viên)",
+                      seller: "VinFast Showroom HCM",
+                      price: "1.2B VNĐ",
+                      date: "22/01/2024",
+                      status: "completed"
+                    }, {
+                      id: "TX002",
+                      type: "Bán",
+                      vehicle: "Tesla Model Y 2023",
+                      buyer: "Công ty ABC",
+                      seller: "Nhóm HN-Cầu Giấy (8 thành viên)",
+                      price: "950M VNĐ",
+                      date: "20/01/2024",
+                      status: "completed"
+                    }, {
+                      id: "TX003",
+                      type: "Mua",
+                      vehicle: "Hyundai Kona Electric",
+                      buyer: "Nhóm ĐN-Hải Châu (6 thành viên)",
+                      seller: "Hyundai Đà Nẵng",
+                      price: "750M VNĐ",
+                      date: "18/01/2024",
+                      status: "processing"
+                    }].map(transaction => <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
                             <Badge variant={transaction.type === 'Mua' ? 'default' : 'secondary'}>
@@ -978,8 +912,7 @@ export default function AdminDashboard() {
         {showChat && <ChatBox isOpen={showChat} onClose={() => setShowChat(false)} userType="admin" />}
 
         {/* Add Staff Modal */}
-        {showAddStaffModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showAddStaffModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b">
                 <h2 className="text-xl font-bold flex items-center space-x-2">
@@ -1004,57 +937,50 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Họ và tên *</label>
-                        <Input
-                          placeholder="Nhập họ và tên đầy đủ"
-                          value={newStaffData.name}
-                          onChange={(e) => setNewStaffData({...newStaffData, name: e.target.value})}
-                        />
+                        <Input placeholder="Nhập họ và tên đầy đủ" value={newStaffData.name} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        name: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Email *</label>
-                        <Input
-                          type="email"
-                          placeholder="example@ecoshare.vn"
-                          value={newStaffData.email}
-                          onChange={(e) => setNewStaffData({...newStaffData, email: e.target.value})}
-                        />
+                        <Input type="email" placeholder="example@ecoshare.vn" value={newStaffData.email} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        email: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Số điện thoại</label>
-                        <Input
-                          placeholder="0123456789"
-                          value={newStaffData.phone || ''}
-                          onChange={(e) => setNewStaffData({...newStaffData, phone: e.target.value})}
-                        />
+                        <Input placeholder="0123456789" value={newStaffData.phone || ''} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        phone: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Ngày sinh</label>
-                        <Input
-                          type="date"
-                          value={newStaffData.birthDate || ''}
-                          onChange={(e) => setNewStaffData({...newStaffData, birthDate: e.target.value})}
-                        />
+                        <Input type="date" value={newStaffData.birthDate || ''} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        birthDate: e.target.value
+                      })} />
                       </div>
                       
                       <div className="md:col-span-2">
                         <label className="block text-sm font-medium mb-2">Địa chỉ</label>
-                        <Input
-                          placeholder="Nhập địa chỉ"
-                          value={newStaffData.address || ''}
-                          onChange={(e) => setNewStaffData({...newStaffData, address: e.target.value})}
-                        />
+                        <Input placeholder="Nhập địa chỉ" value={newStaffData.address || ''} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        address: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố làm việc *</label>
-                        <select
-                          className="w-full p-3 border border-input rounded-md bg-background"
-                          value={newStaffData.province}
-                          onChange={(e) => setNewStaffData({...newStaffData, province: e.target.value})}
-                        >
+                        <select className="w-full p-3 border border-input rounded-md bg-background" value={newStaffData.province} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        province: e.target.value
+                      })}>
                           <option value="">Chọn tỉnh/thành phố</option>
                           <option value="Hồ Chí Minh">Hồ Chí Minh</option>
                           <option value="Hà Nội">Hà Nội</option>
@@ -1082,11 +1008,10 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Tên đăng nhập *</label>
-                        <Input
-                          placeholder="Nhập tên đăng nhập"
-                          value={newStaffData.username}
-                          onChange={(e) => setNewStaffData({...newStaffData, username: e.target.value})}
-                        />
+                        <Input placeholder="Nhập tên đăng nhập" value={newStaffData.username} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        username: e.target.value
+                      })} />
                         <p className="text-xs text-muted-foreground mt-1">
                           Tên đăng nhập sẽ được sử dụng để đăng nhập vào hệ thống
                         </p>
@@ -1094,12 +1019,10 @@ export default function AdminDashboard() {
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Mật khẩu tạm thời *</label>
-                        <Input
-                          type="password"
-                          placeholder="Nhập mật khẩu tạm thời"
-                          value={newStaffData.password}
-                          onChange={(e) => setNewStaffData({...newStaffData, password: e.target.value})}
-                        />
+                        <Input type="password" placeholder="Nhập mật khẩu tạm thời" value={newStaffData.password} onChange={e => setNewStaffData({
+                        ...newStaffData,
+                        password: e.target.value
+                      })} />
                         <p className="text-xs text-muted-foreground mt-1">
                           Nhân viên sẽ được yêu cầu thay đổi mật khẩu khi đăng nhập lần đầu
                         </p>
@@ -1119,27 +1042,19 @@ export default function AdminDashboard() {
               </div>
               
               <div className="flex justify-end space-x-3 p-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAddStaffModal(false)}
-                >
+                <Button variant="outline" onClick={() => setShowAddStaffModal(false)}>
                   Hủy
                 </Button>
-                <Button
-                  className="bg-gradient-primary hover:shadow-glow"
-                  onClick={handleCreateStaff}
-                >
+                <Button className="bg-gradient-primary hover:shadow-glow" onClick={handleCreateStaff}>
                   <UserPlus className="h-4 w-4 mr-2" />
                   Tạo nhân viên
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Success Modal */}
-        {showSuccessModal && createdStaff && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showSuccessModal && createdStaff && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
               <div className="p-6 text-center">
                 <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
@@ -1161,20 +1076,15 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 
-                <Button
-                  className="w-full bg-gradient-primary hover:shadow-glow"
-                  onClick={() => setShowSuccessModal(false)}
-                >
+                <Button className="w-full bg-gradient-primary hover:shadow-glow" onClick={() => setShowSuccessModal(false)}>
                   Đóng
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Edit Staff Modal */}
-        {showEditStaffModal && selectedStaff && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showEditStaffModal && selectedStaff && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b">
                 <h2 className="text-xl font-bold flex items-center space-x-2">
@@ -1233,57 +1143,50 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Họ và tên *</label>
-                        <Input
-                          placeholder="Nhập họ và tên đầy đủ"
-                          value={editStaffData.name}
-                          onChange={(e) => setEditStaffData({...editStaffData, name: e.target.value})}
-                        />
+                        <Input placeholder="Nhập họ và tên đầy đủ" value={editStaffData.name} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        name: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Email *</label>
-                        <Input
-                          type="email"
-                          placeholder="example@ecoshare.vn"
-                          value={editStaffData.email}
-                          onChange={(e) => setEditStaffData({...editStaffData, email: e.target.value})}
-                        />
+                        <Input type="email" placeholder="example@ecoshare.vn" value={editStaffData.email} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        email: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Số điện thoại</label>
-                        <Input
-                          placeholder="0123456789"
-                          value={editStaffData.phone}
-                          onChange={(e) => setEditStaffData({...editStaffData, phone: e.target.value})}
-                        />
+                        <Input placeholder="0123456789" value={editStaffData.phone} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        phone: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Ngày sinh</label>
-                        <Input
-                          type="date"
-                          value={editStaffData.birthDate}
-                          onChange={(e) => setEditStaffData({...editStaffData, birthDate: e.target.value})}
-                        />
+                        <Input type="date" value={editStaffData.birthDate} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        birthDate: e.target.value
+                      })} />
                       </div>
                       
                       <div className="md:col-span-2">
                         <label className="block text-sm font-medium mb-2">Địa chỉ</label>
-                        <Input
-                          placeholder="Nhập địa chỉ"
-                          value={editStaffData.address}
-                          onChange={(e) => setEditStaffData({...editStaffData, address: e.target.value})}
-                        />
+                        <Input placeholder="Nhập địa chỉ" value={editStaffData.address} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        address: e.target.value
+                      })} />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium mb-2">Tỉnh/Thành phố làm việc *</label>
-                        <select
-                          className="w-full p-3 border border-input rounded-md bg-background"
-                          value={editStaffData.province}
-                          onChange={(e) => setEditStaffData({...editStaffData, province: e.target.value})}
-                        >
+                        <select className="w-full p-3 border border-input rounded-md bg-background" value={editStaffData.province} onChange={e => setEditStaffData({
+                        ...editStaffData,
+                        province: e.target.value
+                      })}>
                           <option value="">Chọn tỉnh/thành phố</option>
                           <option value="Hồ Chí Minh">Hồ Chí Minh</option>
                           <option value="Hà Nội">Hà Nội</option>
@@ -1301,27 +1204,19 @@ export default function AdminDashboard() {
               </div>
               
               <div className="flex justify-end space-x-3 p-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowEditStaffModal(false)}
-                >
+                <Button variant="outline" onClick={() => setShowEditStaffModal(false)}>
                   Hủy
                 </Button>
-                <Button
-                  className="bg-gradient-primary hover:shadow-glow"
-                  onClick={handleUpdateStaff}
-                >
+                <Button className="bg-gradient-primary hover:shadow-glow" onClick={handleUpdateStaff}>
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Cập nhật
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Update Success Modal */}
-        {showUpdateSuccessModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showUpdateSuccessModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
               <div className="p-6 text-center">
                 <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
@@ -1332,20 +1227,15 @@ export default function AdminDashboard() {
                   Thông tin nhân viên đã được cập nhật thành công.
                 </p>
                 
-                <Button
-                  className="w-full bg-gradient-primary hover:shadow-glow"
-                  onClick={() => setShowUpdateSuccessModal(false)}
-                >
+                <Button className="w-full bg-gradient-primary hover:shadow-glow" onClick={() => setShowUpdateSuccessModal(false)}>
                   Đóng
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Lock/Unlock Confirmation Modal */}
-        {showLockConfirmModal && selectedStaff && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showLockConfirmModal && selectedStaff && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-4">
@@ -1358,34 +1248,22 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium mb-2">
                     Nhập "{actionType === "lock" ? "Xác nhận khóa nhân viên này" : "Xác nhận mở khóa nhân viên này"}" để xác nhận:
                   </label>
-                  <Input
-                    placeholder={actionType === "lock" ? "Xác nhận khóa nhân viên này" : "Xác nhận mở khóa nhân viên này"}
-                    value={confirmationText}
-                    onChange={(e) => setConfirmationText(e.target.value)}
-                  />
+                  <Input placeholder={actionType === "lock" ? "Xác nhận khóa nhân viên này" : "Xác nhận mở khóa nhân viên này"} value={confirmationText} onChange={e => setConfirmationText(e.target.value)} />
                 </div>
                 <div className="flex justify-end space-x-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowLockConfirmModal(false)}
-                  >
+                  <Button variant="outline" onClick={() => setShowLockConfirmModal(false)}>
                     Hủy
                   </Button>
-                  <Button
-                    className={actionType === "lock" ? "bg-destructive hover:bg-destructive/90" : "bg-gradient-primary hover:shadow-glow"}
-                    onClick={confirmAction}
-                  >
+                  <Button className={actionType === "lock" ? "bg-destructive hover:bg-destructive/90" : "bg-gradient-primary hover:shadow-glow"} onClick={confirmAction}>
                     {actionType === "lock" ? "Khóa" : "Mở khóa"}
                   </Button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Fire Confirmation Modal */}
-        {showFireConfirmModal && selectedStaff && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showFireConfirmModal && selectedStaff && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-4 text-destructive">
@@ -1398,64 +1276,43 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium mb-2">
                     Nhập "Xác nhận sa thải nhân viên này" để xác nhận:
                   </label>
-                  <Input
-                    placeholder="Xác nhận sa thải nhân viên này"
-                    value={confirmationText}
-                    onChange={(e) => setConfirmationText(e.target.value)}
-                  />
+                  <Input placeholder="Xác nhận sa thải nhân viên này" value={confirmationText} onChange={e => setConfirmationText(e.target.value)} />
                 </div>
                 <div className="flex justify-end space-x-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowFireConfirmModal(false)}
-                  >
+                  <Button variant="outline" onClick={() => setShowFireConfirmModal(false)}>
                     Hủy
                   </Button>
-                  <Button
-                    className="bg-destructive hover:bg-destructive/90"
-                    onClick={confirmAction}
-                  >
+                  <Button className="bg-destructive hover:bg-destructive/90" onClick={confirmAction}>
                     Sa thải
                   </Button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Action Success Modal */}
-        {showActionSuccessModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showActionSuccessModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-md w-full">
               <div className="p-6 text-center">
                 <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-success/10 mb-4">
                   <CheckCircle className="h-6 w-6 text-success" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">
-                  {actionType === "lock" ? "Khóa thành công!" : 
-                   actionType === "unlock" ? "Mở khóa thành công!" : 
-                   "Sa thải thành công!"}
+                  {actionType === "lock" ? "Khóa thành công!" : actionType === "unlock" ? "Mở khóa thành công!" : "Sa thải thành công!"}
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  {actionType === "lock" ? "Nhân viên đã được khóa tài khoản." : 
-                   actionType === "unlock" ? "Nhân viên đã được mở khóa tài khoản." : 
-                   "Nhân viên đã được sa thải khỏi hệ thống."}
+                  {actionType === "lock" ? "Nhân viên đã được khóa tài khoản." : actionType === "unlock" ? "Nhân viên đã được mở khóa tài khoản." : "Nhân viên đã được sa thải khỏi hệ thống."}
                 </p>
                 
-                <Button
-                  className="w-full bg-gradient-primary hover:shadow-glow"
-                  onClick={() => setShowActionSuccessModal(false)}
-                >
+                <Button className="w-full bg-gradient-primary hover:shadow-glow" onClick={() => setShowActionSuccessModal(false)}>
                   Đóng
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Contract Detail Modal */}
-        {showContractDetailModal && selectedContract && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showContractDetailModal && selectedContract && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-background rounded-lg shadow-elegant max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b">
                 <h2 className="text-xl font-bold flex items-center space-x-2">
@@ -1539,8 +1396,7 @@ export default function AdminDashboard() {
                 </Card>
 
                 {/* Vehicle Details (if applicable) */}
-                {selectedContract.contractType.includes('đồng sở hữu') && (
-                  <Card>
+                {selectedContract.contractType.includes('đồng sở hữu') && <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center space-x-2">
                         <Car className="h-5 w-5" />
@@ -1558,8 +1414,7 @@ export default function AdminDashboard() {
                             <Badge variant="default">Hoạt động</Badge>
                           </div>
                         </div>
-                        {selectedContract.vehicleCount > 1 && (
-                          <div className="p-3 border rounded-lg">
+                        {selectedContract.vehicleCount > 1 && <div className="p-3 border rounded-lg">
                             <div className="flex justify-between items-center">
                               <div>
                                 <p className="font-medium">Tesla Model Y 2023</p>
@@ -1567,37 +1422,28 @@ export default function AdminDashboard() {
                               </div>
                               <Badge variant="default">Hoạt động</Badge>
                             </div>
-                          </div>
-                        )}
+                          </div>}
                       </div>
                     </CardContent>
-                  </Card>
-                )}
+                  </Card>}
               </div>
               
               <div className="flex justify-end space-x-3 p-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowContractDetailModal(false)}
-                >
+                <Button variant="outline" onClick={() => setShowContractDetailModal(false)}>
                   Đóng
                 </Button>
-                <Button
-                  className="bg-gradient-primary hover:shadow-glow"
-                  onClick={() => {
-                    toast({
-                      title: "Trạng thái tải xuống",
-                      description: selectedContract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải",
-                    });
-                  }}
-                >
+                <Button className="bg-gradient-primary hover:shadow-glow" onClick={() => {
+                toast({
+                  title: "Trạng thái tải xuống",
+                  description: selectedContract.status === 'active' ? "Hợp đồng có thể tải xuống" : "Hợp đồng chưa sẵn sàng để tải"
+                });
+              }}>
                   <Download className="h-4 w-4 mr-2" />
                   Tải về hợp đồng
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
         
         </div>
       </div>
