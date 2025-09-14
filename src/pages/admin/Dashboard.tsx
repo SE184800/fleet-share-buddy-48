@@ -554,16 +554,48 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="flex flex-col space-y-2 ml-4">
-                              <Button size="sm" variant="outline">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => {
+                                  toast({
+                                    title: "Xem hợp đồng",
+                                    description: `Đang mở hợp đồng ${contract.title}`,
+                                  });
+                                }}
+                              >
                                 <Eye className="h-4 w-4 mr-1" />
                                 Xem
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => {
+                                  // Simulate download
+                                  const link = document.createElement('a');
+                                  link.href = '#';
+                                  link.download = `${contract.id}_contract.pdf`;
+                                  link.click();
+                                  toast({
+                                    title: "Tải xuống thành công",
+                                    description: `Đã tải xuống hợp đồng ${contract.id}`,
+                                  });
+                                }}
+                              >
                                 <Download className="h-4 w-4 mr-1" />
                                 Tải về
                               </Button>
                               {contract.status === 'pending' && (
-                                <Button size="sm" className="bg-gradient-primary hover:shadow-glow">
+                                <Button 
+                                  size="sm" 
+                                  className="bg-gradient-primary hover:shadow-glow"
+                                  onClick={() => {
+                                    toast({
+                                      title: "Hợp đồng đã được duyệt",
+                                      description: `Hợp đồng ${contract.title} đã được phê duyệt thành công`,
+                                    });
+                                  }}
+                                >
                                   <CheckCircle className="h-4 w-4 mr-1" />
                                   Duyệt
                                 </Button>
