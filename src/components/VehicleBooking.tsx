@@ -194,12 +194,9 @@ export default function VehicleBooking() {
               <SelectContent>
                 {vehicles.map((vehicle) => (
                   <SelectItem key={vehicle.id} value={vehicle.name}>
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center space-x-2">
-                        <Car className="h-4 w-4" />
-                        <span>{vehicle.name}</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">{vehicle.groupName}</span>
+                    <div className="flex items-center space-x-2">
+                      <Car className="h-4 w-4" />
+                      <span>{vehicle.name} - {vehicle.groupName}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -368,12 +365,9 @@ export default function VehicleBooking() {
                     <SelectContent>
                       {vehicles.map((vehicle) => (
                         <SelectItem key={vehicle.id} value={vehicle.name}>
-                          <div className="flex items-center justify-between w-full">
-                            <div className="flex items-center space-x-2">
-                              <Car className="h-4 w-4" />
-                              <span>{vehicle.name}</span>
-                            </div>
-                            <span className="text-xs text-muted-foreground">{vehicle.groupName}</span>
+                          <div className="flex items-center space-x-2">
+                            <Car className="h-4 w-4" />
+                            <span>{vehicle.name} - {vehicle.groupName}</span>
                           </div>
                         </SelectItem>
                       ))}
