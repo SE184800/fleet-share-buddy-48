@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Car } from "lucide-react";
+import { Car, ArrowLeft } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -45,6 +45,14 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
+      <Button
+        variant="ghost"
+        onClick={() => navigate(-1)}
+        className="absolute top-4 left-4 text-white hover:bg-white/10"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Quay lại
+      </Button>
       <Card className="w-full max-w-md shadow-glow border-0">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-2">
