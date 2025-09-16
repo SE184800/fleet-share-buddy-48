@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Users, ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
+import { Users, ArrowLeft, LogOut, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { groups, CURRENT_USER_ID } from "@/data/mockGroups";
 import { useSEO } from "@/hooks/useSEO";
@@ -19,25 +19,25 @@ export default function MyGroups() {
 
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<string>("");
 
   const data = useMemo(() => groups, []);
 
-  const handleRequestDeletion = (groupId: string) => {
+  const handleLeaveGroup = (groupId: string) => {
     setSelectedGroup(groupId);
-    setDeleteDialogOpen(true);
+    setLeaveDialogOpen(true);
   };
 
-  const confirmRequestDeletion = () => {
+  const confirmLeaveGroup = () => {
     const group = groups.find(g => g.id === selectedGroup);
     if (group) {
       toast({
-        title: "Yêu cầu xóa nhóm đã được gửi",
-        description: `Yêu cầu xóa nhóm "${group.name}" đã được gửi đến staff để xét duyệt.`,
+        title: "Rời nhóm thành công",
+        description: `Bạn đã rời khỏi nhóm "${group.name}".`,
       });
     }
-    setDeleteDialogOpen(false);
+    setLeaveDialogOpen(false);
     setSelectedGroup("");
   };
 
@@ -106,16 +106,14 @@ export default function MyGroups() {
                       <Button variant="outline" className="flex-1" onClick={() => navigate(`/co-owner/groups/${g.id}`)}>
                         Xem chi tiết
                       </Button>
-                      {myRole === "admin" && (
-                        <Button 
-                          variant="destructive" 
-                          size="sm"
-                          onClick={() => handleRequestDeletion(g.id)}
-                          className="px-3"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
+                      <Button 
+                        variant="destructive" 
+                        size="sm"
+                        onClick={() => handleLeaveGroup(g.id)}
+                        className="px-3"
+                      >
+                        <LogOut className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -126,29 +124,29 @@ export default function MyGroups() {
       </main>
       </div>
 
-      {/* Delete Request Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      {/* Leave Group Dialog */}
+      <Dialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              Yêu cầu xóa nhóm
+              Rời nhóm
             </DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn gửi yêu cầu xóa nhóm này không? Yêu cầu sẽ được gửi đến staff để xét duyệt.
+              Bạn có chắc chắn muốn rời khỏi nhóm này không? Bạn sẽ mất quyền truy cập và các đặt lịch hiện tại.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground">
-              <strong>Lưu ý:</strong> Chỉ staff mới có quyền xóa nhóm sau khi xét duyệt yêu cầu của bạn.
+              <strong>Lưu ý:</strong> Sau khi rời nhóm, bạn cần được mời lại để tham gia.
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setLeaveDialogOpen(false)}>
               Hủy
             </Button>
-            <Button variant="destructive" onClick={confirmRequestDeletion}>
-              Gửi yêu cầu
+            <Button variant="destructive" onClick={confirmLeaveGroup}>
+              Rời nhóm
             </Button>
           </DialogFooter>
         </DialogContent>
