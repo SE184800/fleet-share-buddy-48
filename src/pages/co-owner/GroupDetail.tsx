@@ -35,7 +35,7 @@ export default function GroupDetail() {
   const [selectedMemberToRemove, setSelectedMemberToRemove] = useState<string>("");
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [confirmText, setConfirmText] = useState("");
-  
+
   // Service request states
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const [openServiceRequest, setOpenServiceRequest] = useState(false);
@@ -196,11 +196,9 @@ export default function GroupDetail() {
                   <CardTitle>Đồng sở hữu</CardTitle>
                   <CardDescription>Các thành viên trong nhóm</CardDescription>
                 </div>
-                {myRole === "admin" && (
-                  <Button onClick={() => setOpenAddMember(true)} size="sm">
+                {myRole === "admin" && <Button onClick={() => setOpenAddMember(true)} size="sm">
                     Thêm thành viên
-                  </Button>
-                )}
+                  </Button>}
               </div>
             </CardHeader>
             <CardContent>
@@ -228,18 +226,7 @@ export default function GroupDetail() {
                         <div className="text-sm font-bold text-primary">{getUserUsage(m.id)}%</div>
                         <div className="text-xs text-muted-foreground">Tỉ lệ sử dụng</div>
                       </div>
-                      {myRole === "admin" && m.id !== CURRENT_USER_ID && (
-                        <Button 
-                          variant="destructive" 
-                          size="sm"
-                          onClick={() => {
-                            setSelectedMemberToRemove(m.id);
-                            setOpenRemoveMember(true);
-                          }}
-                        >
-                          Xóa
-                        </Button>
-                      )}
+                      {myRole === "admin" && m.id !== CURRENT_USER_ID}
                     </div>
                   </div>)}
               </div>
@@ -256,11 +243,7 @@ export default function GroupDetail() {
                   <CardTitle>Xe của nhóm</CardTitle>
                   <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
                 </div>
-                <Button 
-                  onClick={() => setOpenServiceRequest(true)}
-                  disabled={!selectedVehicle}
-                  size="sm"
-                >
+                <Button onClick={() => setOpenServiceRequest(true)} disabled={!selectedVehicle} size="sm">
                   Request dịch vụ
                 </Button>
               </div>
@@ -274,13 +257,7 @@ export default function GroupDetail() {
                 
                 <TabsContent value="vehicles">
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {group.vehicles.map(v => <div 
-                        key={v.id} 
-                        className={`border rounded-md p-3 cursor-pointer transition-colors ${
-                          selectedVehicle === v.id ? "border-primary bg-primary/5" : "hover:bg-accent/50"
-                        }`}
-                        onClick={() => setSelectedVehicle(v.id)}
-                      >
+                    {group.vehicles.map(v => <div key={v.id} className={`border rounded-md p-3 cursor-pointer transition-colors ${selectedVehicle === v.id ? "border-primary bg-primary/5" : "hover:bg-accent/50"}`} onClick={() => setSelectedVehicle(v.id)}>
                         <img src={v.imageUrl} alt={`Hình ảnh xe ${v.name}`} loading="lazy" className="w-full h-32 object-cover rounded mb-2" />
                         <div className="font-semibold flex items-center gap-2">
                           {v.name}
@@ -296,13 +273,9 @@ export default function GroupDetail() {
                 
                 <TabsContent value="requests">
                   <div className="space-y-3">
-                    {serviceRequests.length === 0 ? (
-                      <div className="text-center py-6 text-muted-foreground">
+                    {serviceRequests.length === 0 ? <div className="text-center py-6 text-muted-foreground">
                         Chưa có yêu cầu dịch vụ nào
-                      </div>
-                    ) : (
-                      serviceRequests.map(request => (
-                        <div key={request.id} className="border rounded-lg p-4">
+                      </div> : serviceRequests.map(request => <div key={request.id} className="border rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="font-medium">{request.vehicleName}</div>
@@ -313,49 +286,33 @@ export default function GroupDetail() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Badge variant={
-                                request.status === "pending" ? "secondary" : 
-                                request.status === "approved" ? "default" : "destructive"
-                              }>
-                                {request.status === "pending" ? "Chờ duyệt" : 
-                                 request.status === "approved" ? "Đã duyệt" : "Từ chối"}
+                              <Badge variant={request.status === "pending" ? "secondary" : request.status === "approved" ? "default" : "destructive"}>
+                                {request.status === "pending" ? "Chờ duyệt" : request.status === "approved" ? "Đã duyệt" : "Từ chối"}
                               </Badge>
-                              {request.status === "pending" && (
-                                <div className="flex gap-1">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                      setEditingRequest(request.id);
-                                      setSelectedVehicle(request.vehicleId);
-                                      setPaymentType(request.paymentType);
-                                      setServiceType(request.serviceType);
-                                      setServiceDescription(request.description);
-                                      setOpenServiceRequest(true);
-                                    }}
-                                  >
+                              {request.status === "pending" && <div className="flex gap-1">
+                                  <Button size="sm" variant="outline" onClick={() => {
+                            setEditingRequest(request.id);
+                            setSelectedVehicle(request.vehicleId);
+                            setPaymentType(request.paymentType);
+                            setServiceType(request.serviceType);
+                            setServiceDescription(request.description);
+                            setOpenServiceRequest(true);
+                          }}>
                                     Sửa
                                   </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={() => {
-                                      setServiceRequests(prev => prev.filter(r => r.id !== request.id));
-                                      toast({
-                                        title: "Đã xóa yêu cầu",
-                                        description: "Yêu cầu dịch vụ đã được xóa thành công"
-                                      });
-                                    }}
-                                  >
+                                  <Button size="sm" variant="destructive" onClick={() => {
+                            setServiceRequests(prev => prev.filter(r => r.id !== request.id));
+                            toast({
+                              title: "Đã xóa yêu cầu",
+                              description: "Yêu cầu dịch vụ đã được xóa thành công"
+                            });
+                          }}>
                                     Xóa
                                   </Button>
-                                </div>
-                              )}
+                                </div>}
                             </div>
                           </div>
-                        </div>
-                      ))
-                    )}
+                        </div>)}
                   </div>
                 </TabsContent>
               </Tabs>
@@ -400,40 +357,29 @@ export default function GroupDetail() {
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium">Email thành viên mới:</label>
-              <Input 
-                value={newMemberEmail}
-                onChange={(e) => setNewMemberEmail(e.target.value)}
-                placeholder="Nhập email thành viên"
-              />
+              <Input value={newMemberEmail} onChange={e => setNewMemberEmail(e.target.value)} placeholder="Nhập email thành viên" />
             </div>
             <div>
               <label className="text-sm font-medium">Xác nhận hành động:</label>
-              <Input 
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder="Nhập 'Xác nhận thêm thành viên'"
-              />
+              <Input value={confirmText} onChange={e => setConfirmText(e.target.value)} placeholder="Nhập 'Xác nhận thêm thành viên'" />
             </div>
             <div className="flex gap-2">
-              <Button 
-                onClick={() => {
-                  if (confirmText === "Xác nhận thêm thành viên" && newMemberEmail.trim()) {
-                    toast({
-                      title: "Yêu cầu đã được gửi",
-                      description: "Staff sẽ xử lý yêu cầu thêm thành viên trong 24h"
-                    });
-                    setOpenAddMember(false);
-                    setNewMemberEmail("");
-                    setConfirmText("");
-                  } else {
-                    toast({
-                      title: "Thông tin không hợp lệ",
-                      description: "Vui lòng nhập đúng text xác nhận và email"
-                    });
-                  }
-                }}
-                className="flex-1"
-              >
+              <Button onClick={() => {
+              if (confirmText === "Xác nhận thêm thành viên" && newMemberEmail.trim()) {
+                toast({
+                  title: "Yêu cầu đã được gửi",
+                  description: "Staff sẽ xử lý yêu cầu thêm thành viên trong 24h"
+                });
+                setOpenAddMember(false);
+                setNewMemberEmail("");
+                setConfirmText("");
+              } else {
+                toast({
+                  title: "Thông tin không hợp lệ",
+                  description: "Vui lòng nhập đúng text xác nhận và email"
+                });
+              }
+            }} className="flex-1">
                 Gửi yêu cầu
               </Button>
               <Button variant="outline" onClick={() => setOpenAddMember(false)}>
@@ -454,33 +400,25 @@ export default function GroupDetail() {
             <p>Bạn có chắc chắn muốn xóa thành viên này khỏi nhóm?</p>
             <div>
               <label className="text-sm font-medium">Xác nhận hành động:</label>
-              <Input 
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder="Nhập 'Xác nhận xóa thành viên'"
-              />
+              <Input value={confirmText} onChange={e => setConfirmText(e.target.value)} placeholder="Nhập 'Xác nhận xóa thành viên'" />
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="destructive"
-                onClick={() => {
-                  if (confirmText === "Xác nhận xóa thành viên") {
-                    toast({
-                      title: "Yêu cầu đã được gửi",
-                      description: "Staff sẽ xử lý yêu cầu xóa thành viên trong 24h"
-                    });
-                    setOpenRemoveMember(false);
-                    setConfirmText("");
-                    setSelectedMemberToRemove("");
-                  } else {
-                    toast({
-                      title: "Text xác nhận không đúng",
-                      description: "Vui lòng nhập đúng text xác nhận"
-                    });
-                  }
-                }}
-                className="flex-1"
-              >
+              <Button variant="destructive" onClick={() => {
+              if (confirmText === "Xác nhận xóa thành viên") {
+                toast({
+                  title: "Yêu cầu đã được gửi",
+                  description: "Staff sẽ xử lý yêu cầu xóa thành viên trong 24h"
+                });
+                setOpenRemoveMember(false);
+                setConfirmText("");
+                setSelectedMemberToRemove("");
+              } else {
+                toast({
+                  title: "Text xác nhận không đúng",
+                  description: "Vui lòng nhập đúng text xác nhận"
+                });
+              }
+            }} className="flex-1">
                 Gửi yêu cầu xóa
               </Button>
               <Button variant="outline" onClick={() => setOpenRemoveMember(false)}>
@@ -539,87 +477,67 @@ export default function GroupDetail() {
             
             <div>
               <Label className="text-sm font-medium">Mô tả chi tiết:</Label>
-              <Textarea 
-                value={serviceDescription}
-                onChange={(e) => setServiceDescription(e.target.value)}
-                placeholder="Nhập mô tả chi tiết về dịch vụ cần thực hiện..."
-                className="mt-1"
-                rows={3}
-              />
+              <Textarea value={serviceDescription} onChange={e => setServiceDescription(e.target.value)} placeholder="Nhập mô tả chi tiết về dịch vụ cần thực hiện..." className="mt-1" rows={3} />
             </div>
             
             <div className="flex gap-2">
-              <Button 
-                onClick={() => {
-                  if (!selectedVehicle || !paymentType || !serviceType || !serviceDescription.trim()) {
-                    toast({
-                      title: "Thông tin chưa đầy đủ",
-                      description: "Vui lòng điền đầy đủ thông tin yêu cầu"
-                    });
-                    return;
-                  }
-                  
-                  if (editingRequest) {
-                    // Update existing request
-                    setServiceRequests(prev => prev.map(req => 
-                      req.id === editingRequest 
-                        ? {
-                            ...req,
-                            vehicleId: selectedVehicle,
-                            vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
-                            paymentType,
-                            serviceType,
-                            description: serviceDescription
-                          }
-                        : req
-                    ));
-                    
-                    toast({
-                      title: "Cập nhật thành công",
-                      description: "Yêu cầu dịch vụ đã được cập nhật"
-                    });
-                  } else {
-                    // Create new request
-                    const newRequest = {
-                      id: `req-${Date.now()}`,
-                      vehicleId: selectedVehicle,
-                      vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
-                      paymentType,
-                      serviceType,
-                      description: serviceDescription,
-                      status: "pending" as const,
-                      date: new Date().toLocaleDateString("vi-VN")
-                    };
-                    
-                    setServiceRequests(prev => [...prev, newRequest]);
-                    
-                    toast({
-                      title: "Gửi yêu cầu thành công",
-                      description: "Staff sẽ xử lý yêu cầu của bạn trong 24h"
-                    });
-                  }
-                  
-                  // Reset form
-                  setOpenServiceRequest(false);
-                  setEditingRequest(null);
-                  setPaymentType("");
-                  setServiceType("");
-                  setServiceDescription("");
-                }}
-                className="flex-1"
-              >
+              <Button onClick={() => {
+              if (!selectedVehicle || !paymentType || !serviceType || !serviceDescription.trim()) {
+                toast({
+                  title: "Thông tin chưa đầy đủ",
+                  description: "Vui lòng điền đầy đủ thông tin yêu cầu"
+                });
+                return;
+              }
+              if (editingRequest) {
+                // Update existing request
+                setServiceRequests(prev => prev.map(req => req.id === editingRequest ? {
+                  ...req,
+                  vehicleId: selectedVehicle,
+                  vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
+                  paymentType,
+                  serviceType,
+                  description: serviceDescription
+                } : req));
+                toast({
+                  title: "Cập nhật thành công",
+                  description: "Yêu cầu dịch vụ đã được cập nhật"
+                });
+              } else {
+                // Create new request
+                const newRequest = {
+                  id: `req-${Date.now()}`,
+                  vehicleId: selectedVehicle,
+                  vehicleName: group.vehicles.find(v => v.id === selectedVehicle)?.name || "",
+                  paymentType,
+                  serviceType,
+                  description: serviceDescription,
+                  status: "pending" as const,
+                  date: new Date().toLocaleDateString("vi-VN")
+                };
+                setServiceRequests(prev => [...prev, newRequest]);
+                toast({
+                  title: "Gửi yêu cầu thành công",
+                  description: "Staff sẽ xử lý yêu cầu của bạn trong 24h"
+                });
+              }
+
+              // Reset form
+              setOpenServiceRequest(false);
+              setEditingRequest(null);
+              setPaymentType("");
+              setServiceType("");
+              setServiceDescription("");
+            }} className="flex-1">
                 {editingRequest ? "Cập nhật yêu cầu" : "Gửi yêu cầu"}
               </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setOpenServiceRequest(false);
-                  setEditingRequest(null);
-                  setPaymentType("");
-                  setServiceType("");
-                  setServiceDescription("");
-                }}
-              >
+              <Button variant="outline" onClick={() => {
+              setOpenServiceRequest(false);
+              setEditingRequest(null);
+              setPaymentType("");
+              setServiceType("");
+              setServiceDescription("");
+            }}>
                 Hủy
               </Button>
             </div>
