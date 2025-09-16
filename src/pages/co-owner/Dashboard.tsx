@@ -151,17 +151,6 @@ export default function CoOwnerDashboard() {
                       <span>Ngày đăng ký: {reg.date}</span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    {reg.contract && (
-                      <Button size="sm" variant="outline" className="flex items-center space-x-1">
-                        <Download className="h-4 w-4" />
-                        <span>Tải hợp đồng</span>
-                      </Button>
-                    )}
-                    <Button size="sm" variant="ghost">
-                      Chi tiết
-                    </Button>
-                  </div>
                 </div>
               ))}
             </div>
