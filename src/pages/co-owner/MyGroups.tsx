@@ -19,25 +19,25 @@ export default function MyGroups() {
 
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [leaveRequestDialogOpen, setLeaveRequestDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<string>("");
 
   const data = useMemo(() => groups, []);
 
-  const handleLeaveGroup = (groupId: string) => {
+  const handleRequestLeave = (groupId: string) => {
     setSelectedGroup(groupId);
-    setLeaveDialogOpen(true);
+    setLeaveRequestDialogOpen(true);
   };
 
-  const confirmLeaveGroup = () => {
+  const confirmRequestLeave = () => {
     const group = groups.find(g => g.id === selectedGroup);
     if (group) {
       toast({
-        title: "Rời nhóm thành công",
-        description: `Bạn đã rời khỏi nhóm "${group.name}".`,
+        title: "Yêu cầu rời nhóm đã được gửi",
+        description: `Yêu cầu rời nhóm "${group.name}" đã được gửi đến staff để xét duyệt.`,
       });
     }
-    setLeaveDialogOpen(false);
+    setLeaveRequestDialogOpen(false);
     setSelectedGroup("");
   };
 
@@ -109,7 +109,7 @@ export default function MyGroups() {
                       <Button 
                         variant="destructive" 
                         size="sm"
-                        onClick={() => handleLeaveGroup(g.id)}
+                        onClick={() => handleRequestLeave(g.id)}
                         className="px-3"
                       >
                         <LogOut className="h-4 w-4" />
@@ -124,29 +124,29 @@ export default function MyGroups() {
       </main>
       </div>
 
-      {/* Leave Group Dialog */}
-      <Dialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
+      {/* Leave Request Dialog */}
+      <Dialog open={leaveRequestDialogOpen} onOpenChange={setLeaveRequestDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              Rời nhóm
+              Yêu cầu rời nhóm
             </DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn rời khỏi nhóm này không? Bạn sẽ mất quyền truy cập và các đặt lịch hiện tại.
+              Bạn có chắc chắn muốn gửi yêu cầu rời nhóm này không? Yêu cầu sẽ được gửi đến staff để xét duyệt.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground">
-              <strong>Lưu ý:</strong> Sau khi rời nhóm, bạn cần được mời lại để tham gia.
+              <strong>Lưu ý:</strong> Chỉ staff mới có quyền phê duyệt yêu cầu rời nhóm của bạn.
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setLeaveDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setLeaveRequestDialogOpen(false)}>
               Hủy
             </Button>
-            <Button variant="destructive" onClick={confirmLeaveGroup}>
-              Rời nhóm
+            <Button variant="destructive" onClick={confirmRequestLeave}>
+              Gửi yêu cầu
             </Button>
           </DialogFooter>
         </DialogContent>
