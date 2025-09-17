@@ -10,12 +10,28 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
+import axios from "axios";
 export default function Register() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showTerms, setShowTerms] = useState(false);
   const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>({});
   const errorTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
+  const createUser = async (userData: {
+    fullName: string;
+    email: string;
+    phone: string;
+    password: string;
+  }) => {
+    try {
+      // Thay đổi URL này thành endpoint backend thực tế của bạn
+      const response = await axios.post("https://68ca27d4430c4476c34861d4.mockapi.io/user", userData);
+      console.log("Kết quả backend trả về:", response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
   const showError = (field: string, message: string) => {
     setErrorMessage((prev) => ({ ...prev, [field]: message }));
     if (errorTimeouts.current[field]) {
@@ -81,24 +97,36 @@ export default function Register() {
               acceptTerms: false,
             }}
             validationSchema={validationSchema}
-            validateOnChange={true}
+            validateOnChange={false}
             validateOnBlur={false}
-            onSubmit={(values, { setSubmitting, setErrors }) => {
+            onSubmit={async (values, { setSubmitting, setErrors }) => {
               // Xử lý lỗi thủ công để dùng timeout
               validationSchema
                 .validate(values, { abortEarly: false })
-                .then(() => {
-                  navigate("/verify-otp", {
-                    state: {
-                      phone: values.phone,
-                      email: values.email,
-                      fullName: values.fullName,
-                    },
-                  });
-                  toast({
-                    title: "Đăng ký thành công",
-                    description: "Vui lòng xác thực tài khoản bằng mã OTP",
-                  });
+                .then(async () => {
+                  const userObject = {
+                    fullName: values.fullName,
+                    email: values.email,
+                    phone: values.phone,
+                    password: values.password,
+                  };
+                  try {
+                    // Gửi request tạo user lên backend
+                    await createUser(userObject);
+                    // Sau này sẽ chuyển sang bước xác thực OTP ở đây
+                    navigate("/verify-otp", { state: userObject });
+                    toast({
+                      title: "Đăng ký thành công",
+                      description: "Vui lòng xác thực tài khoản bằng mã OTP",
+                    });
+                  } catch (err: any) {
+                    toast({
+                      title: "Lỗi đăng ký",
+                      description: err?.response?.data?.message || "Đã có lỗi xảy ra",
+                      variant: "destructive",
+                    });
+                  }
+                  setSubmitting(false);
                 })
                 .catch((err) => {
                   if (err.inner) {
@@ -131,7 +159,7 @@ export default function Register() {
             }}
           >
 
-            {({ isSubmitting, errors }) => (
+            {({ isSubmitting, }) => (
               <Form className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Họ và tên*</Label>
