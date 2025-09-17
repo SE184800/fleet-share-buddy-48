@@ -34,9 +34,12 @@ const App = () => (
           {/* Co-owner routes */}
           <Route path="/co-owner/dashboard" element={<CoOwnerDashboard />} />
           <Route path="/co-owner/vehicle-registration" element={<VehicleRegistration />} />
+<<<<<<< HEAD
           <Route path="/co-owner/groups" element={<MyGroups />} />
           <Route path="/co-owner/groups/:groupId" element={<GroupDetail />} />
           <Route path="/co-owner/contracts" element={<Contracts />} />
+=======
+>>>>>>> 683b417fe18d5677ee8f686afb4dc50f0d45b161
 
           {/* Staff routes */}
           <Route path="/staff/dashboard" element={<StaffDashboard />} />
@@ -45,6 +48,7 @@ const App = () => (
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
