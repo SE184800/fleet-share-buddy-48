@@ -25,7 +25,7 @@ export default function Register() {
   }) => {
     try {
       // Thay đổi URL này thành endpoint backend thực tế của bạn
-      const response = await axios.post("https://localhost:8080/user", userData);
+      const response = await axios.post("https://localhost:3000/user", userData);
       console.log("Kết quả backend trả về:", response.data);
       return response.data;
     } catch (error) {
