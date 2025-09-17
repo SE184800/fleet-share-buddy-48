@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,9 +16,8 @@ export default function Login() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!email || !password || userTypes.length === 0) {
       toast({
         title: "Lỗi đăng nhập",
@@ -26,21 +26,36 @@ export default function Login() {
       });
       return;
     }
-
-    // Simulate login logic - use first selected user type
-    const selectedType = userTypes[0];
-    if (selectedType === "co-owner") {
-      navigate("/co-owner/dashboard");
-    } else if (selectedType === "staff") {
-      navigate("/staff/dashboard");
-    } else if (selectedType === "admin") {
-      navigate("/admin/dashboard");
+    try {
+      // Thay đổi URL này thành endpoint backend thực tế của bạn
+      const response = await axios.post("https://68ca27d4430c4476c34861d4.mockapi.io/login", {
+        email,
+        password,
+        userType: userTypes[0],
+      });
+      // Xử lý response backend trả về
+      toast({
+        title: "Đăng nhập thành công",
+        description: `Chào mừng bạn đến với EcoShare!`,
+      });
+      // Điều hướng theo loại tài khoản
+      const selectedType = userTypes[0];
+      if (selectedType === "co-owner") {
+        navigate("/co-owner/dashboard");
+      } else if (selectedType === "staff") {
+        navigate("/staff/dashboard");
+      } else if (selectedType === "admin") {
+        navigate("/admin/dashboard");
+      }
+    } catch (err) {
+      // Xử lý lỗi trả về từ backend
+      toast({
+        title: "Lỗi đăng nhập",
+        description:
+          err?.response?.data?.message || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
+        variant: "destructive",
+      });
     }
-
-    toast({
-      title: "Đăng nhập thành công",
-      description: `Chào mừng bạn đến với EcoShare!`,
-    });
   };
 
   return (
