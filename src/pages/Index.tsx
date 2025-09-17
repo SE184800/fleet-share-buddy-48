@@ -182,7 +182,7 @@ const Index = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="text-sm space-y-2">
-                  <p><span className="font-medium">4.1:</span> Nhóm phải có ít nhất 2 thành viên và tối đa 10 thành viên.</p>
+                  <p><span className="font-medium">4.1:</span> Nhóm tối đa 5 người đồng sở hữu, tối thiểu tỷ lệ sở hữu là 15%.</p>
                   <p><span className="font-medium">4.2:</span> Các quyết định quan trọng cần tối thiểu 70% tổng tỷ lệ sở hữu đồng ý để thông qua.</p>
                   <p><span className="font-medium">4.3:</span> Quỹ chung được quản lý minh bạch với biên lai điện tử.</p>
                   <p><span className="font-medium">4.4:</span> AI gợi ý lịch sử dụng chỉ mang tính tham khảo, không bắt buộc áp dụng.</p>

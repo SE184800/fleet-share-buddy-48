@@ -105,6 +105,16 @@ export default function VehicleRegistration() {
   };
 
   const addCoOwner = () => {
+    // Maximum 5 people total (including primary owner)
+    if (coOwners.length >= 4) {
+      toast({
+        title: "Giới hạn số người",
+        description: "Tối đa 5 người đồng sở hữu (bao gồm chủ sở hữu chính)",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (totalOwnership >= 100) {
       toast({
         title: "Lỗi",
@@ -119,13 +129,22 @@ export default function VehicleRegistration() {
       name: "",
       email: "",
       phone: "",
-      ownership: Math.min(10, 100 - totalOwnership),
+      ownership: Math.max(15, Math.min(15, 100 - totalOwnership)), // Minimum 15%
       idNumber: ""
     };
     setCoOwners([...coOwners, newCoOwner]);
   };
 
   const updateCoOwner = (id: string, field: keyof CoOwner, value: string | number) => {
+    if (field === 'ownership' && typeof value === 'number' && value < 15) {
+      toast({
+        title: "Tỷ lệ sở hữu không hợp lệ",
+        description: "Tỷ lệ sở hữu tối thiểu là 15%",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setCoOwners(coOwners.map(co => 
       co.id === id ? { ...co, [field]: value } : co
     ));
