@@ -28,7 +28,7 @@ export default function Login() {
     }
     try {
       // Thay đổi URL này thành endpoint backend thực tế của bạn
-      const response = await axios.post("https://68ca27d4430c4476c34861d4.mockapi.io/login", {
+      const response = await axios.post("https://68ca27d4430c4476c34861.mockapi.io/login", {
         email,
         password,
         userType: userTypes[0],
