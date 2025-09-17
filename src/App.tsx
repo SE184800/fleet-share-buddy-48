@@ -15,6 +15,7 @@ import MyGroups from "./pages/co-owner/MyGroups";
 import GroupDetail from "./pages/co-owner/GroupDetail";
 import Contracts from "./pages/co-owner/Contracts";
 import NotFound from "./pages/NotFound";
+import Footer from "./components/ui/footnote";
 
 const queryClient = new QueryClient();
 
@@ -29,23 +30,24 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
-          
+
           {/* Co-owner routes */}
           <Route path="/co-owner/dashboard" element={<CoOwnerDashboard />} />
           <Route path="/co-owner/vehicle-registration" element={<VehicleRegistration />} />
           <Route path="/co-owner/groups" element={<MyGroups />} />
           <Route path="/co-owner/groups/:groupId" element={<GroupDetail />} />
           <Route path="/co-owner/contracts" element={<Contracts />} />
-          
+
           {/* Staff routes */}
           <Route path="/staff/dashboard" element={<StaffDashboard />} />
-          
+
           {/* Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
