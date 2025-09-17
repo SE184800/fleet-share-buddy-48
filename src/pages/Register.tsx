@@ -97,7 +97,7 @@ export default function Register() {
               acceptTerms: false,
             }}
             validationSchema={validationSchema}
-            validateOnChange={false}
+            validateOnChange={true}
             validateOnBlur={false}
             onSubmit={async (values, { setSubmitting, setErrors }) => {
               // Xử lý lỗi thủ công để dùng timeout
