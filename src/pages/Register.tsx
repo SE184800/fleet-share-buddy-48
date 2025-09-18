@@ -18,14 +18,14 @@ export default function Register() {
   const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>({});
   const errorTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
   const createUser = async (userData: {
-    fullName: string;
+      hovaTen: string;
     email: string;
     phone: string;
     password: string;
   }) => {
     try {
       // Thay đổi URL này thành endpoint backend thực tế của bạn
-      const response = await axios.post("https://localhost:3000/user", userData);
+      const response = await axios.post("http://localhost:8080/Users/", userData);
       console.log("Kết quả backend trả về:", response.data);
       return response.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export default function Register() {
     };
   }, []);
   const validationSchema = Yup.object({
-    fullName: Yup.string()
+    hovaTen: Yup.string()
       .required("Vui lòng nhập họ và tên")
       .matches(/^[A-Za-zÀ-ỹà-ỹ\s]+$/, "Họ và tên chỉ được chứa chữ cái"),
     email: Yup.string()
@@ -65,7 +65,7 @@ export default function Register() {
     cccd: Yup.string()
       .required("Vui lòng nhập số CCCD")
       .matches(/^0\d{11}$/, "CCCD phải có 12 số và bắt đầu bằng số 0"),
-    license: Yup.string()
+    gplx: Yup.string()
       .required("Vui lòng nhập số giấy phép lái xe")
       .min(8, "Giấy phép lái xe phải từ 8 ký tự trở lên"),
     password: Yup.string()
@@ -95,11 +95,11 @@ export default function Register() {
         <CardContent>
           <Formik
             initialValues={{
-              fullName: "",
+                hovaTen: "",
               email: "",
               phone: "",
               cccd: "",
-              license: "",
+              gplx: "",
               password: "",
               confirmPassword: "",
               acceptTerms: false,
@@ -113,11 +113,11 @@ export default function Register() {
                 .validate(values, { abortEarly: false })
                 .then(async () => {
                   const userObject = {
-                    fullName: values.fullName,
+                    hovaTen: values.hovaTen,
                     email: values.email,
                     phone: values.phone,
                     cccd: values.cccd,
-                    license: values.license,
+                    gplx: values.gplx,
                     password: values.password,
                   };
                   try {
@@ -172,16 +172,16 @@ export default function Register() {
             {({ isSubmitting, }) => (
               <Form className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Họ và tên*</Label>
+                  <Label htmlFor="hovaTen">Họ và tên*</Label>
                   <Field
                     as={Input}
-                    id="fullName"
-                    name="fullName"
+                    id="hovaTen"
+                    name="hovaTen"
                     type="text"
                     placeholder="Nhập họ và tên đầy đủ"
                   />
                   <div className="text-red-500 text-xs">
-                    {errorMessage.fullName || <ErrorMessage name="fullName" />}
+                    {errorMessage.hovaTen || <ErrorMessage name="hovaTen" />}
                   </div>
                 </div>
 
@@ -212,16 +212,16 @@ export default function Register() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="license">Giấy phép lái xe*</Label>
+                  <Label htmlFor="gplx">Giấy phép lái xe*</Label>
                   <Field
                     as={Input}
-                    id="license"
-                    name="license"
+                    id="gplx"
+                    name="gplx"
                     type="text"
                     placeholder="Nhập số giấy phép lái xe"
                   />
                   <div className="text-red-500 text-xs">
-                    {errorMessage.license || <ErrorMessage name="license" />}
+                    {errorMessage.gplx || <ErrorMessage name="gplx" />}
                   </div>
                 </div>
                 <div className="space-y-2">
