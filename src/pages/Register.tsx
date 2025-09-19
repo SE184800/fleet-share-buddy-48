@@ -1,46 +1,31 @@
-import {useNavigate, Link} from "react-router-dom";
-import {Car, ArrowLeft} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {useToast} from "@/hooks/use-toast";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import { useNavigate, Link } from "react-router-dom";
+import { Car, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {useState} from "react";
-import {useEffect} from "react";
-import {useRef} from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useRef } from "react";
 import axios from "axios";
 
 export default function Register() {
     const navigate = useNavigate();
-    const {toast} = useToast();
+    const { toast } = useToast();
     const [showTerms, setShowTerms] = useState(false);
     const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>({});
     const errorTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
-    const createUser = async (userData: {
-        hovaTen: string;
-        email: string;
-        phone: string;
-        password: string;
-    }) => {
-        try {
-            // Thay đổi URL này thành endpoint backend thực tế của bạn
-            const response = await axios.post("http://localhost:8080/Users/", userData);
-            console.log("Kết quả backend trả về:", response.data);
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    };
     const showError = (field: string, message: string) => {
-        setErrorMessage((prev) => ({...prev, [field]: message}));
+        setErrorMessage((prev) => ({ ...prev, [field]: message }));
         if (errorTimeouts.current[field]) {
             clearTimeout(errorTimeouts.current[field]);
         }
         errorTimeouts.current[field] = setTimeout(() => {
             setErrorMessage((prev) => {
-                const newErrors = {...prev};
+                const newErrors = { ...prev };
                 delete newErrors[field];
                 return newErrors;
             });
@@ -85,7 +70,7 @@ export default function Register() {
             <Card className="w-full max-w-md shadow-glow border-0">
                 <CardHeader className="text-center space-y-4">
                     <div className="flex items-center justify-center space-x-2">
-                        <Car className="h-8 w-8 text-primary"/>
+                        <Car className="h-8 w-8 text-primary" />
                         <span className="text-2xl font-bold text-primary">EcoShare</span>
                     </div>
                     <CardTitle className="text-2xl font-bold">Đăng ký tài khoản</CardTitle>
@@ -108,54 +93,40 @@ export default function Register() {
                         validationSchema={validationSchema}
                         validateOnChange={true}
                         validateOnBlur={false}
-                        onSubmit={async (values, {setSubmitting, setErrors}) => {
-                            // Xử lý lỗi thủ công để dùng timeout
-                            validationSchema
-                                .validate(values, {abortEarly: false})
-                                .then(async () => {
-                                    const userObject = {
-                                        role_id: {"role_id": 1},    // gán mặc định
-                                        hovaTen: values.hovaTen,
-                                        email: values.email,
-                                        phone: values.phone,
-                                        cccd: values.cccd,
-                                        gplx: values.gplx,
-                                        password: values.password,
-                                    };
-                                    try {
-                                        // Gửi request tạo user lên backend
-                                        await createUser(userObject);
-                                        // Sau này sẽ chuyển sang bước xác thực OTP ở đây
-                                        navigate("/verify-otp", {state: userObject});
-                                        toast({
-                                            title: "Đăng ký thành công",
-                                            description: "Vui lòng xác thực tài khoản bằng mã OTP",
-                                        });
-                                    } catch (err: any) {
-                                        toast({
-                                            title: "Lỗi đăng ký",
-                                            description: err?.response?.data?.message || "Đã có lỗi xảy ra",
-                                            variant: "destructive",
-                                        });
-                                    }
-                                    setSubmitting(false);
-                                })
-                                .catch((err) => {
-                                    if (err.inner) {
-                                        const formErrors: { [key: string]: string } = {};
-                                        err.inner.forEach((e: any) => {
-                                            formErrors[e.path] = e.message;
-                                            showError(e.path, e.message);
-                                        });
-                                        setErrors(formErrors);
-                                    }
-                                    setSubmitting(false);
+                        onSubmit={async (values, { setSubmitting }) => {
+                            try {
+                                // Build object sạch, loại bỏ confirmPassword
+                                const userObject = {
+                                    role_id: { role_id: 1 },    // gán mặc định
+                                    hovaTen: values.hovaTen,
+                                    email: values.email,
+                                    phone: values.phone,
+                                    cccd: values.cccd,
+                                    gplx: values.gplx,
+                                    password: values.password,
+                                };
+
+                                // Điều hướng sang VerifyOTP và truyền object
+                                navigate("/verify-otp", { state: userObject });
+                                toast({
+                                    title: "Đăng ký thành công",
+                                    description: "Vui lòng xác thực tài khoản bằng mã OTP",
                                 });
+                            } catch (err: any) {
+                                toast({
+                                    title: "Lỗi đăng ký",
+                                    description: err?.response?.data?.message || "Đã có lỗi xảy ra",
+                                    variant: "destructive",
+                                });
+                            } finally {
+                                setSubmitting(false);
+                            }
                         }}
+
                         validate={(values) => {
                             // Xử lý lỗi realtime khi nhập
                             try {
-                                validationSchema.validateSync(values, {abortEarly: false});
+                                validationSchema.validateSync(values, { abortEarly: false });
                                 setErrorMessage({});
                                 return {};
                             } catch (err: any) {
@@ -171,7 +142,7 @@ export default function Register() {
                         }}
                     >
 
-                        {({isSubmitting,}) => (
+                        {({ isSubmitting, }) => (
                             <Form className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="hovaTen">Họ và tên*</Label>
@@ -183,7 +154,7 @@ export default function Register() {
                                         placeholder="Nhập họ và tên đầy đủ"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.hovaTen || <ErrorMessage name="hovaTen"/>}
+                                        {errorMessage.hovaTen || <ErrorMessage name="hovaTen" />}
                                     </div>
                                 </div>
 
@@ -197,7 +168,7 @@ export default function Register() {
                                         placeholder="Nhập email của bạn"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.email || <ErrorMessage name="email"/>}
+                                        {errorMessage.email || <ErrorMessage name="email" />}
                                     </div>
                                 </div>
                                 <div className="space-y-2">
@@ -210,7 +181,7 @@ export default function Register() {
                                         placeholder="Nhập số CCCD (12 số, bắt đầu bằng 0)"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.cccd || <ErrorMessage name="cccd"/>}
+                                        {errorMessage.cccd || <ErrorMessage name="cccd" />}
                                     </div>
                                 </div>
                                 <div className="space-y-2">
@@ -223,7 +194,7 @@ export default function Register() {
                                         placeholder="Nhập số giấy phép lái xe"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.gplx || <ErrorMessage name="gplx"/>}
+                                        {errorMessage.gplx || <ErrorMessage name="gplx" />}
                                     </div>
                                 </div>
                                 <div className="space-y-2">
@@ -236,7 +207,7 @@ export default function Register() {
                                         placeholder="Nhập số điện thoại"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.phone || <ErrorMessage name="phone"/>}
+                                        {errorMessage.phone || <ErrorMessage name="phone" />}
                                     </div>
                                 </div>
 
@@ -250,7 +221,7 @@ export default function Register() {
                                         placeholder="Nhập mật khẩu"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.password || <ErrorMessage name="password"/>}
+                                        {errorMessage.password || <ErrorMessage name="password" />}
                                     </div>
                                 </div>
 
@@ -264,10 +235,10 @@ export default function Register() {
                                         placeholder="Nhập lại mật khẩu"
                                     />
                                     <div className="text-red-500 text-xs">
-                                        {errorMessage.confirmPassword || <ErrorMessage name="confirmPassword"/>}
+                                        {errorMessage.confirmPassword || <ErrorMessage name="confirmPassword" />}
                                     </div>
                                 </div>
-                                <div style={{height: 5}}/>
+                                <div style={{ height: 5 }} />
                                 <div className="flex items-center space-x-2">
                                     <Field
                                         type="checkbox"
@@ -286,7 +257,7 @@ export default function Register() {
                                     </Label>
                                 </div>
                                 <div className="text-red-500 text-xs">
-                                    {errorMessage.acceptTerms || <ErrorMessage name="acceptTerms"/>}
+                                    {errorMessage.acceptTerms || <ErrorMessage name="acceptTerms" />}
                                 </div>
                                 <Button
                                     type="submit"
@@ -356,7 +327,7 @@ export default function Register() {
                             to="/"
                             className="flex items-center justify-center space-x-2 text-sm text-muted-foreground hover:text-primary"
                         >
-                            <ArrowLeft className="h-4 w-4"/>
+                            <ArrowLeft className="h-4 w-4" />
                             <span>Quay về trang chủ</span>
                         </Link>
                     </div>
