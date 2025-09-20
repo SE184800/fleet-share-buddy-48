@@ -209,6 +209,27 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Rule 6 - Penalties */}
+            <Card className="shadow-elegant lg:col-span-2">
+              <CardHeader>
+                <div className="flex items-center space-x-3">
+                  <div className="bg-destructive/10 rounded-full p-2">
+                    <Shield className="h-5 w-5 text-destructive" />
+                  </div>
+                  <CardTitle className="text-lg">6. Mức phạt vi phạm</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="text-sm space-y-2">
+                  <p><span className="font-medium">6.1:</span> Vi phạm lịch sử dụng (sử dụng quá thời hạn, không trả xe đúng giờ): Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2.</p>
+                  <p><span className="font-medium">6.2:</span> Thanh toán chậm trễ: Phạt 50,000 VNĐ/ngày sau thời hạn 15 ngày, tạm khóa quyền đặt lịch.</p>
+                  <p><span className="font-medium">6.3:</span> Đặt lịch xung đột thường xuyên (trên 5 lần/tháng): Giảm 50% quyền ưu tiên trong 30 ngày.</p>
+                  <p><span className="font-medium">6.4:</span> Gây hư hỏng xe do sử dụng không đúng cách: Chịu toàn bộ chi phí sửa chữa + phạt 500,000 VNĐ.</p>
+                  <p><span className="font-medium">6.5:</span> Vi phạm nghiêm trọng (cho thuê lại, sử dụng sai mục đích): Loại khỏi nhóm và tịch thu tỷ lệ sở hữu.</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="text-center mt-8">
