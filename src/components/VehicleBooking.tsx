@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Car, Users, AlertCircle, Edit, X, Check } from "lucide-react";
+import { Calendar, Clock, Car, Users, AlertCircle, Edit, X, Check, Shield, AlertTriangle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useRuleEngine } from "@/hooks/useRuleEngine";
+import { RuleViolationPanel } from "@/components/RuleViolationPanel";
 
 interface BookingSlot {
   id: string;
@@ -36,6 +38,15 @@ export default function VehicleBooking() {
   const [editDate, setEditDate] = useState<string>("");
   const [editTime, setEditTime] = useState<string>("");
   const { toast } = useToast();
+
+  // Rule Engine for booking validation
+  const { 
+    violations, 
+    isChecking, 
+    checkRules, 
+    canMakeBooking, 
+    resolveViolation 
+  } = useRuleEngine("group-1", "user-1");
 
   // Mock data - would come from backend
   const vehicles: Vehicle[] = [
@@ -113,8 +124,45 @@ export default function VehicleBooking() {
   const handleBooking = () => {
     if (!selectedVehicle || !selectedDate || !selectedTime) return;
     
+    // Check if user can make booking based on rule engine
+    const canBook = canMakeBooking();
+    
+    if (!canBook) {
+      toast({
+        title: "Không thể đặt lịch",
+        description: "Bạn có vi phạm quy định hoặc nợ quá hạn. Vui lòng kiểm tra phần vi phạm.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Create demo schedule to check rules
+    const demoSchedule = {
+      id: `schedule-${Date.now()}`,
+      userId: "user-1",
+      groupId: "group-1", 
+      vehicleId: selectedVehicle === "VinFast VF8" ? "vehicle-1" : "vehicle-2",
+      startTime: `${selectedDate}T${selectedStartTime.split('-')[0]}:00:00Z`,
+      endTime: `${selectedDate}T${selectedEndTime}:00:00Z`,
+      status: "pending" as const,
+      priority: 50,
+      isEmergency: false
+    };
+
+    const demoHistory = {
+      userId: "user-1",
+      groupId: "group-1",
+      totalHours: 80,
+      totalDays: 12,
+      consecutiveDaysUsed: Math.random() > 0.5 ? 16 : 8, // Random demo for consecutive days violation
+      violationCount: 0,
+      lastUsageDate: "2024-01-15T00:00:00Z"
+    };
+
+    // Check scheduling rules
+    checkRules(demoSchedule, demoHistory);
+    
     console.log("Booking:", { selectedVehicle, selectedDate, selectedTime });
-    // Here would integrate with backend to create booking
     
     toast({
       title: "Đặt lịch thành công",
@@ -174,13 +222,37 @@ export default function VehicleBooking() {
   return (
     <Card className="shadow-elegant">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <Calendar className="h-5 w-5" />
-          <span>Đặt lịch sử dụng xe</span>
-        </CardTitle>
-        <CardDescription>
-          Lên lịch sử dụng xe điện trong nhóm đồng sở hữu
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="h-5 w-5" />
+              <span>Đặt lịch sử dụng xe</span>
+            </CardTitle>
+            <CardDescription>
+              Lên lịch sử dụng xe điện trong nhóm đồng sở hữu
+            </CardDescription>
+          </div>
+          <div className="flex gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Vi phạm đặt lịch ({violations.length})
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Quản lý vi phạm quy định đặt lịch</DialogTitle>
+                </DialogHeader>
+                <RuleViolationPanel
+                  violations={violations}
+                  onResolve={resolveViolation}
+                  canResolve={false}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Booking Form */}
@@ -231,11 +303,25 @@ export default function VehicleBooking() {
 
         <Button 
           onClick={handleBooking}
-          className="w-full bg-gradient-primary hover:shadow-glow"
+          className={`w-full ${canMakeBooking() ? 'bg-gradient-primary hover:shadow-glow' : 'bg-destructive hover:bg-destructive/90'}`}
           disabled={!selectedVehicle || !selectedDate || !selectedTime}
         >
-          Đặt lịch
+          {canMakeBooking() ? 'Đặt lịch' : 'Không thể đặt lịch (có vi phạm)'}
         </Button>
+
+        {/* Rule violations warning */}
+        {violations.length > 0 && (
+          <Card className="border-orange-500/50 bg-orange-50/50 dark:bg-orange-950/20">
+            <CardContent className="pt-4">
+              <div className="flex items-center space-x-2 text-orange-600 dark:text-orange-400">
+                <AlertTriangle className="h-4 w-4" />
+                <span className="text-sm font-medium">
+                  Bạn có {violations.length} vi phạm quy định có thể ảnh hưởng đến việc đặt lịch
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Time Selection Dialog */}
         <Dialog open={showTimeSelector} onOpenChange={setShowTimeSelector}>
