@@ -307,13 +307,13 @@ export default function GroupDetail() {
                   <CardTitle>Xe của nhóm</CardTitle>
                   <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
                 </div>
-                <div className="flex gap-2">
+                 <div className="flex gap-2">
                   <Button onClick={() => setOpenServiceRequest(true)} disabled={!selectedVehicle} size="sm">
                     Request dịch vụ
                   </Button>
                   <EmergencyDecisionDialog
                     trigger={
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" disabled={!selectedVehicle}>
                         <AlertTriangle className="h-4 w-4 mr-2" />
                         Quyết định khẩn cấp
                       </Button>
@@ -326,7 +326,7 @@ export default function GroupDetail() {
                       });
                     }}
                   />
-                </div>
+                 </div>
               </div>
             </CardHeader>
             <CardContent>

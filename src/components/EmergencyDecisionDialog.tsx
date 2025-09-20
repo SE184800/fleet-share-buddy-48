@@ -21,7 +21,7 @@ export const EmergencyDecisionDialog = ({ trigger, onSubmit }: EmergencyDecision
   const [description, setDescription] = useState('');
   const [emergencyReason, setEmergencyReason] = useState('');
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
-  const [isUrgent, setIsUrgent] = useState(false);
+  const [isUrgent, setIsUrgent] = useState(true);
 
   const handleSubmit = () => {
     if (!title.trim() || !description.trim()) {
@@ -84,8 +84,8 @@ export const EmergencyDecisionDialog = ({ trigger, onSubmit }: EmergencyDecision
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Tạo quyết định nhóm
+            <AlertTriangle className="h-5 w-5 text-orange-500" />
+            Quyết định khẩn cấp
           </DialogTitle>
         </DialogHeader>
 
@@ -114,111 +114,74 @@ export const EmergencyDecisionDialog = ({ trigger, onSubmit }: EmergencyDecision
             </div>
           </div>
 
-          {/* Emergency Override Section */}
-          <Card className={isUrgent ? 'border-orange-500 bg-orange-50/50' : ''}>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-orange-500" />
-                  Trường hợp khẩn cấp
-                </CardTitle>
-                <Button
-                  variant={isUrgent ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setIsUrgent(!isUrgent)}
-                >
-                  {isUrgent ? 'Bỏ khẩn cấp' : 'Đánh dấu khẩn cấp'}
-                </Button>
-              </div>
-            </CardHeader>
-
-            {isUrgent && (
-              <CardContent className="space-y-4">
-                <div className="bg-orange-100 border border-orange-200 rounded-lg p-3">
-                  <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-orange-600 mt-0.5" />
-                    <div className="text-sm">
-                      <p className="font-medium text-orange-800 mb-1">Quy định 4.5:</p>
-                      <p className="text-orange-700">
-                        Trường hợp khẩn cấp có thể bỏ qua quy trình bỏ phiếu nhưng phải cung cấp bằng chứng 
-                        chứng minh tính cấp thiết và được staff xác nhận.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="emergency-reason">Lý do khẩn cấp *</Label>
-                  <Textarea
-                    id="emergency-reason"
-                    placeholder="VD: Xe bị hỏng đột ngột giữa đường, cần sửa chữa ngay để không ảnh hưởng đến lịch sử dụng của thành viên khác..."
-                    value={emergencyReason}
-                    onChange={(e) => setEmergencyReason(e.target.value)}
-                    rows={3}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="evidence">Bằng chứng chứng minh *</Label>
-                  <Input
-                    id="evidence"
-                    type="file"
-                    multiple
-                    accept="image/*,application/pdf,video/*"
-                    onChange={handleFileUpload}
-                    className="mt-1"
-                  />
-                  {evidenceFiles.length > 0 && (
-                    <div className="mt-2 space-y-1">
-                      {evidenceFiles.map((file, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm">
-                          <Upload className="h-3 w-3" />
-                          <span>{file.name}</span>
-                          <Badge variant="secondary" className="text-xs">
-                            {(file.size / 1024 / 1024).toFixed(1)} MB
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Chấp nhận ảnh, video, PDF. Tối đa 10MB mỗi file.
-                  </p>
-                </div>
-
-                <div className="bg-yellow-100 border border-yellow-200 rounded-lg p-3">
-                  <p className="text-sm text-yellow-800">
-                    <strong>Lưu ý:</strong> Quyết định khẩn cấp sẽ được thực hiện ngay lập tức nhưng cần được staff xác nhận. 
-                    Nếu staff không chấp thuận, quyết định sẽ bị hủy bỏ.
-                  </p>
-                </div>
-              </CardContent>
-            )}
-          </Card>
-
-          {/* Normal Process Info */}
-          {!isUrgent && (
-            <Card>
-              <CardContent className="py-4">
-                <div className="flex items-start gap-3">
-                  <Shield className="h-5 w-5 text-blue-500 mt-0.5" />
+          {/* Emergency Decision Section */}
+          <Card className="border-orange-500 bg-orange-50/50">
+            <CardContent className="space-y-4 pt-6">
+              <div className="bg-orange-100 border border-orange-200 rounded-lg p-3">
+                <div className="flex items-start gap-2">
+                  <Clock className="h-4 w-4 text-orange-600 mt-0.5" />
                   <div className="text-sm">
-                    <p className="font-medium mb-1">Quy trình bỏ phiếu thông thường:</p>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Cần tối thiểu 70% tổng tỷ lệ sở hữu đồng ý</li>
-                      <li>• Thời hạn bỏ phiếu: 7 ngày</li>
-                      <li>• Tất cả thành viên sẽ được thông báo</li>
-                    </ul>
+                    <p className="font-medium text-orange-800 mb-1">Quy định 4.5:</p>
+                    <p className="text-orange-700">
+                      Trường hợp khẩn cấp có thể bỏ qua quy trình bỏ phiếu nhưng phải cung cấp bằng chứng 
+                      chứng minh tính cấp thiết và được staff xác nhận.
+                    </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+
+              <div>
+                <Label htmlFor="emergency-reason">Lý do khẩn cấp *</Label>
+                <Textarea
+                  id="emergency-reason"
+                  placeholder="VD: Xe bị hỏng đột ngột giữa đường, cần sửa chữa ngay để không ảnh hưởng đến lịch sử dụng của thành viên khác..."
+                  value={emergencyReason}
+                  onChange={(e) => setEmergencyReason(e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="evidence">Bằng chứng chứng minh *</Label>
+                <Input
+                  id="evidence"
+                  type="file"
+                  multiple
+                  accept="image/*,application/pdf,video/*"
+                  onChange={handleFileUpload}
+                  className="mt-1"
+                />
+                {evidenceFiles.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {evidenceFiles.map((file, index) => (
+                      <div key={index} className="flex items-center gap-2 text-sm">
+                        <Upload className="h-3 w-3" />
+                        <span>{file.name}</span>
+                        <Badge variant="secondary" className="text-xs">
+                          {(file.size / 1024 / 1024).toFixed(1)} MB
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">
+                  Chấp nhận ảnh, video, PDF. Tối đa 10MB mỗi file.
+                </p>
+              </div>
+
+              <div className="bg-yellow-100 border border-yellow-200 rounded-lg p-3">
+                <p className="text-sm text-yellow-800">
+                  <strong>Lưu ý:</strong> Quyết định khẩn cấp sẽ được thực hiện ngay lập tức nhưng cần được staff xác nhận. 
+                  Nếu staff không chấp thuận, quyết định sẽ bị hủy bỏ.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button onClick={handleSubmit} className="flex-1">
-              {isUrgent ? 'Tạo quyết định khẩn cấp' : 'Tạo đề xuất bỏ phiếu'}
+              Tạo quyết định khẩn cấp
             </Button>
             <Button variant="outline" onClick={() => setOpen(false)}>
               Hủy
