@@ -148,30 +148,72 @@ export default function CoOwnerDashboard() {
       </header>
 
       <div className="container mx-auto p-6 space-y-6">
-        {/* Rule Engine Demo Controls */}
-        <Card className="shadow-elegant border-l-4 border-l-orange-500">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Shield className="h-5 w-5 text-orange-500" />
-                <CardTitle>Hệ thống quản lý quy tắc - DEMO</CardTitle>
+        {/* Group-based Rule Management */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">Quản lý theo nhóm</h2>
+          
+          {/* Group 1: VinFast VF8 */}
+          <Card className="shadow-elegant">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Car className="h-6 w-6 text-primary" />
+                  <div>
+                    <CardTitle>Nhóm VinFast VF8</CardTitle>
+                    <CardDescription>5 thành viên • Xe điện</CardDescription>
+                  </div>
+                </div>
+                <Badge variant="secondary">Đang hoạt động</Badge>
               </div>
-              <div className="flex gap-2">
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Group Members */}
+              <div>
+                <h4 className="font-medium mb-3">Thành viên nhóm</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {[
+                    { name: "Nguyễn Văn A", ownership: "35%", violations: 2, status: "Hoạt động" },
+                    { name: "Trần Thị B", ownership: "25%", violations: 0, status: "Hoạt động" },
+                    { name: "Lê Văn C", ownership: "20%", violations: 1, status: "Tạm khóa" },
+                    { name: "Phạm Thị D", ownership: "15%", violations: 0, status: "Hoạt động" },
+                    { name: "Hoàng Văn E", ownership: "5%", violations: 3, status: "Cảnh cáo" }
+                  ].map((member, index) => (
+                    <Card key={index} className="p-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-sm">{member.name}</span>
+                          <Badge variant={member.status === "Hoạt động" ? "default" : 
+                                        member.status === "Tạm khóa" ? "destructive" : "secondary"}>
+                            {member.status}
+                          </Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground space-y-1">
+                          <div>Sở hữu: {member.ownership}</div>
+                          <div>Vi phạm: {member.violations}</div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Group Controls */}
+              <div className="flex gap-2 pt-3 border-t">
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="outline" size="sm">
                       <Shield className="h-4 w-4 mr-2" />
-                      Vi phạm ({violations.length})
+                      Vi phạm nhóm
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>Quản lý vi phạm quy định</DialogTitle>
+                      <DialogTitle>Vi phạm quy định - Nhóm VinFast VF8</DialogTitle>
                     </DialogHeader>
                     <RuleViolationPanel
                       violations={violations}
                       onResolve={resolveViolation}
-                      canResolve={false} // User is co-owner, not staff
+                      canResolve={false}
                     />
                   </DialogContent>
                 </Dialog>
@@ -184,26 +226,95 @@ export default function CoOwnerDashboard() {
                     </Button>
                   }
                   onSubmit={(decision) => {
-                    console.log("Emergency decision:", decision);
+                    console.log("Emergency decision for VF8 group:", decision);
+                  }}
+                />
+                
+                <Button onClick={triggerDemoViolations} disabled={isChecking} size="sm">
+                  {isChecking ? "Kiểm tra..." : "Demo vi phạm"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Group 2: Tesla Model Y */}
+          <Card className="shadow-elegant">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Car className="h-6 w-6 text-primary" />
+                  <div>
+                    <CardTitle>Nhóm Tesla Model Y</CardTitle>
+                    <CardDescription>3 thành viên • Xe điện</CardDescription>
+                  </div>
+                </div>
+                <Badge variant="secondary">Đang hoạt động</Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Group Members */}
+              <div>
+                <h4 className="font-medium mb-3">Thành viên nhóm</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {[
+                    { name: "Đỗ Văn F", ownership: "40%", violations: 0, status: "Hoạt động" },
+                    { name: "Vũ Thị G", ownership: "35%", violations: 1, status: "Hoạt động" },
+                    { name: "Bùi Văn H", ownership: "25%", violations: 0, status: "Hoạt động" }
+                  ].map((member, index) => (
+                    <Card key={index} className="p-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-sm">{member.name}</span>
+                          <Badge variant={member.status === "Hoạt động" ? "default" : 
+                                        member.status === "Tạm khóa" ? "destructive" : "secondary"}>
+                            {member.status}
+                          </Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground space-y-1">
+                          <div>Sở hữu: {member.ownership}</div>
+                          <div>Vi phạm: {member.violations}</div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Group Controls */}
+              <div className="flex gap-2 pt-3 border-t">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Vi phạm nhóm
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Vi phạm quy định - Nhóm Tesla Model Y</DialogTitle>
+                    </DialogHeader>
+                    <div className="text-center py-8">
+                      <Shield className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                      <p className="text-muted-foreground">Nhóm này chưa có vi phạm nào</p>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                
+                <EmergencyDecisionDialog
+                  trigger={
+                    <Button variant="outline" size="sm">
+                      <AlertTriangle className="h-4 w-4 mr-2" />
+                      Quyết định khẩn cấp
+                    </Button>
+                  }
+                  onSubmit={(decision) => {
+                    console.log("Emergency decision for Tesla group:", decision);
                   }}
                 />
               </div>
-            </div>
-            <CardDescription>
-              Prototype hệ thống thực thi quy định EcoShare
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Nhấn "Tạo vi phạm demo" để kiểm tra hệ thống hoặc "Vi phạm" để xem danh sách vi phạm hiện tại.
-              </p>
-              <Button onClick={triggerDemoViolations} disabled={isChecking}>
-                {isChecking ? "Đang kiểm tra..." : "Tạo vi phạm demo"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
