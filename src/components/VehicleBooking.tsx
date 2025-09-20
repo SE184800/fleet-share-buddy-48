@@ -17,6 +17,7 @@ interface BookingSlot {
   bookedBy: string;
   ownershipLevel: number;
   canOverride?: boolean;
+  isMyBooking?: boolean;
 }
 
 interface Vehicle {
@@ -65,9 +66,10 @@ export default function VehicleBooking() {
       time: "09:00-11:00",
       date: "2024-01-16",
       vehicle: "VinFast VF8",
-      bookedBy: "Nguyễn Văn A (60%)",
-      ownershipLevel: 60,
-      canOverride: false
+      bookedBy: "Bạn (35%)", // Current user's booking
+      ownershipLevel: 35,
+      canOverride: false,
+      isMyBooking: true
     },
     {
       id: "2", 
@@ -76,7 +78,8 @@ export default function VehicleBooking() {
       vehicle: "Tesla Model Y",
       bookedBy: "Trần Thị B (25%)",
       ownershipLevel: 25,
-      canOverride: true
+      canOverride: true,
+      isMyBooking: false
     },
     {
       id: "3",
@@ -85,7 +88,18 @@ export default function VehicleBooking() {
       vehicle: "VinFast VF8",
       bookedBy: "Lê Văn C (40%)",
       ownershipLevel: 40,
-      canOverride: false
+      canOverride: false,
+      isMyBooking: false
+    },
+    {
+      id: "4",
+      time: "16:00-18:00",
+      date: "2024-01-17", 
+      vehicle: "Tesla Model Y",
+      bookedBy: "Bạn (35%)", // Another booking by current user
+      ownershipLevel: 35,
+      canOverride: false,
+      isMyBooking: true
     }
   ];
 
@@ -136,26 +150,44 @@ export default function VehicleBooking() {
       return;
     }
 
+    // Demo: Simulate different rule scenarios based on selected date
+    const selectedDateObj = new Date(selectedDate);
+    const today = new Date();
+    const daysDiff = Math.ceil((selectedDateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    
     // Create demo schedule to check rules
     const demoSchedule = {
       id: `schedule-${Date.now()}`,
       userId: "user-1",
       groupId: "group-1", 
       vehicleId: selectedVehicle === "VinFast VF8" ? "vehicle-1" : "vehicle-2",
-      startTime: `${selectedDate}T${selectedStartTime.split('-')[0]}:00:00Z`,
-      endTime: `${selectedDate}T${selectedEndTime}:00:00Z`,
+      startTime: `${selectedDate}T${selectedStartTime?.split('-')[0] || '09'}:00:00Z`,
+      endTime: `${selectedDate}T${selectedEndTime || '17:00'}:00Z`,
       status: "pending" as const,
       priority: 50,
       isEmergency: false
     };
 
+    // Demo different scenarios based on booking pattern
+    let consecutiveDays = 8; // Normal usage
+    
+    // If booking for more than 7 days from today, simulate consecutive usage violation
+    if (daysDiff > 7) {
+      consecutiveDays = 16; // Triggers violation: exceeds 14 day limit
+      toast({
+        title: "Demo: Kích hoạt vi phạm",
+        description: "Đặt lịch xa (>7 ngày) sẽ mô phỏng vi phạm sử dụng quá 14 ngày liên tiếp",
+        variant: "destructive"
+      });
+    }
+
     const demoHistory = {
-      userId: "user-1",
+      userId: "user-1", 
       groupId: "group-1",
-      totalHours: 80,
-      totalDays: 12,
-      consecutiveDaysUsed: Math.random() > 0.5 ? 16 : 8, // Random demo for consecutive days violation
-      violationCount: 0,
+      totalHours: 80 + (daysDiff * 2), // Increase hours based on days
+      totalDays: 12 + daysDiff,
+      consecutiveDaysUsed: consecutiveDays,
+      violationCount: consecutiveDays > 14 ? 1 : 0,
       lastUsageDate: "2024-01-15T00:00:00Z"
     };
 
@@ -171,8 +203,17 @@ export default function VehicleBooking() {
   };
 
   const handleCancelBooking = (bookingId: string) => {
+    const booking = existingBookings.find(b => b.id === bookingId);
+    if (booking && !booking.isMyBooking) {
+      toast({
+        title: "Không thể hủy",
+        description: "Bạn chỉ có thể hủy lịch của chính mình",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     console.log("Cancelling booking:", bookingId);
-    // Here would integrate with backend to cancel booking
     toast({
       title: "Đã hủy lịch",
       description: "Lịch đặt xe đã được hủy thành công",
@@ -181,6 +222,15 @@ export default function VehicleBooking() {
 
   const handleEditBooking = (bookingId: string) => {
     const booking = existingBookings.find(b => b.id === bookingId);
+    if (booking && !booking.isMyBooking) {
+      toast({
+        title: "Không thể chỉnh sửa",
+        description: "Bạn chỉ có thể chỉnh sửa lịch của chính mình",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (booking) {
       setEditingBooking(bookingId);
       setEditVehicle(booking.vehicle);
@@ -199,7 +249,6 @@ export default function VehicleBooking() {
   const handleUpdateBooking = () => {
     try {
       console.log("Updating booking:", { editingBooking, editVehicle, editDate, editTime });
-      // Here would integrate with backend to update booking
       
       toast({
         title: "Cập nhật thành công",
@@ -255,6 +304,23 @@ export default function VehicleBooking() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Demo Rules Explanation */}
+        <Card className="border-blue-500/50 bg-blue-50/50 dark:bg-blue-950/20">
+          <CardContent className="pt-4">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-sm font-medium">Hướng dẫn demo quy tắc:</span>
+              </div>
+              <ul className="text-xs text-blue-600/80 dark:text-blue-400/80 space-y-1 ml-6">
+                <li>• Đặt lịch trong 7 ngày: Sử dụng bình thường</li>
+                <li>• Đặt lịch xa hơn 7 ngày: Mô phỏng vi phạm "sử dụng quá 14 ngày liên tiếp"</li>
+                <li>• Chỉ có thể chỉnh sửa/hủy lịch của chính mình</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Booking Form */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -538,33 +604,46 @@ export default function VehicleBooking() {
                         Đang chỉnh sửa
                       </Badge>
                     )}
+                    {booking.isMyBooking && (
+                      <Badge variant="default" className="text-xs bg-green-100 text-green-800">
+                        Lịch của bạn
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-sm text-muted-foreground mt-1">
                     {booking.date} • {booking.time}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  {booking.canOverride && (
+                  {booking.canOverride && !booking.isMyBooking && (
                     <Badge variant="secondary" className="text-xs bg-warning/20 text-warning-foreground">
                       Có thể thay thế
                     </Badge>
                   )}
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => handleEditBooking(booking.id)}
-                    disabled={editingBooking === booking.id}
-                  >
-                    <Edit className="h-4 w-4 mr-1" />
-                    Thay đổi
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => handleCancelBooking(booking.id)}
-                  >
-                    Hủy
-                  </Button>
+                  {booking.isMyBooking && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditBooking(booking.id)}
+                        disabled={editingBooking === booking.id}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleCancelBooking(booking.id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </>
+                  )}
+                  {!booking.isMyBooking && (
+                    <Badge variant="outline" className="text-xs">
+                      Của người khác
+                    </Badge>
+                  )}
                 </div>
               </div>
             ))}
