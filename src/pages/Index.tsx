@@ -144,7 +144,7 @@ const Index = () => {
                 <div className="text-sm space-y-2">
                   <p><span className="font-medium">2.1:</span> Thời gian đặt lịch được xác định theo nguyên tắc "ai đặt trước thì ưu tiên trước".</p>
                   <p><span className="font-medium">2.2:</span> Nếu có xung đột lịch, hệ thống sẽ ưu tiên dựa trên lịch sử sử dụng và tỷ lệ sở hữu.</p>
-                  <p><span className="font-medium">2.3:</span> Mỗi thành viên không được sử dụng quá 120% số ngày tương ứng với tỷ lệ sở hữu trong một tháng.</p>
+                  <p><span className="font-medium">2.3:</span> Thành viên có thể sử dụng xe tối đa 14 ngày liên tục và 7 ngày nếu là những mùa cao điểm (ngày lễ,...).</p>
                   <p><span className="font-medium">2.4:</span> Đặt lịch phải được xác nhận ít nhất 2 giờ trước khi sử dụng.</p>
                 </div>
               </CardContent>
