@@ -18,8 +18,8 @@ import { useSEO } from "@/hooks/useSEO";
 import { toast } from "@/hooks/use-toast";
 import { CURRENT_USER_ID, getGroupById } from "@/data/mockGroups";
 import { RuleViolationPanel } from "@/components/RuleViolationPanel";
-import { EmergencyDecisionDialog } from '@/components/EmergencyDecisionDialog';
-import { VotingDecisionDialog } from '@/components/VotingDecisionDialog';
+import { EmergencyDecisionDialog } from "@/components/EmergencyDecisionDialog";
+import { VotingDecisionDialog } from "@/components/VotingDecisionDialog";
 import { useRuleEngine } from "@/hooks/useRuleEngine";
 export default function GroupDetail() {
   const {
