@@ -18,7 +18,8 @@ import { useSEO } from "@/hooks/useSEO";
 import { toast } from "@/hooks/use-toast";
 import { CURRENT_USER_ID, getGroupById } from "@/data/mockGroups";
 import { RuleViolationPanel } from "@/components/RuleViolationPanel";
-import { EmergencyDecisionDialog } from "@/components/EmergencyDecisionDialog";
+import { EmergencyDecisionDialog } from '@/components/EmergencyDecisionDialog';
+import { VotingDecisionDialog } from '@/components/VotingDecisionDialog';
 import { useRuleEngine } from "@/hooks/useRuleEngine";
 export default function GroupDetail() {
   const {
@@ -308,9 +309,20 @@ export default function GroupDetail() {
                   <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
                 </div>
                  <div className="flex gap-2">
-                  <Button onClick={() => setOpenServiceRequest(true)} disabled={!selectedVehicle} size="sm">
-                    Request dịch vụ
-                  </Button>
+                  <VotingDecisionDialog
+                    trigger={
+                      <Button disabled={!selectedVehicle} size="sm">
+                        Request dịch vụ
+                      </Button>
+                    }
+                    onSubmit={(decision) => {
+                      console.log("Service request voting for group:", groupId, decision);
+                      toast({
+                        title: "Đã tạo bỏ phiếu",
+                        description: "Thành viên sẽ bỏ phiếu trong 7 ngày tới"
+                      });
+                    }}
+                  />
                   <EmergencyDecisionDialog
                     trigger={
                       <Button variant="outline" size="sm" disabled={!selectedVehicle}>

@@ -57,7 +57,7 @@ export interface GroupDecision {
   groupId: string;
   title: string;
   description: string;
-  type: 'ownership_change' | 'member_addition' | 'major_expense' | 'rule_change';
+  type: 'ownership_change' | 'member_addition' | 'major_expense' | 'rule_change' | 'service_request';
   initiatedBy: string;
   requiredApprovalPercentage: number;
   currentApprovalPercentage: number;
