@@ -307,9 +307,26 @@ export default function GroupDetail() {
                   <CardTitle>Xe của nhóm</CardTitle>
                   <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
                 </div>
-                <Button onClick={() => setOpenServiceRequest(true)} disabled={!selectedVehicle} size="sm">
-                  Request dịch vụ
-                </Button>
+                <div className="flex gap-2">
+                  <Button onClick={() => setOpenServiceRequest(true)} disabled={!selectedVehicle} size="sm">
+                    Request dịch vụ
+                  </Button>
+                  <EmergencyDecisionDialog
+                    trigger={
+                      <Button variant="outline" size="sm">
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Quyết định khẩn cấp
+                      </Button>
+                    }
+                    onSubmit={(decision) => {
+                      console.log("Emergency decision for group:", groupId, decision);
+                      toast({
+                        title: "Quyết định khẩn cấp đã được gửi",
+                        description: "Staff sẽ xem xét và phê duyệt quyết định của bạn"
+                      });
+                    }}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -386,28 +403,9 @@ export default function GroupDetail() {
                     {/* Rule Engine Controls */}
                     <Card className="border-l-4 border-l-orange-500">
                       <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <Shield className="h-5 w-5 text-orange-500" />
-                            <CardTitle className="text-lg">Hệ thống quản lý vi phạm nhóm</CardTitle>
-                          </div>
-                          <div className="flex gap-2">
-                            <EmergencyDecisionDialog
-                              trigger={
-                                <Button variant="outline" size="sm">
-                                  <AlertTriangle className="h-4 w-4 mr-2" />
-                                  Quyết định khẩn cấp
-                                </Button>
-                              }
-                              onSubmit={(decision) => {
-                                console.log("Emergency decision for group:", groupId, decision);
-                                toast({
-                                  title: "Quyết định khẩn cấp đã được gửi",
-                                  description: "Staff sẽ xem xét và phê duyệt quyết định của bạn"
-                                });
-                              }}
-                            />
-                          </div>
+                        <div className="flex items-center space-x-2">
+                          <Shield className="h-5 w-5 text-orange-500" />
+                          <CardTitle className="text-lg">Hệ thống quản lý vi phạm nhóm</CardTitle>
                         </div>
                         <CardDescription>
                           Xem vi phạm của tất cả thành viên trong nhóm này
