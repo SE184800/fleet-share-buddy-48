@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Car, Leaf, Users, Shield, ArrowRight, FileText, Scale, Calendar, DollarSign, UserCheck } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const Index = () => {
   return (
@@ -239,152 +240,148 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
             {/* Penalty 1 - Schedule Violations */}
-            <Card className="shadow-elegant">
-              <CardHeader>
-                <div className="flex items-center justify-between">
+            <AccordionItem value="penalty-1" className="mb-4">
+              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
                     <div className="bg-destructive/10 rounded-full p-2">
                       <Calendar className="h-5 w-5 text-destructive" />
                     </div>
-                    <CardTitle className="text-lg">Vi phạm lịch sử dụng</CardTitle>
+                    <span className="text-lg font-semibold">Vi phạm lịch sử dụng</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Quy định 2.3
-                    </Button>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Quy định 2.4
-                    </Button>
+                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.3</span>
+                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.4</span>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Sử dụng xe quá thời hạn hoặc không trả xe đúng giờ
-                </p>
-                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
-                  <p className="text-sm font-medium text-destructive">
-                    Mức phạt: Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Sử dụng xe quá thời hạn hoặc không trả xe đúng giờ
                   </p>
+                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                    <p className="text-sm font-medium text-destructive">
+                      Mức phạt: Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </AccordionContent>
+            </AccordionItem>
 
             {/* Penalty 2 - Payment Delays */}
-            <Card className="shadow-elegant">
-              <CardHeader>
-                <div className="flex items-center justify-between">
+            <AccordionItem value="penalty-2" className="mb-4">
+              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
                     <div className="bg-destructive/10 rounded-full p-2">
                       <DollarSign className="h-5 w-5 text-destructive" />
                     </div>
-                    <CardTitle className="text-lg">Thanh toán chậm trễ</CardTitle>
+                    <span className="text-lg font-semibold">Thanh toán chậm trễ</span>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    Quy định 3.4
-                  </Button>
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 3.4</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Không thanh toán chi phí trong thời hạn quy định
-                </p>
-                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
-                  <p className="text-sm font-medium text-destructive">
-                    Mức phạt: 50,000 VNĐ/ngày + tạm khóa quyền đặt lịch
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Không thanh toán chi phí trong thời hạn quy định
                   </p>
+                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                    <p className="text-sm font-medium text-destructive">
+                      Mức phạt: 50,000 VNĐ/ngày + tạm khóa quyền đặt lịch
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </AccordionContent>
+            </AccordionItem>
 
             {/* Penalty 3 - Schedule Conflicts */}
-            <Card className="shadow-elegant">
-              <CardHeader>
-                <div className="flex items-center justify-between">
+            <AccordionItem value="penalty-3" className="mb-4">
+              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
                     <div className="bg-destructive/10 rounded-full p-2">
                       <Calendar className="h-5 w-5 text-destructive" />
                     </div>
-                    <CardTitle className="text-lg">Đặt lịch xung đột</CardTitle>
+                    <span className="text-lg font-semibold">Đặt lịch xung đột</span>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    Quy định 2.5
-                  </Button>
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.5</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Đặt lịch trùng lặp thường xuyên (trên 5 lần/tháng)
-                </p>
-                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
-                  <p className="text-sm font-medium text-destructive">
-                    Mức phạt: Giảm 50% quyền ưu tiên trong 30 ngày
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Đặt lịch trùng lặp thường xuyên (trên 5 lần/tháng)
                   </p>
+                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                    <p className="text-sm font-medium text-destructive">
+                      Mức phạt: Giảm 50% quyền ưu tiên trong 30 ngày
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </AccordionContent>
+            </AccordionItem>
 
             {/* Penalty 4 - Vehicle Damage */}
-            <Card className="shadow-elegant">
-              <CardHeader>
-                <div className="flex items-center justify-between">
+            <AccordionItem value="penalty-4" className="mb-4">
+              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
                     <div className="bg-destructive/10 rounded-full p-2">
                       <Car className="h-5 w-5 text-destructive" />
                     </div>
-                    <CardTitle className="text-lg">Gây hư hỏng xe</CardTitle>
+                    <span className="text-lg font-semibold">Gây hư hỏng xe</span>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    Quy định 2.1
-                  </Button>
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.1</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Hư hỏng xe do sử dụng không đúng cách
-                </p>
-                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
-                  <p className="text-sm font-medium text-destructive">
-                    Mức phạt: Chi phí sửa chữa + phạt 500,000 VNĐ
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Hư hỏng xe do sử dụng không đúng cách
                   </p>
+                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                    <p className="text-sm font-medium text-destructive">
+                      Mức phạt: Chi phí sửa chữa + phạt 500,000 VNĐ
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </AccordionContent>
+            </AccordionItem>
 
             {/* Penalty 5 - Serious Violations */}
-            <Card className="shadow-elegant lg:col-span-2">
-              <CardHeader>
-                <div className="flex items-center justify-between">
+            <AccordionItem value="penalty-5" className="mb-4">
+              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
                     <div className="bg-destructive/10 rounded-full p-2">
                       <Shield className="h-5 w-5 text-destructive" />
                     </div>
-                    <CardTitle className="text-lg">Vi phạm nghiêm trọng</CardTitle>
+                    <span className="text-lg font-semibold">Vi phạm nghiêm trọng</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Quy định 1.2
-                    </Button>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Quy định 4.1
-                    </Button>
+                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 1.2</span>
+                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 4.1</span>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Cho thuê lại xe, sử dụng sai mục đích, hoặc vi phạm nghiêm trọng khác
-                </p>
-                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
-                  <p className="text-sm font-medium text-destructive">
-                    Mức phạt: Loại khỏi nhóm và tịch thu tỷ lệ sở hữu
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="mt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Cho thuê lại xe, sử dụng sai mục đích, hoặc vi phạm nghiêm trọng khác
                   </p>
+                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                    <p className="text-sm font-medium text-destructive">
+                      Mức phạt: Loại khỏi nhóm và tịch thu tỷ lệ sở hữu
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 
