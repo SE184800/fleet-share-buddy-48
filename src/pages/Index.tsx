@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
 import { Car, Leaf, Users, Shield, ArrowRight, FileText, Scale, Calendar, DollarSign, UserCheck } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -105,7 +106,170 @@ const Index = () => {
       <section className="py-16 bg-gradient-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Quy định sử dụng EcoShare</h2>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <h2 className="text-3xl font-bold">Quy định sử dụng EcoShare</h2>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" size="sm" className="bg-destructive hover:bg-destructive/90">
+                    <Shield className="mr-2 h-4 w-4" />
+                    Vi phạm
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold text-center mb-4">
+                      Mức phạt vi phạm
+                    </DialogTitle>
+                    <p className="text-muted-foreground text-center">
+                      Hệ thống phạt minh bạch cho các vi phạm quy định, nhấp vào từng mục để xem chi tiết
+                    </p>
+                  </DialogHeader>
+                  
+                  <Accordion type="single" collapsible className="w-full mt-6">
+                    {/* Penalty 1 - Schedule Violations */}
+                    <AccordionItem value="penalty-1" className="mb-4">
+                      <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-destructive/10 rounded-full p-2">
+                              <Calendar className="h-5 w-5 text-destructive" />
+                            </div>
+                            <span className="text-lg font-semibold">Vi phạm lịch sử dụng</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.3</span>
+                            <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.4</span>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Sử dụng xe quá thời hạn hoặc không trả xe đúng giờ
+                          </p>
+                          <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                            <p className="text-sm font-medium text-destructive">
+                              Mức phạt: Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Penalty 2 - Payment Delays */}
+                    <AccordionItem value="penalty-2" className="mb-4">
+                      <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-destructive/10 rounded-full p-2">
+                              <DollarSign className="h-5 w-5 text-destructive" />
+                            </div>
+                            <span className="text-lg font-semibold">Thanh toán chậm trễ</span>
+                          </div>
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 3.4</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Không thanh toán chi phí trong thời hạn quy định
+                          </p>
+                          <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                            <p className="text-sm font-medium text-destructive">
+                              Mức phạt: 50,000 VNĐ/ngày + tạm khóa quyền đặt lịch
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Penalty 3 - Schedule Conflicts */}
+                    <AccordionItem value="penalty-3" className="mb-4">
+                      <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-destructive/10 rounded-full p-2">
+                              <Calendar className="h-5 w-5 text-destructive" />
+                            </div>
+                            <span className="text-lg font-semibold">Đặt lịch xung đột</span>
+                          </div>
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.5</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Đặt lịch trùng lặp thường xuyên (trên 5 lần/tháng)
+                          </p>
+                          <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                            <p className="text-sm font-medium text-destructive">
+                              Mức phạt: Giảm 50% quyền ưu tiên trong 30 ngày
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Penalty 4 - Vehicle Damage */}
+                    <AccordionItem value="penalty-4" className="mb-4">
+                      <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-destructive/10 rounded-full p-2">
+                              <Car className="h-5 w-5 text-destructive" />
+                            </div>
+                            <span className="text-lg font-semibold">Gây hư hỏng xe</span>
+                          </div>
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.1</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Hư hỏng xe do sử dụng không đúng cách
+                          </p>
+                          <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                            <p className="text-sm font-medium text-destructive">
+                              Mức phạt: Chi phí sửa chữa + phạt 500,000 VNĐ
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Penalty 5 - Serious Violations */}
+                    <AccordionItem value="penalty-5" className="mb-4">
+                      <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-destructive/10 rounded-full p-2">
+                              <Shield className="h-5 w-5 text-destructive" />
+                            </div>
+                            <span className="text-lg font-semibold">Vi phạm nghiêm trọng</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 1.2</span>
+                            <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 4.1</span>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Cho thuê lại xe, sử dụng sai mục đích, hoặc vi phạm nghiêm trọng khác
+                          </p>
+                          <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
+                            <p className="text-sm font-medium text-destructive">
+                              Mức phạt: Loại khỏi nhóm và tịch thu tỷ lệ sở hữu
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </DialogContent>
+              </Dialog>
+            </div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Tìm hiểu các quy định và nguyên tắc hoạt động để có trải nghiệm tốt nhất khi sử dụng dịch vụ
             </p>
@@ -230,160 +394,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Penalties Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Mức phạt vi phạm</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Hệ thống phạt minh bạch cho các vi phạm quy định, nhấp vào từng mục để xem chi tiết
-            </p>
-          </div>
-
-          <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
-            {/* Penalty 1 - Schedule Violations */}
-            <AccordionItem value="penalty-1" className="mb-4">
-              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-destructive/10 rounded-full p-2">
-                      <Calendar className="h-5 w-5 text-destructive" />
-                    </div>
-                    <span className="text-lg font-semibold">Vi phạm lịch sử dụng</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.3</span>
-                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.4</span>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Sử dụng xe quá thời hạn hoặc không trả xe đúng giờ
-                  </p>
-                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
-                    <p className="text-sm font-medium text-destructive">
-                      Mức phạt: Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Penalty 2 - Payment Delays */}
-            <AccordionItem value="penalty-2" className="mb-4">
-              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-destructive/10 rounded-full p-2">
-                      <DollarSign className="h-5 w-5 text-destructive" />
-                    </div>
-                    <span className="text-lg font-semibold">Thanh toán chậm trễ</span>
-                  </div>
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 3.4</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Không thanh toán chi phí trong thời hạn quy định
-                  </p>
-                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
-                    <p className="text-sm font-medium text-destructive">
-                      Mức phạt: 50,000 VNĐ/ngày + tạm khóa quyền đặt lịch
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Penalty 3 - Schedule Conflicts */}
-            <AccordionItem value="penalty-3" className="mb-4">
-              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-destructive/10 rounded-full p-2">
-                      <Calendar className="h-5 w-5 text-destructive" />
-                    </div>
-                    <span className="text-lg font-semibold">Đặt lịch xung đột</span>
-                  </div>
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.5</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Đặt lịch trùng lặp thường xuyên (trên 5 lần/tháng)
-                  </p>
-                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
-                    <p className="text-sm font-medium text-destructive">
-                      Mức phạt: Giảm 50% quyền ưu tiên trong 30 ngày
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Penalty 4 - Vehicle Damage */}
-            <AccordionItem value="penalty-4" className="mb-4">
-              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-destructive/10 rounded-full p-2">
-                      <Car className="h-5 w-5 text-destructive" />
-                    </div>
-                    <span className="text-lg font-semibold">Gây hư hỏng xe</span>
-                  </div>
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 2.1</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Hư hỏng xe do sử dụng không đúng cách
-                  </p>
-                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
-                    <p className="text-sm font-medium text-destructive">
-                      Mức phạt: Chi phí sửa chữa + phạt 500,000 VNĐ
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            {/* Penalty 5 - Serious Violations */}
-            <AccordionItem value="penalty-5" className="mb-4">
-              <AccordionTrigger className="bg-gradient-card rounded-lg px-6 py-4 shadow-elegant hover:no-underline">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-destructive/10 rounded-full p-2">
-                      <Shield className="h-5 w-5 text-destructive" />
-                    </div>
-                    <span className="text-lg font-semibold">Vi phạm nghiêm trọng</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 1.2</span>
-                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">Quy định 4.1</span>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Cho thuê lại xe, sử dụng sai mục đích, hoặc vi phạm nghiêm trọng khác
-                  </p>
-                  <div className="p-4 bg-destructive/5 rounded-lg border-l-4 border-destructive">
-                    <p className="text-sm font-medium text-destructive">
-                      Mức phạt: Loại khỏi nhóm và tịch thu tỷ lệ sở hữu
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </section>
 
       {/* Call to Action */}
       <section className="bg-gradient-primary text-white py-16">
