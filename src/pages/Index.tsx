@@ -209,27 +209,6 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
-
-            {/* Rule 6 - Penalties */}
-            <Card className="shadow-elegant lg:col-span-2">
-              <CardHeader>
-                <div className="flex items-center space-x-3">
-                  <div className="bg-destructive/10 rounded-full p-2">
-                    <Shield className="h-5 w-5 text-destructive" />
-                  </div>
-                  <CardTitle className="text-lg">6. Mức phạt vi phạm</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-sm space-y-2">
-                  <p><span className="font-medium">6.1:</span> Vi phạm lịch sử dụng (sử dụng quá thời hạn, không trả xe đúng giờ): Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2.</p>
-                  <p><span className="font-medium">6.2:</span> Thanh toán chậm trễ: Phạt 50,000 VNĐ/ngày sau thời hạn 15 ngày, tạm khóa quyền đặt lịch.</p>
-                  <p><span className="font-medium">6.3:</span> Đặt lịch xung đột thường xuyên (trên 5 lần/tháng): Giảm 50% quyền ưu tiên trong 30 ngày.</p>
-                  <p><span className="font-medium">6.4:</span> Gây hư hỏng xe do sử dụng không đúng cách: Chịu toàn bộ chi phí sửa chữa + phạt 500,000 VNĐ.</p>
-                  <p><span className="font-medium">6.5:</span> Vi phạm nghiêm trọng (cho thuê lại, sử dụng sai mục đích): Loại khỏi nhóm và tịch thu tỷ lệ sở hữu.</p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           <div className="text-center mt-8">
@@ -246,6 +225,165 @@ const Index = () => {
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Penalties Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Mức phạt vi phạm</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Hệ thống phạt minh bạch cho các vi phạm quy định, nhấp vào từng mục để xem chi tiết
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Penalty 1 - Schedule Violations */}
+            <Card className="shadow-elegant">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-destructive/10 rounded-full p-2">
+                      <Calendar className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg">Vi phạm lịch sử dụng</CardTitle>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Quy định 2.3
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Quy định 2.4
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Sử dụng xe quá thời hạn hoặc không trả xe đúng giờ
+                </p>
+                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
+                  <p className="text-sm font-medium text-destructive">
+                    Mức phạt: Cảnh cáo lần 1, phạt 200,000 VNĐ từ lần 2
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Penalty 2 - Payment Delays */}
+            <Card className="shadow-elegant">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-destructive/10 rounded-full p-2">
+                      <DollarSign className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg">Thanh toán chậm trễ</CardTitle>
+                  </div>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Quy định 3.4
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Không thanh toán chi phí trong thời hạn quy định
+                </p>
+                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
+                  <p className="text-sm font-medium text-destructive">
+                    Mức phạt: 50,000 VNĐ/ngày + tạm khóa quyền đặt lịch
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Penalty 3 - Schedule Conflicts */}
+            <Card className="shadow-elegant">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-destructive/10 rounded-full p-2">
+                      <Calendar className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg">Đặt lịch xung đột</CardTitle>
+                  </div>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Quy định 2.5
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Đặt lịch trùng lặp thường xuyên (trên 5 lần/tháng)
+                </p>
+                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
+                  <p className="text-sm font-medium text-destructive">
+                    Mức phạt: Giảm 50% quyền ưu tiên trong 30 ngày
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Penalty 4 - Vehicle Damage */}
+            <Card className="shadow-elegant">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-destructive/10 rounded-full p-2">
+                      <Car className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg">Gây hư hỏng xe</CardTitle>
+                  </div>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Quy định 2.1
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Hư hỏng xe do sử dụng không đúng cách
+                </p>
+                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
+                  <p className="text-sm font-medium text-destructive">
+                    Mức phạt: Chi phí sửa chữa + phạt 500,000 VNĐ
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Penalty 5 - Serious Violations */}
+            <Card className="shadow-elegant lg:col-span-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-destructive/10 rounded-full p-2">
+                      <Shield className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg">Vi phạm nghiêm trọng</CardTitle>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Quy định 1.2
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Quy định 4.1
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Cho thuê lại xe, sử dụng sai mục đích, hoặc vi phạm nghiêm trọng khác
+                </p>
+                <div className="mt-3 p-3 bg-destructive/5 rounded-lg">
+                  <p className="text-sm font-medium text-destructive">
+                    Mức phạt: Loại khỏi nhóm và tịch thu tỷ lệ sở hữu
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
