@@ -5,17 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Shield, AlertTriangle } from "lucide-react";
 import QRCode from "react-qr-code";
 import { useSEO } from "@/hooks/useSEO";
 import { toast } from "@/hooks/use-toast";
 import { CURRENT_USER_ID, getGroupById } from "@/data/mockGroups";
+import { RuleViolationPanel } from "@/components/RuleViolationPanel";
+import { EmergencyDecisionDialog } from "@/components/EmergencyDecisionDialog";
+import { useRuleEngine } from "@/hooks/useRuleEngine";
 export default function GroupDetail() {
   const {
     groupId
@@ -53,6 +57,66 @@ export default function GroupDetail() {
     status: "pending" | "approved" | "rejected";
     date: string;
   }>>([]);
+
+  // Rule Engine cho nhóm
+  const { 
+    violations, 
+    isChecking, 
+    checkRules, 
+    resolveViolation 
+  } = useRuleEngine(groupId || "", CURRENT_USER_ID);
+
+  // Demo function để tạo vi phạm cho thành viên khác nhau
+  const triggerGroupViolations = () => {
+    // Tạo vi phạm cho các thành viên khác nhau trong nhóm
+    const demoMembers = group?.users || [];
+    
+    demoMembers.forEach((member, index) => {
+      checkRules(
+        {
+          id: `schedule-${member.id}`,
+          userId: member.id,
+          groupId: groupId || "",
+          vehicleId: "vehicle-1",
+          startTime: "2024-01-20T09:00:00Z",
+          endTime: "2024-01-20T18:00:00Z",
+          actualReturnTime: index % 2 === 0 ? "2024-01-20T19:30:00Z" : undefined, // Một số trả muộn
+          status: "completed",
+          priority: 50,
+          isEmergency: false
+        },
+        {
+          userId: member.id,
+          groupId: groupId || "",
+          totalHours: 80 + (index * 20),
+          totalDays: 10 + (index * 3),
+          consecutiveDaysUsed: index === 0 ? 16 : 8, // Thành viên đầu tiên vi phạm
+          violationCount: index % 3,
+          lastUsageDate: "2024-01-19T00:00:00Z"
+        },
+        index === 1 ? {
+          id: `debt-${member.id}`,
+          userId: member.id,
+          groupId: groupId || "",
+          amount: 500000,
+          type: "fine" as const,
+          dueDate: "2023-12-31T00:00:00Z",
+          overdueDays: 18, // Thành viên thứ 2 nợ quá hạn
+          status: "overdue" as const,
+          description: "Phí sử dụng xe tháng 12/2023"
+        } : undefined,
+        {
+          userId: member.id,
+          groupId: groupId || "",
+          ownershipPercentage: 35,
+          status: "active" as const,
+          identityVerified: true,
+          licenseVerified: index !== 2, // Thành viên thứ 3 chưa xác minh bằng lái
+          joinedAt: "2023-12-01T00:00:00Z"
+        }
+      );
+    });
+  };
   if (!group) {
     return <div className="container mx-auto p-6">
         <Card>
@@ -253,6 +317,7 @@ export default function GroupDetail() {
                 <TabsList>
                   <TabsTrigger value="vehicles">Danh sách xe</TabsTrigger>
                   <TabsTrigger value="requests">Yêu cầu dịch vụ ({serviceRequests.length})</TabsTrigger>
+                  <TabsTrigger value="violations">Quản lý vi phạm ({violations.length})</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="vehicles">
@@ -313,6 +378,59 @@ export default function GroupDetail() {
                             </div>
                           </div>
                         </div>)}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="violations">
+                  <div className="space-y-4">
+                    {/* Rule Engine Controls */}
+                    <Card className="border-l-4 border-l-orange-500">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Shield className="h-5 w-5 text-orange-500" />
+                            <CardTitle className="text-lg">Hệ thống quản lý vi phạm nhóm</CardTitle>
+                          </div>
+                          <div className="flex gap-2">
+                            <EmergencyDecisionDialog
+                              trigger={
+                                <Button variant="outline" size="sm">
+                                  <AlertTriangle className="h-4 w-4 mr-2" />
+                                  Quyết định khẩn cấp
+                                </Button>
+                              }
+                              onSubmit={(decision) => {
+                                console.log("Emergency decision for group:", groupId, decision);
+                                toast({
+                                  title: "Quyết định khẩn cấp đã được gửi",
+                                  description: "Staff sẽ xem xét và phê duyệt quyết định của bạn"
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <CardDescription>
+                          Xem vi phạm của tất cả thành viên trong nhóm này
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <p className="text-sm text-muted-foreground">
+                            Tất cả thành viên đều có thể xem vi phạm của nhau để đảm bảo tính minh bạch trong nhóm.
+                          </p>
+                          <Button onClick={triggerGroupViolations} disabled={isChecking}>
+                            {isChecking ? "Đang kiểm tra..." : "Tạo vi phạm demo cho nhóm"}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Violations Panel */}
+                    <RuleViolationPanel
+                      violations={violations}
+                      onResolve={resolveViolation}
+                      canResolve={myRole === "admin"} // Chỉ admin mới có thể resolve
+                    />
                   </div>
                 </TabsContent>
               </Tabs>
