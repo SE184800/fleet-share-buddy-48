@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -20,7 +21,7 @@ import VehicleBooking from "@/components/VehicleBooking";
 import { RuleViolationPanel } from "@/components/RuleViolationPanel";
 import { EmergencyDecisionDialog } from "@/components/EmergencyDecisionDialog";
 import { useRuleEngine } from "@/hooks/useRuleEngine";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function CoOwnerDashboard() {
   const [showChat, setShowChat] = useState(false);
@@ -35,57 +36,53 @@ export default function CoOwnerDashboard() {
     resolveViolation 
   } = useRuleEngine("group-1", "user-1");
 
-  // Demo effect to simulate rule violations
-  useEffect(() => {
-    // Simulate checking rules with demo data
-    const demoViolations = setTimeout(() => {
-      checkRules(
-        {
-          id: "schedule-1",
-          userId: "user-1",
-          groupId: "group-1",
-          vehicleId: "vehicle-1",
-          startTime: "2024-01-20T09:00:00Z",
-          endTime: "2024-01-20T18:00:00Z",
-          actualReturnTime: "2024-01-20T19:30:00Z", // Late return
-          status: "completed",
-          priority: 50,
-          isEmergency: false
-        },
-        {
-          userId: "user-1",
-          groupId: "group-1",
-          totalHours: 120,
-          totalDays: 16,
-          consecutiveDaysUsed: 16, // Exceeds 14 day limit
-          violationCount: 1,
-          lastUsageDate: "2024-01-19T00:00:00Z"
-        },
-        {
-          id: "debt-1",
-          userId: "user-1",
-          groupId: "group-1",
-          amount: 500000,
-          type: "fine",
-          dueDate: "2023-12-31T00:00:00Z",
-          overdueDays: 18, // Exceeds 15 day limit
-          status: "overdue",
-          description: "Phí sử dụng xe tháng 12/2023"
-        },
-        {
-          userId: "user-1",
-          groupId: "group-1",
-          ownershipPercentage: 35,
-          status: "active",
-          identityVerified: true,
-          licenseVerified: false, // Missing license verification
-          joinedAt: "2023-12-01T00:00:00Z"
-        }
-      );
-    }, 1000);
-
-    return () => clearTimeout(demoViolations);
-  }, [checkRules]);
+  
+  // Demo function to trigger violations manually
+  const triggerDemoViolations = () => {
+    checkRules(
+      {
+        id: "schedule-1",
+        userId: "user-1",
+        groupId: "group-1",
+        vehicleId: "vehicle-1",
+        startTime: "2024-01-20T09:00:00Z",
+        endTime: "2024-01-20T18:00:00Z",
+        actualReturnTime: "2024-01-20T19:30:00Z", // Late return
+        status: "completed",
+        priority: 50,
+        isEmergency: false
+      },
+      {
+        userId: "user-1",
+        groupId: "group-1",
+        totalHours: 120,
+        totalDays: 16,
+        consecutiveDaysUsed: 16, // Exceeds 14 day limit
+        violationCount: 1,
+        lastUsageDate: "2024-01-19T00:00:00Z"
+      },
+      {
+        id: "debt-1",
+        userId: "user-1",
+        groupId: "group-1",
+        amount: 500000,
+        type: "fine",
+        dueDate: "2023-12-31T00:00:00Z",
+        overdueDays: 18, // Exceeds 15 day limit
+        status: "overdue",
+        description: "Phí sử dụng xe tháng 12/2023"
+      },
+      {
+        userId: "user-1",
+        groupId: "group-1",
+        ownershipPercentage: 35,
+        status: "active",
+        identityVerified: true,
+        licenseVerified: false, // Missing license verification
+        joinedAt: "2023-12-01T00:00:00Z"
+      }
+    );
+  };
   const registrations = [
     {
       id: "VX-001",
@@ -151,7 +148,7 @@ export default function CoOwnerDashboard() {
       </header>
 
       <div className="container mx-auto p-6 space-y-6">
-        {/* Rule Violations Demo Panel */}
+        {/* Rule Engine Demo Controls */}
         <Card className="shadow-elegant border-l-4 border-l-orange-500">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -159,28 +156,52 @@ export default function CoOwnerDashboard() {
                 <Shield className="h-5 w-5 text-orange-500" />
                 <CardTitle>Hệ thống quản lý quy tắc - DEMO</CardTitle>
               </div>
-              <EmergencyDecisionDialog
-                trigger={
-                  <Button variant="outline" size="sm">
-                    <AlertTriangle className="h-4 w-4 mr-2" />
-                    Quyết định khẩn cấp
-                  </Button>
-                }
-                onSubmit={(decision) => {
-                  console.log("Emergency decision:", decision);
-                }}
-              />
+              <div className="flex gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Vi phạm ({violations.length})
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Quản lý vi phạm quy định</DialogTitle>
+                    </DialogHeader>
+                    <RuleViolationPanel
+                      violations={violations}
+                      onResolve={resolveViolation}
+                      canResolve={false} // User is co-owner, not staff
+                    />
+                  </DialogContent>
+                </Dialog>
+                
+                <EmergencyDecisionDialog
+                  trigger={
+                    <Button variant="outline" size="sm">
+                      <AlertTriangle className="h-4 w-4 mr-2" />
+                      Quyết định khẩn cấp
+                    </Button>
+                  }
+                  onSubmit={(decision) => {
+                    console.log("Emergency decision:", decision);
+                  }}
+                />
+              </div>
             </div>
             <CardDescription>
               Prototype hệ thống thực thi quy định EcoShare
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RuleViolationPanel
-              violations={violations}
-              onResolve={resolveViolation}
-              canResolve={false} // User is co-owner, not staff
-            />
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Nhấn "Tạo vi phạm demo" để kiểm tra hệ thống hoặc "Vi phạm" để xem danh sách vi phạm hiện tại.
+              </p>
+              <Button onClick={triggerDemoViolations} disabled={isChecking}>
+                {isChecking ? "Đang kiểm tra..." : "Tạo vi phạm demo"}
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
