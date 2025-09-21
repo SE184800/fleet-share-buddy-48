@@ -57,7 +57,66 @@ export default function GroupDetail() {
     description: string;
     status: "pending" | "approved" | "rejected";
     date: string;
-  }>>([]);
+    requester: string;
+    votingStatus?: {
+      approvalPercentage: number;
+      ownershipPercentage: number;
+      votesCount: number;
+      totalMembers: number;
+    };
+  }>>([
+    {
+      id: "req-001",
+      vehicleId: "car-honda-city",
+      vehicleName: "Honda City",
+      paymentType: "fund",
+      serviceType: "Bảo dưỡng định kỳ",
+      description: "Thay dầu máy và kiểm tra hệ thống phanh",
+      status: "pending",
+      date: "2024-01-15",
+      requester: "Trần B",
+      votingStatus: {
+        approvalPercentage: 75,
+        ownershipPercentage: 65,
+        votesCount: 3,
+        totalMembers: 4
+      }
+    },
+    {
+      id: "req-002", 
+      vehicleId: "car-toyota-vios",
+      vehicleName: "Toyota Vios",
+      paymentType: "self",
+      serviceType: "Sửa chữa",
+      description: "Thay lốp trước bị thủng",
+      status: "approved",
+      date: "2024-01-10",
+      requester: "Nguyễn Văn A",
+      votingStatus: {
+        approvalPercentage: 100,
+        ownershipPercentage: 85,
+        votesCount: 4,
+        totalMembers: 4
+      }
+    },
+    {
+      id: "req-003",
+      vehicleId: "car-honda-city", 
+      vehicleName: "Honda City",
+      paymentType: "fund",
+      serviceType: "Rửa xe",
+      description: "Rửa xe và vệ sinh nội thất",
+      status: "rejected",
+      date: "2024-01-08",
+      requester: "Lê C",
+      votingStatus: {
+        approvalPercentage: 25,
+        ownershipPercentage: 30,
+        votesCount: 1,
+        totalMembers: 4
+      }
+    }
+  ]);
 
   // Rule Engine cho nhóm
   const { 
@@ -414,9 +473,27 @@ export default function GroupDetail() {
                       </div> : serviceRequests.map(request => <div key={request.id} className="border rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <div className="font-medium">{request.vehicleName}</div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className="font-medium">{request.vehicleName}</div>
+                                <Badge variant="outline" className="text-xs">
+                                  {request.requester}
+                                </Badge>
+                              </div>
                               <div className="text-sm text-muted-foreground">{request.serviceType}</div>
                               <div className="text-sm mt-1">{request.description}</div>
+                              {request.votingStatus && (
+                                <div className="text-xs text-muted-foreground mt-2 p-2 bg-muted/50 rounded">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div>Tỷ lệ đồng ý: {request.votingStatus.approvalPercentage}% ({request.votingStatus.votesCount}/{request.votingStatus.totalMembers})</div>
+                                    <div>Quyền sở hữu: {request.votingStatus.ownershipPercentage}%</div>
+                                  </div>
+                                  <div className="mt-1 text-xs">
+                                    {request.status === "approved" && "✅ Đã thông qua và gửi lên staff"}
+                                    {request.status === "rejected" && "❌ Không đủ tỷ lệ thông qua"}
+                                    {request.status === "pending" && "⏳ Đang chờ bỏ phiếu..."}
+                                  </div>
+                                </div>
+                              )}
                               <div className="text-xs text-muted-foreground mt-2">
                                 {request.paymentType === "self" ? "Tự chi trả" : "Dùng quỹ chung"} • {request.date}
                               </div>
@@ -683,7 +760,8 @@ export default function GroupDetail() {
                   serviceType,
                   description: serviceDescription,
                   status: "pending" as const,
-                  date: new Date().toLocaleDateString("vi-VN")
+                  date: new Date().toLocaleDateString("vi-VN"),
+                  requester: group?.users.find(u => u.id === CURRENT_USER_ID)?.name || "Unknown"
                 };
                 setServiceRequests(prev => [...prev, newRequest]);
                 toast({
