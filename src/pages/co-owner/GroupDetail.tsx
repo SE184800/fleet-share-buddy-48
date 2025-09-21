@@ -309,20 +309,62 @@ export default function GroupDetail() {
                   <CardDescription>Hình ảnh, thông tin và trạng thái</CardDescription>
                 </div>
                  <div className="flex gap-2">
-                  <VotingDecisionDialog
-                    trigger={
-                      <Button disabled={!selectedVehicle} size="sm">
-                        Request dịch vụ
-                      </Button>
-                    }
-                    onSubmit={(decision) => {
-                      console.log("Service request voting for group:", groupId, decision);
-                      toast({
-                        title: "Đã tạo bỏ phiếu",
-                        description: "Thành viên sẽ bỏ phiếu trong 7 ngày tới"
-                      });
-                    }}
-                  />
+                   <VotingDecisionDialog
+                     trigger={
+                       <Button disabled={!selectedVehicle} size="sm">
+                         Request dịch vụ
+                       </Button>
+                     }
+                     onSubmit={(decision) => {
+                       // Demo: Simulate voting process
+                       const currentUser = group?.users.find(m => m.id === CURRENT_USER_ID);
+                       const requestTitle = `Dịch vụ ${serviceType || 'bảo dưỡng'} cho xe ${selectedVehicle}`;
+                       const requestDescription = `Yêu cầu từ ${currentUser?.name}: ${serviceDescription || decision.description}`;
+                       
+                       console.log("Service request voting:", {
+                         groupId,
+                         title: requestTitle,
+                         description: requestDescription,
+                         requester: currentUser?.name,
+                         decision
+                       });
+
+                       // Demo: Simulate voting results after 3 seconds
+                       toast({
+                         title: "Đã tạo bỏ phiếu",
+                         description: "Thành viên sẽ bỏ phiếu trong 7 ngày tới"
+                       });
+
+                       setTimeout(() => {
+                         // Simulate >50% members (3/4) and >60% ownership voting yes
+                         const approvalPercentage = 75; // 3/4 members = 75%
+                         const ownershipPercentage = 65; // Combined ownership of yes voters
+                         
+                         if (approvalPercentage > 50 && ownershipPercentage > 60) {
+                           toast({
+                             title: "✅ Yêu cầu đã được thông qua",
+                             description: `Tỷ lệ đồng ý: ${approvalPercentage}% thành viên, ${ownershipPercentage}% quyền sở hữu. Đã gửi lên staff!`,
+                             duration: 5000
+                           });
+                           
+                           // Simulate sending to staff
+                           console.log("Request approved and sent to staff:", {
+                             title: requestTitle,
+                             description: requestDescription,
+                             approvalPercentage,
+                             ownershipPercentage,
+                             status: "sent_to_staff"
+                           });
+                         } else {
+                           toast({
+                             title: "❌ Yêu cầu bị từ chối",
+                             description: `Không đủ tỷ lệ thông qua (cần >50% thành viên và >60% quyền sở hữu)`,
+                             duration: 5000
+                           });
+                         }
+                       }, 3000);
+                     }}
+                   />
                   <EmergencyDecisionDialog
                     trigger={
                       <Button variant="outline" size="sm" disabled={!selectedVehicle}>
