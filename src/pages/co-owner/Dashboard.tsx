@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ChatBox from "@/components/ChatBox";
 import UserDropdown from "@/components/UserDropdown";
 import VehicleBooking from "@/components/VehicleBooking";
+import { RulesPanel } from "@/components/RulesPanel";
 import { useState } from "react";
 
 export default function CoOwnerDashboard() {
@@ -77,6 +78,7 @@ export default function CoOwnerDashboard() {
                 Đăng ký xe
               </Button>
             </Link>
+            <RulesPanel />
             <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
               <Bell className="h-4 w-4" />
             </Button>
