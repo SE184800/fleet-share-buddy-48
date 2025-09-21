@@ -26,60 +26,85 @@ export function RulesPanel() {
         {/* Basic Rules Section */}
         <div className="mt-6 mb-8">
           <h3 className="text-lg font-semibold mb-4 text-center">📋 Quy định cơ bản</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Rule 1 - Ownership Management */}
             <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">1. Thành viên & Sở hữu</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Tỷ lệ sở hữu tối thiểu: 20%</li>
-                <li>• Xác minh danh tính bắt buộc</li>
-                <li>• Giấy phép lái xe hợp lệ</li>
-                <li>• Hợp đồng ký kết đầy đủ</li>
-              </ul>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="bg-primary/10 rounded-full p-2">
+                  <Users className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold text-primary">1. Quản lý quyền sở hữu & thành viên</h4>
+              </div>
+              <div className="text-sm space-y-2">
+                <p><span className="font-medium">1.1:</span> Mỗi thành viên phải có CCCD/CMND và Giấy phép lái xe hợp lệ trước khi được thêm vào nhóm đồng sở hữu.</p>
+                <p><span className="font-medium">1.2:</span> Mọi thay đổi về tỷ lệ sở hữu phải được tất cả các thành viên hiện tại kí số e-contract mới có hiệu lực.</p>
+                <p><span className="font-medium">1.3:</span> Chỉ admin nhóm có quyền thêm/xóa thành viên hoặc thay đổi tỷ lệ sở hữu.</p>
+              </div>
             </div>
+
+            {/* Rule 2 - Scheduling */}
             <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">2. Sử dụng xe</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Đặt lịch trước tối thiểu 2 giờ</li>
-                <li>• Thời gian sử dụng tối đa: 8 giờ/lần</li>
-                <li>• Trả xe đúng giờ, đúng địa điểm</li>
-                <li>• Báo cáo sự cố ngay lập tức</li>
-              </ul>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="bg-primary/10 rounded-full p-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold text-primary">2. Đặt lịch & sử dụng xe</h4>
+              </div>
+              <div className="text-sm space-y-2">
+                <p><span className="font-medium">2.1:</span> Thời gian đặt lịch được xác định theo nguyên tắc "ai đặt trước thì ưu tiên trước".</p>
+                <p><span className="font-medium">2.2:</span> Nếu có xung đột lịch, hệ thống sẽ ưu tiên theo thứ tự: tỷ lệ sở hữu cao nhất → lịch sử sử dụng ít nhất → thời gian đăng ký sớm nhất.</p>
+                <p><span className="font-medium">2.3:</span> Mỗi thành viên chỉ được sử dụng xe tối đa 14 ngày liên tục. Trong các mùa cao điểm (lễ, tết), giới hạn giảm xuống còn 7 ngày liên tục.</p>
+                <p><span className="font-medium">2.4:</span> Đặt lịch phải được xác nhận ít nhất 2 giờ trước khi sử dụng.</p>
+                <p><span className="font-medium">2.5:</span> Hệ thống sẽ cảnh báo thành viên "có thể bị hạn chế ưu tiên nếu đặt trùng thường xuyên" khi phát hiện đặt lịch xung đột nhiều lần.</p>
+              </div>
             </div>
+
+            {/* Rule 3 - Costs */}
             <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">3. Thanh toán</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Chi phí điện: theo km sử dụng</li>
-                <li>• Bảo trì định kỳ: chia đều</li>
-                <li>• Thanh toán trong 7 ngày</li>
-                <li>• Phí trễ hạn: 50k/ngày</li>
-              </ul>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="bg-primary/10 rounded-full p-2">
+                  <DollarSign className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold text-primary">3. Chi phí & thanh toán</h4>
+              </div>
+              <div className="text-sm space-y-2">
+                <p><span className="font-medium">3.1:</span> Các chi phí chung sẽ được chia theo tỷ lệ sở hữu mặc định.</p>
+                <p><span className="font-medium">3.2:</span> Nhóm có thể lựa chọn chia chi phí theo mức độ sử dụng xe.</p>
+                <p><span className="font-medium">3.3:</span> Thanh toán chi phí phải thực hiện qua phương thức trực tuyến (e-wallet, banking).</p>
+                <p><span className="font-medium">3.4:</span> Thành viên có nợ quá hạn &gt; 15 ngày sẽ bị tạm khóa quyền đặt lịch.</p>
+              </div>
             </div>
+
+            {/* Rule 4 - Group Decisions */}
             <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">4. Bảo trì & Vệ sinh</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Vệ sinh xe sau mỗi lần sử dụng</li>
-                <li>• Kiểm tra tình trạng trước/sau</li>
-                <li>• Bảo trì định kỳ theo lịch</li>
-                <li>• Sạc pin đầy trước khi trả</li>
-              </ul>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="bg-primary/10 rounded-full p-2">
+                  <Users className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold text-primary">4. Nhóm đồng sở hữu & quyết định chung</h4>
+              </div>
+              <div className="text-sm space-y-2">
+                <p><span className="font-medium">4.1:</span> Nhóm tối đa 5 người đồng sở hữu, tối thiểu tỷ lệ sở hữu là 15%.</p>
+                <p><span className="font-medium">4.2:</span> Các quyết định quan trọng cần tối thiểu 70% tổng tỷ lệ sở hữu đồng ý để thông qua.</p>
+                <p><span className="font-medium">4.3:</span> Quỹ chung được quản lý minh bạch với biên lai điện tử.</p>
+                <p><span className="font-medium">4.4:</span> AI gợi ý lịch sử dụng chỉ mang tính tham khảo, không bắt buộc áp dụng.</p>
+                <p><span className="font-medium">4.5:</span> Trường hợp khẩn cấp, đột xuất có thể bỏ qua quy trình bỏ phiếu nhưng phải cung cấp bằng chứng chứng minh tính cấp thiết và được staff xác nhận.</p>
+              </div>
             </div>
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">5. Bảo hiểm & Trách nhiệm</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Bảo hiểm bắt buộc có hiệu lực</li>
-                <li>• Chịu trách nhiệm khi sử dụng</li>
-                <li>• Bồi thường thiệt hại do lỗi</li>
-                <li>• Không cho thuê lại</li>
-              </ul>
-            </div>
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <h4 className="font-semibold text-primary mb-2">6. Quyết định nhóm</h4>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Bỏ phiếu theo tỷ lệ sở hữu</li>
-                <li>• Quyết định khẩn cấp có bằng chứng</li>
-                <li>• Thời hạn bỏ phiếu: 48 giờ</li>
-                <li>• Đồng thuận tối thiểu: 51%</li>
-              </ul>
+
+            {/* Rule 5 - Disputes */}
+            <div className="p-4 bg-primary/5 rounded-lg border lg:col-span-2">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="bg-primary/10 rounded-full p-2">
+                  <AlertTriangle className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold text-primary">5. Tranh chấp & giám sát</h4>
+              </div>
+              <div className="text-sm space-y-2">
+                <p><span className="font-medium">5.1:</span> Mọi hành động đặt lịch, thanh toán, bỏ phiếu đều được ghi log không thể chỉnh sửa.</p>
+                <p><span className="font-medium">5.2:</span> Trong trường hợp tranh chấp, Staff có quyền kiểm tra log và đưa ra quyết định.</p>
+                <p><span className="font-medium">5.3:</span> Nếu tranh chấp không thể giải quyết ở mức Staff, Admin hệ thống sẽ can thiệp và quyết định cuối cùng là bắt buộc.</p>
+              </div>
             </div>
           </div>
         </div>
