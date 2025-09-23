@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -6,52 +6,104 @@ import { useToast } from "@/hooks/use-toast";
 import { Car, ArrowLeft, MessageSquare, Mail, Clock } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Formik, Form } from "formik";
-import { useEffect } from "react";
 import * as Yup from "yup";
-import { set } from "date-fns";
+
 export default function VerifyOTP() {
   const [otp, setOtp] = useState("");
   const [isResending, setIsResending] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<"sms" | "email">("sms");
+  const [time, setTime] = useState(60);
+  const [expired, setExpired] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [time, setTime] = useState(60);
-  const [expired, setExpired] = useState(false);
-  // Get user info from registration
+
   const userInfo = location.state as { phone?: string; email?: string; fullName?: string };
-  const generateOtp = () => {
+
+  const formatPhoneToE164 = (phone?: string) => {
+    if (!phone) return "";
+    phone = phone.replace(/\s+/g, "");
+    if (phone.startsWith("0")) return "+84" + phone.slice(1);
+    return phone;
+  };
+
+  const generateOtp = async () => {
     const randomOtp = Math.floor(100000 + Math.random() * 900000).toString();
     setOtp(randomOtp);
     setTime(60);
     setExpired(false);
+
     console.log("OTP (debug):", randomOtp);
-    toast({
-      title: "OTP đã được tạo",
-      description: `Mã xác thực đã gửi qua ${selectedMethod === "sms" ? "SMS" : "Email"}`,
-    });
+
+    try {
+      if (selectedMethod === "email" && userInfo?.email) {
+        const response = await fetch("http://localhost:5000/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            method: "email",
+            destination: userInfo.email,
+            otp: randomOtp,
+          }),
+        });
+        if (!response.ok) throw new Error("Send OTP failed");
+        toast({
+          title: "OTP đã được tạo",
+          description: `Mã xác thực đã gửi qua Email: ${userInfo.email}`,
+        });
+      } else if (selectedMethod === "sms" && userInfo?.phone) {
+        const formattedPhone = formatPhoneToE164(userInfo.phone);
+        const response = await fetch("http://localhost:5000/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            method: "sms",
+            destination: formattedPhone,
+            otp: randomOtp,
+          }),
+        });
+        if (!response.ok) throw new Error("Send OTP failed");
+        toast({
+          title: "OTP đã được tạo",
+          description: `Mã xác thực đã gửi qua SMS: ${formattedPhone}`,
+        });
+      } else {
+        toast({
+          title: "OTP đã được tạo",
+          description: "Không thể gửi OTP vì thiếu thông tin liên hệ",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      console.error("Error sending OTP:", err);
+      toast({
+        title: "Gửi OTP thất bại",
+        description: "Không thể gửi OTP",
+        variant: "destructive",
+      });
+    }
   };
+
   useEffect(() => {
     generateOtp();
   }, [selectedMethod]);
 
-  // Đếm ngược 60s
+  // Countdown 60s
   useEffect(() => {
-    if (time === null || time <= 0) {
-      if (time === 0) setExpired(true);
+    if (time <= 0) {
+      setExpired(true);
       return;
     }
-    const timer = setTimeout(() => setTime((prev) => (prev ? prev - 1 : 0)), 1000);
+    const timer = setTimeout(() => setTime(prev => prev - 1), 1000);
     return () => clearTimeout(timer);
   }, [time]);
-  // Schema validate OTP bằng Yup
+
   const otpSchema = Yup.object().shape({
     otp: Yup.string()
       .required("Vui lòng nhập OTP")
       .matches(/^\d{6}$/, "OTP phải gồm 6 chữ số"),
   });
-
-  // Gửi userInfo về backend
   const sendUserInfoToBackend = async () => {
     try {
       const response = await fetch("https://68ca27d4430c4476c34861d4.mockapi.io/user", {
@@ -59,9 +111,7 @@ export default function VerifyOTP() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userInfo),
       });
-
       if (!response.ok) throw new Error("Failed to create user");
-
       const data = await response.json();
       console.log("User created:", data);
     } catch (err) {
@@ -85,6 +135,7 @@ export default function VerifyOTP() {
     selectedMethod === "sms"
       ? userInfo?.phone?.replace(/(\d{3})\d{4}(\d{3})/, "$1****$2")
       : userInfo?.email?.replace(/(.{2}).*(@.*)/, "$1****$2");
+
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-glow border-0">
@@ -94,11 +145,8 @@ export default function VerifyOTP() {
             <span className="text-2xl font-bold text-primary">EcoShare</span>
           </div>
           <CardTitle className="text-2xl font-bold">Xác thực tài khoản</CardTitle>
-          <CardDescription>
-            Nhập mã OTP để hoàn tất đăng ký tài khoản
-          </CardDescription>
+          <CardDescription>Nhập mã OTP để hoàn tất đăng ký tài khoản</CardDescription>
         </CardHeader>
-
         <CardContent className="space-y-6">
           {/* Chọn phương thức */}
           <div className="space-y-3">
@@ -138,7 +186,15 @@ export default function VerifyOTP() {
           <Formik
             initialValues={{ otp: "" }}
             validationSchema={otpSchema}
-            onSubmit={async (values) => {
+            onSubmit={async values => {
+              if (expired) {
+                toast({
+                  title: "OTP hết hạn",
+                  description: "Vui lòng yêu cầu gửi lại mã OTP mới",
+                  variant: "destructive",
+                });
+                return;
+              }
               if (values.otp === otp) {
                 await sendUserInfoToBackend();
                 navigate("/co-owner/vehicle-registration");
@@ -164,15 +220,13 @@ export default function VerifyOTP() {
                   <div className="text-center text-sm text-muted-foreground">
                     {expired
                       ? "OTP đã hết hạn, vui lòng gửi lại."
-                      : time !== null
-                        ? `Mã OTP hết hạn sau ${time}s`
-                        : ""}
+                      : `Mã OTP hết hạn sau ${time}s`}
                   </div>
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={6}
                       value={values.otp}
-                      onChange={(value) => setFieldValue("otp", value)}
+                      onChange={value => setFieldValue("otp", value)}
                     >
                       <InputOTPGroup>
                         <InputOTPSlot index={0} />
