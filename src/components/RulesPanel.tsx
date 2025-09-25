@@ -45,10 +45,25 @@ export function RulesPanel() {
                 </div>
                 <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 text-base">1. Quản lý quyền sở hữu & thành viên</h4>
               </div>
-              <div className="text-sm space-y-2">
-                <p><span className="font-medium">1.1:</span> Mỗi thành viên phải có CCCD/CMND và Giấy phép lái xe hợp lệ trước khi được thêm vào nhóm đồng sở hữu.</p>
-                <p><span className="font-medium">1.2:</span> Mọi thay đổi về tỷ lệ sở hữu phải được tất cả các thành viên hiện tại kí số e-contract mới có hiệu lực.</p>
-                <p><span className="font-medium">1.3:</span> Chỉ admin nhóm có quyền thêm/xóa thành viên hoặc thay đổi tỷ lệ sở hữu.</p>
+              <div className="text-sm space-y-3">
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">ID</span>
+                  </div>
+                  <p><span className="font-medium text-emerald-700 dark:text-emerald-300">CCCD/CMND + GPLX</span> - Bắt buộc trước khi tham gia nhóm</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">✍️</span>
+                  </div>
+                  <p><span className="font-medium text-emerald-700 dark:text-emerald-300">E-contract</span> - Thay đổi tỷ lệ sở hữu cần chữ ký số tất cả thành viên</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">👑</span>
+                  </div>
+                  <p><span className="font-medium text-emerald-700 dark:text-emerald-300">Admin</span> - Chỉ admin mới có quyền quản lý thành viên</p>
+                </div>
               </div>
             </div>
 
@@ -60,12 +75,37 @@ export function RulesPanel() {
                 </div>
                 <h4 className="font-semibold text-blue-700 dark:text-blue-300 text-base">2. Đặt lịch & sử dụng xe</h4>
               </div>
-              <div className="text-sm space-y-2">
-                <p><span className="font-medium">2.1:</span> Thời gian đặt lịch được xác định theo nguyên tắc "ai đặt trước thì ưu tiên trước".</p>
-                <p><span className="font-medium">2.2:</span> Nếu có xung đột lịch, hệ thống sẽ ưu tiên theo thứ tự: tỷ lệ sở hữu cao nhất → lịch sử sử dụng ít nhất → thời gian đăng ký sớm nhất.</p>
-                <p><span className="font-medium">2.3:</span> Mỗi thành viên chỉ được sử dụng xe tối đa 14 ngày liên tục. Trong các mùa cao điểm (lễ, tết), giới hạn giảm xuống còn 7 ngày liên tục.</p>
-                <p><span className="font-medium">2.4:</span> Đặt lịch phải được xác nhận ít nhất 2 giờ trước khi sử dụng.</p>
-                <p><span className="font-medium">2.5:</span> Hệ thống sẽ cảnh báo thành viên "có thể bị hạn chế ưu tiên nếu đặt trùng thường xuyên" khi phát hiện đặt lịch xung đột nhiều lần.</p>
+              <div className="text-sm space-y-3">
+                <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold">1</div>
+                    <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold">2</div>
+                    <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold">3</div>
+                  </div>
+                  <p className="font-medium text-blue-700 dark:text-blue-300">Ai đặt trước → Ưu tiên trước</p>
+                </div>
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-4 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Thứ tự ưu tiên khi xung đột:</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <div className="bg-blue-500 text-white px-2 py-1 rounded">Tỷ lệ sở hữu cao</div>
+                    <span>→</span>
+                    <div className="bg-blue-400 text-white px-2 py-1 rounded">Sử dụng ít</div>
+                    <span>→</span>
+                    <div className="bg-blue-300 text-white px-2 py-1 rounded">Đăng ký sớm</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex gap-1">
+                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                    <div className="w-4 h-4 bg-blue-400 rounded"></div>
+                    <div className="w-4 h-4 bg-blue-300 rounded"></div>
+                    <div className="w-4 h-4 bg-blue-200 rounded"></div>
+                    <span className="text-blue-600 text-sm font-medium ml-1">14 ngày</span>
+                  </div>
+                  <p className="text-sm">Giới hạn sử dụng liên tục (7 ngày vào dịp lễ/tết)</p>
+                </div>
               </div>
             </div>
 
@@ -77,11 +117,34 @@ export function RulesPanel() {
                 </div>
                 <h4 className="font-semibold text-amber-700 dark:text-amber-300 text-base">3. Chi phí & thanh toán</h4>
               </div>
-              <div className="text-sm space-y-2">
-                <p><span className="font-medium">3.1:</span> Các chi phí chung sẽ được chia theo tỷ lệ sở hữu mặc định.</p>
-                <p><span className="font-medium">3.2:</span> Nhóm có thể lựa chọn chia chi phí theo mức độ sử dụng xe.</p>
-                <p><span className="font-medium">3.3:</span> Thanh toán chi phí phải thực hiện qua phương thức trực tuyến (e-wallet, banking).</p>
-                <p><span className="font-medium">3.4:</span> Thành viên có nợ quá hạn &gt; 15 ngày sẽ bị tạm khóa quyền đặt lịch.</p>
+              <div className="text-sm space-y-3">
+                <div className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 p-4 rounded-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-2xl">💰</div>
+                    <div>
+                      <p className="font-medium text-amber-700 dark:text-amber-300">Chia chi phí theo tỷ lệ sở hữu</p>
+                      <p className="text-xs text-amber-600 dark:text-amber-400">Hoặc theo mức độ sử dụng</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-2 bg-amber-200 dark:bg-amber-800 rounded-full">
+                      <div className="h-2 bg-amber-500 rounded-full" style={{width: '40%'}}></div>
+                    </div>
+                    <span className="text-xs text-amber-600 dark:text-amber-400">40%</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-amber-600 dark:text-amber-400 font-bold text-sm">💳</span>
+                  </div>
+                  <p><span className="font-medium text-amber-700 dark:text-amber-300">E-wallet/Banking</span> - Thanh toán trực tuyến bắt buộc</p>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                  <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-red-600 dark:text-red-400 font-bold text-sm">🚫</span>
+                  </div>
+                  <p><span className="font-medium text-red-700 dark:text-red-300">Nợ &gt; 15 ngày</span> → Khóa quyền đặt lịch</p>
+                </div>
               </div>
             </div>
 
@@ -93,12 +156,38 @@ export function RulesPanel() {
                 </div>
                 <h4 className="font-semibold text-purple-700 dark:text-purple-300 text-base">4. Nhóm đồng sở hữu & quyết định chung</h4>
               </div>
-              <div className="text-sm space-y-2">
-                <p><span className="font-medium">4.1:</span> Nhóm tối đa 5 người đồng sở hữu, tối thiểu tỷ lệ sở hữu là 15%.</p>
-                <p><span className="font-medium">4.2:</span> Các quyết định quan trọng cần tối thiểu 70% tổng tỷ lệ sở hữu đồng ý để thông qua.</p>
-                <p><span className="font-medium">4.3:</span> Quỹ chung được quản lý minh bạch với biên lai điện tử.</p>
-                <p><span className="font-medium">4.4:</span> AI gợi ý lịch sử dụng chỉ mang tính tham khảo, không bắt buộc áp dụng.</p>
-                <p><span className="font-medium">4.5:</span> Trường hợp khẩn cấp, đột xuất có thể bỏ qua quy trình bỏ phiếu nhưng phải cung cấp bằng chứng chứng minh tính cấp thiết và được staff xác nhận.</p>
+              <div className="text-sm space-y-3">
+                <div className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-4 rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">👥</span>
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Tối đa 5 người</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">📊</span>
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Min 15% sở hữu</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-purple-600 dark:text-purple-400">Tỷ lệ thông qua:</span>
+                    <div className="flex-1 h-3 bg-purple-200 dark:bg-purple-800 rounded-full">
+                      <div className="h-3 bg-purple-500 rounded-full" style={{width: '70%'}}></div>
+                    </div>
+                    <span className="text-sm font-medium text-purple-700 dark:text-purple-300">70%</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-purple-600 dark:text-purple-400 font-bold text-sm">🤖</span>
+                  </div>
+                  <p><span className="font-medium text-purple-700 dark:text-purple-300">AI Gợi ý</span> - Chỉ mang tính tham khảo, không bắt buộc</p>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-orange-600 dark:text-orange-400 font-bold text-sm">🚨</span>
+                  </div>
+                  <p><span className="font-medium text-orange-700 dark:text-orange-300">Khẩn cấp</span> - Có thể bỏ qua bỏ phiếu với bằng chứng xác thực</p>
+                </div>
               </div>
             </div>
 
@@ -110,10 +199,32 @@ export function RulesPanel() {
                 </div>
                 <h4 className="font-semibold text-red-700 dark:text-red-300 text-base">5. Tranh chấp & giám sát</h4>
               </div>
-              <div className="text-sm space-y-2">
-                <p><span className="font-medium">5.1:</span> Mọi hành động đặt lịch, thanh toán, bỏ phiếu đều được ghi log không thể chỉnh sửa.</p>
-                <p><span className="font-medium">5.2:</span> Trong trường hợp tranh chấp, Staff có quyền kiểm tra log và đưa ra quyết định.</p>
-                <p><span className="font-medium">5.3:</span> Nếu tranh chấp không thể giải quyết ở mức Staff, Admin hệ thống sẽ can thiệp và quyết định cuối cùng là bắt buộc.</p>
+              <div className="text-sm space-y-3">
+                <div className="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 p-4 rounded-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-2xl">📝</div>
+                    <div>
+                      <p className="font-medium text-red-700 dark:text-red-300">Log bất biến</p>
+                      <p className="text-xs text-red-600 dark:text-red-400">Tất cả hành động được ghi nhận và không thể chỉnh sửa</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-xs">Đặt lịch</span>
+                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span className="text-xs">Thanh toán</span>
+                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                    <span className="text-xs">Bỏ phiếu</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                  <div className="flex gap-1">
+                    <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold">S</div>
+                    <span className="text-xl">→</span>
+                    <div className="w-6 h-6 bg-red-100 dark:bg-red-900 rounded text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">A</div>
+                  </div>
+                  <p><span className="font-medium text-red-700 dark:text-red-300">Staff → Admin</span> - Cấp độ giải quyết tranh chấp</p>
+                </div>
               </div>
             </div>
           </div>
