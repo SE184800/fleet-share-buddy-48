@@ -14,26 +14,36 @@ export function RulesPanel() {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center mb-4">
-            Quy định sử dụng EcoShare & Mức phạt vi phạm
+        <DialogHeader className="relative">
+          <div className="absolute top-0 right-0">
+            <div className="bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-medium">
+              Vi phạm
+            </div>
+          </div>
+          <DialogTitle className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            Quy định sử dụng EcoShare
           </DialogTitle>
-          <p className="text-muted-foreground text-center">
-            Tất cả quy định và hệ thống phạt minh bạch cho các vi phạm, nhấp vào từng mục để xem chi tiết
+          <p className="text-muted-foreground text-center text-sm leading-relaxed max-w-2xl mx-auto">
+            Tìm hiểu các quy định và nguyên tắc hoạt động để có trải nghiệm tốt nhất khi sử dụng dịch vụ
           </p>
         </DialogHeader>
         
         {/* Basic Rules Section */}
-        <div className="mt-6 mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-center">📋 Quy định cơ bản</h3>
+        <div className="mt-8 mb-10">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-primary/5 px-4 py-2 rounded-full">
+              <Shield className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold text-primary">Quy định cơ bản</h3>
+            </div>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Rule 1 - Ownership Management */}
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="bg-primary/10 rounded-full p-2">
-                  <Users className="h-5 w-5 text-primary" />
+            <div className="group p-6 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 dark:from-emerald-900/10 dark:to-emerald-800/5 rounded-xl border border-emerald-200/50 dark:border-emerald-800/30 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-200 hover:shadow-lg">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg p-2.5 shadow-sm">
+                  <Users className="h-5 w-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-primary">1. Quản lý quyền sở hữu & thành viên</h4>
+                <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 text-base">1. Quản lý quyền sở hữu & thành viên</h4>
               </div>
               <div className="text-sm space-y-2">
                 <p><span className="font-medium">1.1:</span> Mỗi thành viên phải có CCCD/CMND và Giấy phép lái xe hợp lệ trước khi được thêm vào nhóm đồng sở hữu.</p>
@@ -43,12 +53,12 @@ export function RulesPanel() {
             </div>
 
             {/* Rule 2 - Scheduling */}
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="bg-primary/10 rounded-full p-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+            <div className="group p-6 bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-900/10 dark:to-blue-800/5 rounded-xl border border-blue-200/50 dark:border-blue-800/30 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 hover:shadow-lg">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-2.5 shadow-sm">
+                  <Calendar className="h-5 w-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-primary">2. Đặt lịch & sử dụng xe</h4>
+                <h4 className="font-semibold text-blue-700 dark:text-blue-300 text-base">2. Đặt lịch & sử dụng xe</h4>
               </div>
               <div className="text-sm space-y-2">
                 <p><span className="font-medium">2.1:</span> Thời gian đặt lịch được xác định theo nguyên tắc "ai đặt trước thì ưu tiên trước".</p>
@@ -60,12 +70,12 @@ export function RulesPanel() {
             </div>
 
             {/* Rule 3 - Costs */}
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="bg-primary/10 rounded-full p-2">
-                  <DollarSign className="h-5 w-5 text-primary" />
+            <div className="group p-6 bg-gradient-to-br from-amber-50/50 to-amber-100/30 dark:from-amber-900/10 dark:to-amber-800/5 rounded-xl border border-amber-200/50 dark:border-amber-800/30 hover:border-amber-300 dark:hover:border-amber-700 transition-all duration-200 hover:shadow-lg">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg p-2.5 shadow-sm">
+                  <DollarSign className="h-5 w-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-primary">3. Chi phí & thanh toán</h4>
+                <h4 className="font-semibold text-amber-700 dark:text-amber-300 text-base">3. Chi phí & thanh toán</h4>
               </div>
               <div className="text-sm space-y-2">
                 <p><span className="font-medium">3.1:</span> Các chi phí chung sẽ được chia theo tỷ lệ sở hữu mặc định.</p>
@@ -76,12 +86,12 @@ export function RulesPanel() {
             </div>
 
             {/* Rule 4 - Group Decisions */}
-            <div className="p-4 bg-primary/5 rounded-lg border">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="bg-primary/10 rounded-full p-2">
-                  <Users className="h-5 w-5 text-primary" />
+            <div className="group p-6 bg-gradient-to-br from-purple-50/50 to-purple-100/30 dark:from-purple-900/10 dark:to-purple-800/5 rounded-xl border border-purple-200/50 dark:border-purple-800/30 hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-200 hover:shadow-lg">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-2.5 shadow-sm">
+                  <Users className="h-5 w-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-primary">4. Nhóm đồng sở hữu & quyết định chung</h4>
+                <h4 className="font-semibold text-purple-700 dark:text-purple-300 text-base">4. Nhóm đồng sở hữu & quyết định chung</h4>
               </div>
               <div className="text-sm space-y-2">
                 <p><span className="font-medium">4.1:</span> Nhóm tối đa 5 người đồng sở hữu, tối thiểu tỷ lệ sở hữu là 15%.</p>
@@ -93,12 +103,12 @@ export function RulesPanel() {
             </div>
 
             {/* Rule 5 - Disputes */}
-            <div className="p-4 bg-primary/5 rounded-lg border lg:col-span-2">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="bg-primary/10 rounded-full p-2">
-                  <AlertTriangle className="h-5 w-5 text-primary" />
+            <div className="group p-6 bg-gradient-to-br from-red-50/50 to-red-100/30 dark:from-red-900/10 dark:to-red-800/5 rounded-xl border border-red-200/50 dark:border-red-800/30 hover:border-red-300 dark:hover:border-red-700 transition-all duration-200 hover:shadow-lg lg:col-span-2">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-2.5 shadow-sm">
+                  <AlertTriangle className="h-5 w-5 text-white" />
                 </div>
-                <h4 className="font-semibold text-primary">5. Tranh chấp & giám sát</h4>
+                <h4 className="font-semibold text-red-700 dark:text-red-300 text-base">5. Tranh chấp & giám sát</h4>
               </div>
               <div className="text-sm space-y-2">
                 <p><span className="font-medium">5.1:</span> Mọi hành động đặt lịch, thanh toán, bỏ phiếu đều được ghi log không thể chỉnh sửa.</p>
@@ -109,7 +119,12 @@ export function RulesPanel() {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold mb-4 text-center text-destructive">⚠️ Mức phạt vi phạm</h3>
+        <div className="text-center mb-6 mt-12">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-destructive/10 to-destructive/5 px-4 py-2 rounded-full">
+            <AlertTriangle className="h-5 w-5 text-destructive" />
+            <h3 className="text-lg font-semibold text-destructive">Mức phạt vi phạm</h3>
+          </div>
+        </div>
         
         <Accordion type="single" collapsible className="w-full mt-6">
           {/* Penalty 1 - Schedule Violations */}
