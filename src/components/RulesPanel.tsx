@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Shield, Calendar, DollarSign, Clock, AlertTriangle, Users } from "lucide-react";
-import carHeroImage from "@/assets/car-hero-image.png";
 
 export function RulesPanel() {
   return (
@@ -15,26 +14,16 @@ export function RulesPanel() {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader className="relative text-center">
+        <DialogHeader className="relative">
           <div className="absolute top-0 right-0">
             <div className="bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-medium">
               Vi phạm
             </div>
           </div>
-          
-          {/* Car Hero Image */}
-          <div className="mx-auto mb-4 w-64 h-32 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center overflow-hidden">
-            <img 
-              src={carHeroImage} 
-              alt="EcoShare Car"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          
-          <DialogTitle className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          <DialogTitle className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             Quy định sử dụng EcoShare
           </DialogTitle>
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-center text-sm leading-relaxed max-w-2xl mx-auto">
             Tìm hiểu các quy định và nguyên tắc hoạt động để có trải nghiệm tốt nhất khi sử dụng dịch vụ
           </p>
         </DialogHeader>
